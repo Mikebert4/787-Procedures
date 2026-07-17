@@ -30,10 +30,62 @@ const visualLibrary = [
         caption: "Exterior inspection route. Source: PDF p.81; FCOM NP.21.5."
       }
     ]
+  },
+  {
+    matcher: /EICAS|First Response|Non-Normal ECL Access|Non-Normal Scope/i,
+    images: [
+      {
+        src: "assets/fcom-eicas-2377.png",
+        alt: "FCOM EICAS message display diagram",
+        caption: "EICAS message display and alert levels. Source: PDF p.2377; FCOM 15.10.1."
+      },
+      {
+        src: "assets/fcom-nn-ecl-1847.png",
+        alt: "FCOM non-normal checklist queue diagram",
+        caption: "Non-normal checklist queue. Source: PDF p.1847; FCOM 10.50.3."
+      },
+      {
+        src: "assets/fcom-nn-ecl-1848.png",
+        alt: "FCOM non-normal checklist page diagram",
+        caption: "Non-normal checklist page layout. Source: PDF p.1848; FCOM 10.50.4."
+      }
+    ]
+  },
+  {
+    matcher: /Callouts|Alert Recognition/i,
+    images: [
+      {
+        src: "assets/fcom-alerts-2412.png",
+        alt: "FCOM aurals and master warning/caution table",
+        caption: "Aurals and master warning/caution table. Source: PDF p.2412; FCOM 15.20.4."
+      },
+      {
+        src: "assets/fcom-alerts-more-2420.png",
+        alt: "FCOM windshear alert table",
+        caption: "Windshear and V1 aural callouts. Source: PDF p.2420; FCOM 15.20.12."
+      }
+    ]
+  },
+  {
+    matcher: /Deferred|Inhibits|Overrides|Resets|Memory Steps/i,
+    images: [
+      {
+        src: "assets/fcom-nn-deferred-1857.png",
+        alt: "FCOM deferred line items on non-normal checklist",
+        caption: "Deferred line items from a non-normal checklist. Source: PDF p.1857; FCOM 10.50.13."
+      },
+      {
+        src: "assets/fcom-nn-deferred-1858.png",
+        alt: "FCOM deferred line items in normal checklist",
+        caption: "Deferred items targeted to a normal checklist. Source: PDF p.1858; FCOM 10.50.14."
+      }
+    ]
   }
 ];
 
 const state = {
+  profiles: {},
+  activeMode: "normal",
   stages: [],
   current: 0
 };
@@ -49,13 +101,19 @@ const progressEl = document.getElementById("stage-progress");
 const prevButton = document.getElementById("prev-stage");
 const nextButton = document.getElementById("next-stage");
 const resetAllButton = document.getElementById("reset-all");
+const modeButtons = {
+  normal: document.getElementById("mode-normal"),
+  nonNormal: document.getElementById("mode-non-normal")
+};
 
 init();
 
 async function init() {
   try {
     const markdown = window.PROFILE_MARKDOWN || await loadMarkdown();
-    state.stages = parseMarkdown(markdown);
+    state.profiles.normal = parseMarkdown(markdown, "normal");
+    state.profiles.nonNormal = parseMarkdown(window.NON_NORMAL_MARKDOWN || "", "nonNormal");
+    state.stages = state.profiles[state.activeMode];
     renderTabs();
     selectStage(0);
     bindControls();
@@ -74,7 +132,7 @@ async function loadMarkdown() {
   return response.text();
 }
 
-function parseMarkdown(markdown) {
+function parseMarkdown(markdown, mode) {
   const operatingFrame = extractBetween(markdown, "## Operating Frame", "## End-to-End Normal Procedures Flow");
   const stageMatches = [...markdown.matchAll(/^###\s+(.+)$/gm)];
   const stages = [];
@@ -82,6 +140,7 @@ function parseMarkdown(markdown) {
   if (operatingFrame) {
     stages.push({
       id: "operating-frame",
+      mode,
       rawTitle: "Operating Frame",
       title: "Operating Frame",
       citation: "PDF pp.69-72; FCOM NP.11.1-NP.11.4",
@@ -93,10 +152,13 @@ function parseMarkdown(markdown) {
     const match = stageMatches[index];
     const next = stageMatches[index + 1];
     const rawTitle = match[1].trim();
-    const body = markdown.slice(match.index + match[0].length, next ? next.index : markdown.indexOf("## Quick Source Map")).trim();
+    const sourceMapIndex = markdown.indexOf("## Quick Source Map");
+    const end = next ? next.index : sourceMapIndex > match.index ? sourceMapIndex : markdown.length;
+    const body = markdown.slice(match.index + match[0].length, end).trim();
     const citation = extractCitation(body);
     stages.push({
       id: slugify(rawTitle),
+      mode,
       rawTitle,
       title: stripStageNumber(rawTitle),
       citation,
@@ -123,6 +185,10 @@ function stripStageNumber(title) {
   return title.replace(/^\d+[A-C]?\.\s+/, "");
 }
 
+function stageNumber(index) {
+  return state.stages[0]?.id === "operating-frame" ? index : index + 1;
+}
+
 function slugify(text) {
   return text.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 }
@@ -131,6 +197,18 @@ function bindControls() {
   prevButton.addEventListener("click", () => selectStage(Math.max(0, state.current - 1)));
   nextButton.addEventListener("click", () => selectStage(Math.min(state.stages.length - 1, state.current + 1)));
   resetAllButton.addEventListener("click", resetAllProgress);
+  modeButtons.normal.addEventListener("click", () => setMode("normal"));
+  modeButtons.nonNormal.addEventListener("click", () => setMode("nonNormal"));
+}
+
+function setMode(mode) {
+  if (state.activeMode === mode) return;
+  state.activeMode = mode;
+  state.stages = state.profiles[mode];
+  modeButtons.normal.setAttribute("aria-pressed", mode === "normal" ? "true" : "false");
+  modeButtons.nonNormal.setAttribute("aria-pressed", mode === "nonNormal" ? "true" : "false");
+  renderTabs();
+  selectStage(0);
 }
 
 function renderTabs() {
@@ -146,7 +224,7 @@ function renderTabs() {
 
     const number = document.createElement("span");
     number.className = "tab-number";
-    number.textContent = index === 0 ? "i" : String(index);
+    number.textContent = stage.id === "operating-frame" ? "i" : String(stageNumber(index));
 
     const title = document.createElement("span");
     title.className = "tab-title";
@@ -155,7 +233,7 @@ function renderTabs() {
     const complete = document.createElement("span");
     complete.className = "tab-complete";
     complete.dataset.state = stageCompletion(stage).complete ? "done" : "open";
-    complete.textContent = stageCompletion(stage).complete ? "✓" : "–";
+    complete.textContent = stageCompletion(stage).complete ? "Done" : "-";
 
     button.append(number, title, complete);
     tabsEl.append(button);
@@ -166,7 +244,7 @@ function selectStage(index) {
   state.current = index;
   const stage = state.stages[index];
   updateTabSelection();
-  labelEl.textContent = index === 0 ? "Profile" : `Stage ${index}`;
+  labelEl.textContent = `${state.activeMode === "normal" ? "Normal" : "Non-Normal"} - ${stage.id === "operating-frame" ? "Profile" : `Stage ${stageNumber(index)}`}`;
   titleEl.textContent = stage.title;
   citationEl.textContent = stage.citation || "Source citations are shown in the procedure text.";
   contentEl.innerHTML = "";
@@ -192,7 +270,7 @@ function renderStageBody(stage) {
     const line = rawLine.trim();
     if (!line || /^References?:/.test(line)) continue;
 
-    if (/^[A-Z][A-Za-z0-9 /()-]+:$/.test(line) || /^(Flow|Timing|Prerequisite|Notes|Inspection route|General inspection standard|Flap retraction schedule|Climb\/cruise flow):$/.test(line)) {
+    if (/^[A-Z][A-Za-z0-9 /()-]+:$/.test(line) || /^(Flow|Timing|Prerequisite|Notes|Callouts|Aural\/voice items to drill|Memory action|Inspection route|General inspection standard|Flap retraction schedule|Climb\/cruise flow):$/.test(line)) {
       if (groupHasContent(group)) contentEl.append(group);
       group = createGroup(line.replace(/:$/, ""));
       list = null;
@@ -304,7 +382,7 @@ function refreshCompletionBadges() {
     const completion = stageCompletion(state.stages[index]);
     const badge = tab.querySelector(".tab-complete");
     badge.dataset.state = completion.complete ? "done" : "open";
-    badge.textContent = completion.complete ? "✓" : "–";
+    badge.textContent = completion.complete ? "Done" : "-";
   });
 }
 
@@ -328,7 +406,7 @@ function countChecklistItems(body) {
 }
 
 function storageKey(stage, index) {
-  return `b787-np:${stage.id}:${index}`;
+  return `b787-procedures:${stage.mode}:${stage.id}:${index}`;
 }
 
 function resetAllProgress() {

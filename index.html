@@ -11,7 +11,11 @@
       <header class="topbar">
         <div>
           <p class="eyebrow">Boeing 787 FCOM</p>
-          <h1>Normal Procedures Training Aide</h1>
+          <h1>787 Procedures Training Aide</h1>
+          <nav class="mode-switch" aria-label="Procedure section">
+            <button id="mode-normal" type="button" class="mode-button" aria-pressed="true">Normal</button>
+            <button id="mode-non-normal" type="button" class="mode-button" aria-pressed="false">Non-Normal</button>
+          </nav>
         </div>
         <div class="status-panel" aria-live="polite">
           <span id="stage-counter">Stage 1 of 20</span>
@@ -20,7 +24,7 @@
       </header>
 
       <main class="layout">
-        <aside class="stage-nav" aria-label="Normal procedure stages">
+        <aside class="stage-nav" aria-label="Procedure stages">
           <div class="nav-header">
             <span>Profile</span>
             <button id="reset-all" type="button" class="ghost-button">Reset</button>
@@ -49,6 +53,7 @@
     </div>
 
     <script src="source-data.js"></script>
+    <script src="non-normal-data.js"></script>
     <script src="app.js"></script>
   </body>
 </html>
