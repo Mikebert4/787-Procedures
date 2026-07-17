@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>787 NP Training Aide</title>
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Boeing 787 FCOM</p>
+          <h1>Normal Procedures Training Aide</h1>
+        </div>
+        <div class="status-panel" aria-live="polite">
+          <span id="stage-counter">Stage 1 of 20</span>
+          <strong id="stage-progress">0%</strong>
+        </div>
+      </header>
+
+      <main class="layout">
+        <aside class="stage-nav" aria-label="Normal procedure stages">
+          <div class="nav-header">
+            <span>Profile</span>
+            <button id="reset-all" type="button" class="ghost-button">Reset</button>
+          </div>
+          <div id="tabs" class="tabs" role="tablist" aria-orientation="vertical"></div>
+        </aside>
+
+        <section class="stage-view" aria-labelledby="stage-title">
+          <div class="stage-toolbar">
+            <button id="prev-stage" type="button" class="icon-button" aria-label="Previous stage">Prev</button>
+            <button id="next-stage" type="button" class="icon-button primary">Next</button>
+          </div>
+          <div class="stage-header">
+            <p id="stage-label" class="eyebrow">Stage</p>
+            <h2 id="stage-title"></h2>
+            <p id="stage-citation" class="citation"></p>
+          </div>
+          <div id="stage-content" class="procedure-content"></div>
+        </section>
+
+        <aside class="visual-pane" aria-label="Reference visuals">
+          <h2>Reference</h2>
+          <div id="visuals"></div>
+        </aside>
+      </main>
+    </div>
+
+    <script src="source-data.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>

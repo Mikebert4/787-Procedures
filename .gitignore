@@ -1,0 +1,4 @@
+server.err.log
+server.out.log
+server_error.log
+__pycache__/
