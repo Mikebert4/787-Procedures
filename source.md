@@ -1,6 +1,6 @@
 # Boeing 787 FCOM Normal Procedures Training Flow
 
-Source: `B787 PKL Flight Crew Operations Manual (FCOM).pdf`, Normal Procedures chapter only. The PDF pages in citations are the file page numbers; FCOM page identifiers are the manual's printed NP section pages. The source manual itself is marked "DO NOT USE FOR FLIGHT"; use this as a training/simulator run-through aid only and defer to your operator/instructor/current approved procedures.
+Source: `B787 PKL Flight Crew Operations Manual (FCOM).pdf`, Normal Procedures chapter only. FCTM guidance from `B787 Flight Crew Training Manual rev 04.pdf` appears as supplemental popups and reference images. The PDF pages in citations are the file page numbers; FCOM/FCTM page identifiers are the manuals' printed section pages. The source manuals are training/reference material; use this as a training/simulator run-through aid only and defer to your operator/instructor/current approved procedures.
 
 ## Operating Frame
 

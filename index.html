@@ -10,7 +10,7 @@
     <div class="app-shell">
       <header class="topbar">
         <div>
-          <p class="eyebrow">Boeing 787 FCOM</p>
+          <p class="eyebrow">Boeing 787 FCOM + FCTM</p>
           <h1>787 Procedures Training Aide</h1>
           <nav class="mode-switch" aria-label="Procedure section">
             <button id="mode-normal" type="button" class="mode-button" aria-pressed="true">Normal</button>
@@ -41,6 +41,7 @@
             <p id="stage-label" class="eyebrow">Stage</p>
             <h2 id="stage-title"></h2>
             <p id="stage-citation" class="citation"></p>
+            <div id="fctm-stage-links" class="fctm-stage-links" aria-label="FCTM guidance for this stage"></div>
           </div>
           <div id="stage-content" class="procedure-content"></div>
         </section>
@@ -52,8 +53,22 @@
       </main>
     </div>
 
+    <dialog id="fctm-dialog" class="fctm-dialog" aria-labelledby="fctm-dialog-title">
+      <div class="fctm-dialog-panel">
+        <div class="fctm-dialog-head">
+          <div>
+            <p class="eyebrow">FCTM Guidance</p>
+            <h2 id="fctm-dialog-title">Training note</h2>
+          </div>
+          <button id="fctm-close" type="button" class="icon-button" aria-label="Close FCTM guidance">Close</button>
+        </div>
+        <div id="fctm-dialog-content" class="fctm-dialog-content"></div>
+      </div>
+    </dialog>
+
     <script src="source-data.js"></script>
     <script src="non-normal-data.js"></script>
+    <script src="fctm-guidance.js"></script>
     <script src="app.js"></script>
   </body>
 </html>

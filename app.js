@@ -90,10 +90,12 @@ const state = {
   current: 0
 };
 
+const fctmGuidance = window.FCTM_GUIDANCE || [];
 const tabsEl = document.getElementById("tabs");
 const titleEl = document.getElementById("stage-title");
 const labelEl = document.getElementById("stage-label");
 const citationEl = document.getElementById("stage-citation");
+const fctmStageLinksEl = document.getElementById("fctm-stage-links");
 const contentEl = document.getElementById("stage-content");
 const visualsEl = document.getElementById("visuals");
 const counterEl = document.getElementById("stage-counter");
@@ -101,6 +103,10 @@ const progressEl = document.getElementById("stage-progress");
 const prevButton = document.getElementById("prev-stage");
 const nextButton = document.getElementById("next-stage");
 const resetAllButton = document.getElementById("reset-all");
+const fctmDialog = document.getElementById("fctm-dialog");
+const fctmDialogTitleEl = document.getElementById("fctm-dialog-title");
+const fctmDialogContentEl = document.getElementById("fctm-dialog-content");
+const fctmCloseButton = document.getElementById("fctm-close");
 const modeButtons = {
   normal: document.getElementById("mode-normal"),
   nonNormal: document.getElementById("mode-non-normal")
@@ -197,6 +203,10 @@ function bindControls() {
   prevButton.addEventListener("click", () => selectStage(Math.max(0, state.current - 1)));
   nextButton.addEventListener("click", () => selectStage(Math.min(state.stages.length - 1, state.current + 1)));
   resetAllButton.addEventListener("click", resetAllProgress);
+  fctmCloseButton.addEventListener("click", closeFctmDialog);
+  fctmDialog.addEventListener("click", (event) => {
+    if (event.target === fctmDialog) closeFctmDialog();
+  });
   modeButtons.normal.addEventListener("click", () => setMode("normal"));
   modeButtons.nonNormal.addEventListener("click", () => setMode("nonNormal"));
 }
@@ -247,6 +257,7 @@ function selectStage(index) {
   labelEl.textContent = `${state.activeMode === "normal" ? "Normal" : "Non-Normal"} - ${stage.id === "operating-frame" ? "Profile" : `Stage ${stageNumber(index)}`}`;
   titleEl.textContent = stage.title;
   citationEl.textContent = stage.citation || "Source citations are shown in the procedure text.";
+  renderStageGuidanceLinks(stage);
   contentEl.innerHTML = "";
   renderStageBody(stage);
   renderVisuals(stage);
@@ -315,8 +326,10 @@ function groupHasContent(group) {
 
 function createCheckItem(stage, index, text) {
   const key = storageKey(stage, index);
+  const guidance = getItemGuidance(stage, text);
   const li = document.createElement("li");
   li.className = "check-item";
+  if (guidance.length) li.classList.add("has-fctm");
 
   const input = document.createElement("input");
   input.type = "checkbox";
@@ -333,6 +346,16 @@ function createCheckItem(stage, index, text) {
   label.textContent = text;
 
   li.append(input, label);
+  if (guidance.length) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "fctm-chip";
+    button.textContent = "FCTM";
+    button.title = "Open FCTM guidance for this item";
+    button.setAttribute("aria-label", `Open FCTM guidance for ${text}`);
+    button.addEventListener("click", () => openFctmDialog(guidance, "Item guidance"));
+    li.append(button);
+  }
   return li;
 }
 
@@ -341,12 +364,13 @@ function renderVisuals(stage) {
   const wrapper = document.createElement("div");
   wrapper.className = "visuals-grid";
   const matches = visualLibrary.filter((entry) => entry.matcher.test(stage.rawTitle) || entry.matcher.test(stage.title));
-  const images = matches.flatMap((entry) => entry.images);
+  const fctmImages = getStageGuidance(stage, { includeItemMatches: true }).flatMap((entry) => entry.images || []);
+  const images = uniqueImages([...matches.flatMap((entry) => entry.images), ...fctmImages]);
 
   if (!images.length) {
     const note = document.createElement("p");
     note.className = "empty-note";
-    note.textContent = "No extracted FCOM diagram is linked to this stage.";
+    note.textContent = "No extracted FCOM/FCTM diagram is linked to this stage.";
     visualsEl.append(note);
     return;
   }
@@ -363,6 +387,117 @@ function renderVisuals(stage) {
     wrapper.append(figure);
   });
   visualsEl.append(wrapper);
+}
+
+function renderStageGuidanceLinks(stage) {
+  fctmStageLinksEl.innerHTML = "";
+  const entries = getStageGuidance(stage);
+  if (!entries.length) return;
+
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = "fctm-stage-button";
+  button.textContent = entries.length === 1 ? "FCTM note" : `FCTM notes (${entries.length})`;
+  button.addEventListener("click", () => openFctmDialog(entries, `${stage.title} guidance`));
+  fctmStageLinksEl.append(button);
+}
+
+function getStageGuidance(stage, options = {}) {
+  return fctmGuidance.filter((entry) => {
+    if (!entry.stageLevel && !options.includeItemMatches) return false;
+    return matchesMode(entry, stage) && matchesStage(entry, stage);
+  });
+}
+
+function getItemGuidance(stage, text) {
+  return fctmGuidance.filter((entry) => {
+    if (!entry.itemPatterns?.length) return false;
+    return matchesMode(entry, stage) && matchesStage(entry, stage) && entry.itemPatterns.some((pattern) => patternMatches(pattern, text));
+  });
+}
+
+function matchesMode(entry, stage) {
+  return !entry.modes?.length || entry.modes.includes(stage.mode);
+}
+
+function matchesStage(entry, stage) {
+  if (!entry.stages?.length) return true;
+  const value = `${stage.rawTitle} ${stage.title} ${stage.id}`;
+  return entry.stages.some((pattern) => patternMatches(pattern, value));
+}
+
+function patternMatches(pattern, value) {
+  if (pattern instanceof RegExp) return pattern.test(value);
+  return value.toLowerCase().includes(String(pattern).toLowerCase());
+}
+
+function uniqueImages(images) {
+  const seen = new Set();
+  return images.filter((image) => {
+    if (seen.has(image.src)) return false;
+    seen.add(image.src);
+    return true;
+  });
+}
+
+function openFctmDialog(entries, title) {
+  fctmDialogTitleEl.textContent = title;
+  fctmDialogContentEl.innerHTML = "";
+
+  entries.forEach((entry) => {
+    const section = document.createElement("section");
+    section.className = "fctm-note";
+
+    const heading = document.createElement("h3");
+    heading.textContent = entry.title;
+    section.append(heading);
+
+    const citation = document.createElement("p");
+    citation.className = "citation";
+    citation.textContent = entry.citation;
+    section.append(citation);
+
+    const list = document.createElement("ul");
+    entry.bullets.forEach((bullet) => {
+      const item = document.createElement("li");
+      item.textContent = bullet;
+      list.append(item);
+    });
+    section.append(list);
+
+    if (entry.images?.length) {
+      const imageGrid = document.createElement("div");
+      imageGrid.className = "fctm-note-images";
+      uniqueImages(entry.images).forEach((image) => {
+        const figure = document.createElement("figure");
+        figure.className = "visual-card";
+        const img = document.createElement("img");
+        img.src = image.src;
+        img.alt = image.alt;
+        const caption = document.createElement("figcaption");
+        caption.textContent = image.caption;
+        figure.append(img, caption);
+        imageGrid.append(figure);
+      });
+      section.append(imageGrid);
+    }
+
+    fctmDialogContentEl.append(section);
+  });
+
+  if (typeof fctmDialog.showModal === "function") {
+    fctmDialog.showModal();
+  } else {
+    fctmDialog.setAttribute("open", "");
+  }
+}
+
+function closeFctmDialog() {
+  if (typeof fctmDialog.close === "function") {
+    fctmDialog.close();
+  } else {
+    fctmDialog.removeAttribute("open");
+  }
 }
 
 function updateNavState() {

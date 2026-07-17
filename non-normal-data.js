@@ -1,6 +1,6 @@
 window.NON_NORMAL_MARKDOWN = `# Boeing 787 FCOM Non-Normal Training Flow
 
-Source: \`B787 PKL Flight Crew Operations Manual (FCOM).pdf\`, using only FCOM content. The FCOM states that the QRH contains all normal and non-normal checklists. This section therefore trains FCOM non-normal philosophy, EICAS/ECL handling, alert/callout recognition, and FCOM-marked memory items. It is not a substitute for the QRH.
+Source: \`B787 PKL Flight Crew Operations Manual (FCOM).pdf\`, using FCOM content for the training flow. FCTM guidance from \`B787 Flight Crew Training Manual rev 04.pdf\` appears as supplemental popups and reference images. The FCOM states that the QRH contains all normal and non-normal checklists. This section therefore trains FCOM non-normal philosophy, EICAS/ECL handling, alert/callout recognition, and FCOM-marked memory items. It is not a substitute for the QRH.
 
 ## Non-Normal Training Flow
 
