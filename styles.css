@@ -338,7 +338,9 @@ h3 {
 }
 
 .fctm-stage-button,
-.fctm-chip {
+.fctm-chip,
+.norse-stage-button,
+.norse-chip {
   border: 1px solid #bda56b;
   border-radius: 8px;
   background: #fff8e7;
@@ -347,12 +349,22 @@ h3 {
   font-weight: 700;
 }
 
-.fctm-stage-button {
+.norse-stage-button,
+.norse-chip {
+  border-color: #101820;
+  background: #101820;
+  color: #f7f4ea;
+  letter-spacing: 0;
+}
+
+.fctm-stage-button,
+.norse-stage-button {
   min-height: 34px;
   padding: 6px 12px;
 }
 
-.fctm-chip {
+.fctm-chip,
+.norse-chip {
   align-self: start;
   min-width: 54px;
   min-height: 28px;
@@ -363,6 +375,11 @@ h3 {
 .fctm-stage-button:hover,
 .fctm-chip:hover {
   background: #ffefc1;
+}
+
+.norse-stage-button:hover,
+.norse-chip:hover {
+  background: #23313d;
 }
 
 .procedure-content {
@@ -411,8 +428,8 @@ h3 {
   background: #fbfcfc;
 }
 
-.check-item.has-fctm {
-  grid-template-columns: 28px minmax(0, 1fr) auto;
+.check-item.has-chips {
+  grid-template-columns: 28px minmax(0, 1fr) auto auto;
 }
 
 .check-item input {
@@ -694,11 +711,12 @@ h3 {
     padding: 14px;
   }
 
-  .check-item.has-fctm {
+  .check-item.has-chips {
     grid-template-columns: 28px minmax(0, 1fr);
   }
 
-  .check-item.has-fctm .fctm-chip {
+  .check-item.has-chips .fctm-chip,
+  .check-item.has-chips .norse-chip {
     grid-column: 2;
     justify-self: start;
   }

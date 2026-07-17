@@ -92,6 +92,7 @@ const state = {
 };
 
 const fctmGuidance = window.FCTM_GUIDANCE || [];
+const norseDifferences = window.NORSE_DIFFERENCES || [];
 const appShellEl = document.querySelector(".app-shell");
 const tabsEl = document.getElementById("tabs");
 const titleEl = document.getElementById("stage-title");
@@ -107,6 +108,7 @@ const nextButton = document.getElementById("next-stage");
 const resetAllButton = document.getElementById("reset-all");
 const navToggleButton = document.getElementById("nav-toggle");
 const fctmDialog = document.getElementById("fctm-dialog");
+const fctmDialogSourceEl = document.getElementById("fctm-dialog-source");
 const fctmDialogTitleEl = document.getElementById("fctm-dialog-title");
 const fctmDialogContentEl = document.getElementById("fctm-dialog-content");
 const fctmCloseButton = document.getElementById("fctm-close");
@@ -350,9 +352,10 @@ function groupHasContent(group) {
 function createCheckItem(stage, index, text) {
   const key = storageKey(stage, index);
   const guidance = getItemGuidance(stage, text);
+  const norse = getItemNorseDifferences(stage, text);
   const li = document.createElement("li");
   li.className = "check-item";
-  if (guidance.length) li.classList.add("has-fctm");
+  if (guidance.length || norse.length) li.classList.add("has-chips");
 
   const input = document.createElement("input");
   input.type = "checkbox";
@@ -370,16 +373,35 @@ function createCheckItem(stage, index, text) {
 
   li.append(input, label);
   if (guidance.length) {
-    const button = document.createElement("button");
-    button.type = "button";
-    button.className = "fctm-chip";
-    button.textContent = "FCTM";
-    button.title = "Open FCTM guidance for this item";
-    button.setAttribute("aria-label", `Open FCTM guidance for ${text}`);
-    button.addEventListener("click", () => openFctmDialog(guidance, "Item guidance"));
-    li.append(button);
+    li.append(createReferenceChip({
+      className: "fctm-chip",
+      label: "FCTM",
+      title: "Open FCTM guidance for this item",
+      ariaLabel: `Open FCTM guidance for ${text}`,
+      onClick: () => openReferenceDialog(guidance, "Item guidance", "FCTM Guidance")
+    }));
+  }
+  if (norse.length) {
+    li.append(createReferenceChip({
+      className: "norse-chip",
+      label: "Norse",
+      title: "Open Norse procedure difference for this item",
+      ariaLabel: `Open Norse procedure difference for ${text}`,
+      onClick: () => openReferenceDialog(norse, "Norse difference", "Norse Difference")
+    }));
   }
   return li;
+}
+
+function createReferenceChip({ className, label, title, ariaLabel, onClick }) {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.className = className;
+  button.textContent = label;
+  button.title = title;
+  button.setAttribute("aria-label", ariaLabel);
+  button.addEventListener("click", onClick);
+  return button;
 }
 
 function renderVisuals(stage) {
@@ -433,15 +455,26 @@ function applyNavState() {
 
 function renderStageGuidanceLinks(stage) {
   fctmStageLinksEl.innerHTML = "";
-  const entries = getStageGuidance(stage);
-  if (!entries.length) return;
+  const guidanceEntries = getStageGuidance(stage);
+  const norseEntries = getStageNorseDifferences(stage);
 
-  const button = document.createElement("button");
-  button.type = "button";
-  button.className = "fctm-stage-button";
-  button.textContent = entries.length === 1 ? "FCTM note" : `FCTM notes (${entries.length})`;
-  button.addEventListener("click", () => openFctmDialog(entries, `${stage.title} guidance`));
-  fctmStageLinksEl.append(button);
+  if (guidanceEntries.length) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "fctm-stage-button";
+    button.textContent = guidanceEntries.length === 1 ? "FCTM note" : `FCTM notes (${guidanceEntries.length})`;
+    button.addEventListener("click", () => openReferenceDialog(guidanceEntries, `${stage.title} guidance`, "FCTM Guidance"));
+    fctmStageLinksEl.append(button);
+  }
+
+  if (norseEntries.length) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "norse-stage-button";
+    button.textContent = norseEntries.length === 1 ? "Norse difference" : `Norse differences (${norseEntries.length})`;
+    button.addEventListener("click", () => openReferenceDialog(norseEntries, `${stage.title} Norse differences`, "Norse Difference"));
+    fctmStageLinksEl.append(button);
+  }
 }
 
 function getStageGuidance(stage, options = {}) {
@@ -453,6 +486,20 @@ function getStageGuidance(stage, options = {}) {
 
 function getItemGuidance(stage, text) {
   return fctmGuidance.filter((entry) => {
+    if (!entry.itemPatterns?.length) return false;
+    return matchesMode(entry, stage) && matchesStage(entry, stage) && entry.itemPatterns.some((pattern) => patternMatches(pattern, text));
+  });
+}
+
+function getStageNorseDifferences(stage, options = {}) {
+  return norseDifferences.filter((entry) => {
+    if (!entry.stageLevel && !options.includeItemMatches) return false;
+    return matchesMode(entry, stage) && matchesStage(entry, stage);
+  });
+}
+
+function getItemNorseDifferences(stage, text) {
+  return norseDifferences.filter((entry) => {
     if (!entry.itemPatterns?.length) return false;
     return matchesMode(entry, stage) && matchesStage(entry, stage) && entry.itemPatterns.some((pattern) => patternMatches(pattern, text));
   });
@@ -482,7 +529,8 @@ function uniqueImages(images) {
   });
 }
 
-function openFctmDialog(entries, title) {
+function openReferenceDialog(entries, title, sourceLabel) {
+  fctmDialogSourceEl.textContent = sourceLabel;
   fctmDialogTitleEl.textContent = title;
   fctmDialogContentEl.innerHTML = "";
 
@@ -540,6 +588,10 @@ function closeFctmDialog() {
   } else {
     fctmDialog.removeAttribute("open");
   }
+}
+
+function openFctmDialog(entries, title) {
+  openReferenceDialog(entries, title, "FCTM Guidance");
 }
 
 function openImageDialog(image) {
