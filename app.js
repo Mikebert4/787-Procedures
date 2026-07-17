@@ -295,6 +295,13 @@ function renderStageBody(stage) {
     const line = rawLine.trim();
     if (!line || /^References?:/.test(line)) continue;
 
+    if (/^####\s+/.test(line)) {
+      if (groupHasContent(group)) contentEl.append(group);
+      group = createGroup(line.replace(/^####\s+/, ""));
+      list = null;
+      continue;
+    }
+
     if (/^[A-Z][A-Za-z0-9 /()-]+:$/.test(line) || /^(Flow|Timing|Prerequisite|Notes|Callouts|Aural\/voice items to drill|Memory action|Inspection route|General inspection standard|Flap retraction schedule|Climb\/cruise flow):$/.test(line)) {
       if (groupHasContent(group)) contentEl.append(group);
       group = createGroup(line.replace(/:$/, ""));
@@ -318,6 +325,8 @@ function renderStageBody(stage) {
     list = null;
     const paragraph = document.createElement("p");
     paragraph.className = line.toLowerCase().includes("do not use for flight") ? "notice" : "procedure-text";
+    if (/^QRH reference:/.test(line)) paragraph.className = "citation";
+    if (/^(Caution!|Warning!)/.test(line)) paragraph.className = "notice";
     paragraph.textContent = line;
     group.append(paragraph);
   }
