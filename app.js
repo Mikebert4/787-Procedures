@@ -87,10 +87,12 @@ const state = {
   profiles: {},
   activeMode: "normal",
   stages: [],
-  current: 0
+  current: 0,
+  navCollapsed: localStorage.getItem("b787-procedures:nav-collapsed") === "1"
 };
 
 const fctmGuidance = window.FCTM_GUIDANCE || [];
+const appShellEl = document.querySelector(".app-shell");
 const tabsEl = document.getElementById("tabs");
 const titleEl = document.getElementById("stage-title");
 const labelEl = document.getElementById("stage-label");
@@ -103,10 +105,16 @@ const progressEl = document.getElementById("stage-progress");
 const prevButton = document.getElementById("prev-stage");
 const nextButton = document.getElementById("next-stage");
 const resetAllButton = document.getElementById("reset-all");
+const navToggleButton = document.getElementById("nav-toggle");
 const fctmDialog = document.getElementById("fctm-dialog");
 const fctmDialogTitleEl = document.getElementById("fctm-dialog-title");
 const fctmDialogContentEl = document.getElementById("fctm-dialog-content");
 const fctmCloseButton = document.getElementById("fctm-close");
+const imageDialog = document.getElementById("image-dialog");
+const imageDialogTitleEl = document.getElementById("image-dialog-title");
+const imageDialogImgEl = document.getElementById("image-dialog-img");
+const imageDialogCaptionEl = document.getElementById("image-dialog-caption");
+const imageCloseButton = document.getElementById("image-close");
 const modeButtons = {
   normal: document.getElementById("mode-normal"),
   nonNormal: document.getElementById("mode-non-normal")
@@ -120,6 +128,7 @@ async function init() {
     state.profiles.normal = parseMarkdown(markdown, "normal");
     state.profiles.nonNormal = parseMarkdown(window.NON_NORMAL_MARKDOWN || "", "nonNormal");
     state.stages = state.profiles[state.activeMode];
+    applyNavState();
     renderTabs();
     selectStage(0);
     bindControls();
@@ -203,9 +212,14 @@ function bindControls() {
   prevButton.addEventListener("click", () => selectStage(Math.max(0, state.current - 1)));
   nextButton.addEventListener("click", () => selectStage(Math.min(state.stages.length - 1, state.current + 1)));
   resetAllButton.addEventListener("click", resetAllProgress);
+  navToggleButton.addEventListener("click", toggleNav);
   fctmCloseButton.addEventListener("click", closeFctmDialog);
   fctmDialog.addEventListener("click", (event) => {
     if (event.target === fctmDialog) closeFctmDialog();
+  });
+  imageCloseButton.addEventListener("click", closeImageDialog);
+  imageDialog.addEventListener("click", (event) => {
+    if (event.target === imageDialog) closeImageDialog();
   });
   modeButtons.normal.addEventListener("click", () => setMode("normal"));
   modeButtons.nonNormal.addEventListener("click", () => setMode("nonNormal"));
@@ -378,15 +392,34 @@ function renderVisuals(stage) {
   images.forEach((image) => {
     const figure = document.createElement("figure");
     figure.className = "visual-card";
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "visual-open";
+    button.setAttribute("aria-label", `Open larger view of ${image.alt}`);
+    button.addEventListener("click", () => openImageDialog(image));
     const img = document.createElement("img");
     img.src = image.src;
     img.alt = image.alt;
+    button.append(img);
     const caption = document.createElement("figcaption");
     caption.textContent = image.caption;
-    figure.append(img, caption);
+    figure.append(button, caption);
     wrapper.append(figure);
   });
   visualsEl.append(wrapper);
+}
+
+function toggleNav() {
+  state.navCollapsed = !state.navCollapsed;
+  localStorage.setItem("b787-procedures:nav-collapsed", state.navCollapsed ? "1" : "0");
+  applyNavState();
+}
+
+function applyNavState() {
+  appShellEl.classList.toggle("nav-collapsed", state.navCollapsed);
+  navToggleButton.textContent = state.navCollapsed ? "Expand" : "Collapse";
+  navToggleButton.setAttribute("aria-expanded", state.navCollapsed ? "false" : "true");
+  navToggleButton.setAttribute("aria-label", state.navCollapsed ? "Expand stage menu" : "Collapse stage menu");
 }
 
 function renderStageGuidanceLinks(stage) {
@@ -497,6 +530,27 @@ function closeFctmDialog() {
     fctmDialog.close();
   } else {
     fctmDialog.removeAttribute("open");
+  }
+}
+
+function openImageDialog(image) {
+  imageDialogTitleEl.textContent = image.alt;
+  imageDialogImgEl.src = image.src;
+  imageDialogImgEl.alt = image.alt;
+  imageDialogCaptionEl.textContent = image.caption;
+
+  if (typeof imageDialog.showModal === "function") {
+    imageDialog.showModal();
+  } else {
+    imageDialog.setAttribute("open", "");
+  }
+}
+
+function closeImageDialog() {
+  if (typeof imageDialog.close === "function") {
+    imageDialog.close();
+  } else {
+    imageDialog.removeAttribute("open");
   }
 }
 

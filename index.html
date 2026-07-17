@@ -27,7 +27,10 @@
         <aside class="stage-nav" aria-label="Procedure stages">
           <div class="nav-header">
             <span>Profile</span>
-            <button id="reset-all" type="button" class="ghost-button">Reset</button>
+            <div class="nav-actions">
+              <button id="reset-all" type="button" class="ghost-button">Reset</button>
+              <button id="nav-toggle" type="button" class="icon-button nav-toggle" aria-expanded="true" aria-label="Collapse stage menu">Collapse</button>
+            </div>
           </div>
           <div id="tabs" class="tabs" role="tablist" aria-orientation="vertical"></div>
         </aside>
@@ -63,6 +66,22 @@
           <button id="fctm-close" type="button" class="icon-button" aria-label="Close FCTM guidance">Close</button>
         </div>
         <div id="fctm-dialog-content" class="fctm-dialog-content"></div>
+      </div>
+    </dialog>
+
+    <dialog id="image-dialog" class="image-dialog" aria-labelledby="image-dialog-title">
+      <div class="image-dialog-panel">
+        <div class="image-dialog-head">
+          <div>
+            <p class="eyebrow">Reference Image</p>
+            <h2 id="image-dialog-title">Expanded view</h2>
+          </div>
+          <button id="image-close" type="button" class="icon-button" aria-label="Close expanded image">Close</button>
+        </div>
+        <div class="image-dialog-body">
+          <img id="image-dialog-img" alt="">
+          <p id="image-dialog-caption" class="citation"></p>
+        </div>
       </div>
     </dialog>
 
