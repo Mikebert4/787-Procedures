@@ -449,6 +449,100 @@ h3 {
   color: #21462f;
 }
 
+.memory-panel {
+  display: grid;
+  gap: 14px;
+}
+
+.memory-alert {
+  margin: 0;
+  padding: 12px 14px;
+  border: 2px solid #a23318;
+  border-radius: 8px;
+  background: #fff1ec;
+  color: #7d2412;
+  font-weight: 800;
+}
+
+.memory-condition {
+  margin: 0;
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.memory-actions {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: memory-action;
+}
+
+.memory-action {
+  counter-increment: memory-action;
+  display: grid;
+  grid-template-columns: 52px 28px minmax(0, 1fr);
+  align-items: center;
+  gap: 12px;
+  min-height: 72px;
+  padding: 14px;
+  border: 2px solid #243b53;
+  border-radius: 8px;
+  background: #f7fbff;
+  color: #12263a;
+  font-size: 1.16rem;
+  font-weight: 800;
+}
+
+.memory-action::before {
+  content: counter(memory-action);
+  display: inline-grid;
+  width: 44px;
+  height: 44px;
+  place-items: center;
+  border-radius: 50%;
+  background: #243b53;
+  color: #ffffff;
+  font-size: 1.05rem;
+}
+
+.memory-action input {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--accent);
+}
+
+.memory-action label {
+  overflow-wrap: anywhere;
+}
+
+.memory-action:has(input:checked) {
+  border-color: #1d7b45;
+  background: #eefbf3;
+  color: #17472b;
+}
+
+.memory-follow-up {
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fbfcfc;
+}
+
+.memory-follow-up h3 {
+  margin-bottom: 6px;
+  color: var(--muted);
+}
+
+.memory-follow-up p {
+  margin: 6px 0 0;
+}
+
+.memory-source {
+  margin-top: 0;
+}
+
 .visual-pane {
   min-width: 0;
   padding: 14px;
@@ -719,6 +813,28 @@ h3 {
   .check-item.has-chips .norse-chip {
     grid-column: 2;
     justify-self: start;
+  }
+
+  .memory-action {
+    grid-template-columns: 42px minmax(0, 1fr);
+    gap: 10px;
+    min-height: 68px;
+    font-size: 1rem;
+  }
+
+  .memory-action::before {
+    width: 38px;
+    height: 38px;
+  }
+
+  .memory-action input {
+    grid-column: 1;
+    justify-self: center;
+  }
+
+  .memory-action label {
+    grid-column: 2;
+    grid-row: 1 / span 2;
   }
 
   .fctm-dialog-head,

@@ -119,7 +119,8 @@ const imageDialogCaptionEl = document.getElementById("image-dialog-caption");
 const imageCloseButton = document.getElementById("image-close");
 const modeButtons = {
   normal: document.getElementById("mode-normal"),
-  nonNormal: document.getElementById("mode-non-normal")
+  nonNormal: document.getElementById("mode-non-normal"),
+  memory: document.getElementById("mode-memory")
 };
 
 init();
@@ -129,6 +130,7 @@ async function init() {
     const markdown = window.PROFILE_MARKDOWN || await loadMarkdown();
     state.profiles.normal = parseMarkdown(markdown, "normal");
     state.profiles.nonNormal = parseMarkdown(window.NON_NORMAL_MARKDOWN || "", "nonNormal");
+    state.profiles.memory = parseMemoryItems(window.MEMORY_ITEMS || []);
     state.stages = state.profiles[state.activeMode];
     applyNavState();
     renderTabs();
@@ -225,14 +227,16 @@ function bindControls() {
   });
   modeButtons.normal.addEventListener("click", () => setMode("normal"));
   modeButtons.nonNormal.addEventListener("click", () => setMode("nonNormal"));
+  modeButtons.memory.addEventListener("click", () => setMode("memory"));
 }
 
 function setMode(mode) {
   if (state.activeMode === mode) return;
   state.activeMode = mode;
   state.stages = state.profiles[mode];
-  modeButtons.normal.setAttribute("aria-pressed", mode === "normal" ? "true" : "false");
-  modeButtons.nonNormal.setAttribute("aria-pressed", mode === "nonNormal" ? "true" : "false");
+  Object.entries(modeButtons).forEach(([key, button]) => {
+    button.setAttribute("aria-pressed", key === mode ? "true" : "false");
+  });
   renderTabs();
   selectStage(0);
 }
@@ -270,7 +274,7 @@ function selectStage(index) {
   state.current = index;
   const stage = state.stages[index];
   updateTabSelection();
-  labelEl.textContent = `${state.activeMode === "normal" ? "Normal" : "Non-Normal"} - ${stage.id === "operating-frame" ? "Profile" : `Stage ${stageNumber(index)}`}`;
+  labelEl.textContent = stageLabel(stage, index);
   titleEl.textContent = stage.title;
   citationEl.textContent = stage.citation || "Source citations are shown in the procedure text.";
   renderStageGuidanceLinks(stage);
@@ -288,6 +292,11 @@ function updateTabSelection() {
 }
 
 function renderStageBody(stage) {
+  if (stage.type === "memory") {
+    renderMemoryStage(stage);
+    return;
+  }
+
   const lines = stage.body.split(/\r?\n/);
   let group = createGroup("Procedure");
   let list = null;
@@ -334,6 +343,87 @@ function renderStageBody(stage) {
   }
 
   if (groupHasContent(group)) contentEl.append(group);
+}
+
+function parseMemoryItems(items) {
+  return items.map((item, index) => ({
+    ...item,
+    type: "memory",
+    mode: "memory",
+    rawTitle: item.title,
+    title: item.title,
+    body: item.actions.map((action) => `- ${action}`).join("\n"),
+    order: index + 1
+  }));
+}
+
+function stageLabel(stage, index) {
+  if (state.activeMode === "memory") return `Memory items - Item ${index + 1}`;
+  return `${state.activeMode === "normal" ? "Normal" : "Non-Normal"} - ${stage.id === "operating-frame" ? "Profile" : `Stage ${stageNumber(index)}`}`;
+}
+
+function renderMemoryStage(stage) {
+  const panel = document.createElement("section");
+  panel.className = "memory-panel";
+
+  const alert = document.createElement("p");
+  alert.className = "memory-alert";
+  alert.textContent = "Perform these memory actions before using the QRH or EICAS checklist.";
+  panel.append(alert);
+
+  if (stage.condition) {
+    const condition = document.createElement("p");
+    condition.className = "memory-condition";
+    condition.textContent = `Condition: ${stage.condition}`;
+    panel.append(condition);
+  }
+
+  const list = document.createElement("ol");
+  list.className = "memory-actions";
+  stage.actions.forEach((action, index) => {
+    const item = document.createElement("li");
+    item.className = "memory-action";
+
+    const key = storageKey(stage, index);
+    const input = document.createElement("input");
+    input.type = "checkbox";
+    input.id = key;
+    input.checked = localStorage.getItem(key) === "1";
+    input.addEventListener("change", () => {
+      localStorage.setItem(key, input.checked ? "1" : "0");
+      refreshCompletionBadges();
+      updateProgress();
+    });
+
+    const label = document.createElement("label");
+    label.htmlFor = key;
+    label.textContent = action;
+
+    item.append(input, label);
+    list.append(item);
+  });
+  panel.append(list);
+
+  if (stage.afterMemory?.length) {
+    const followUp = document.createElement("section");
+    followUp.className = "memory-follow-up";
+    const heading = document.createElement("h3");
+    heading.textContent = "After Memory Actions";
+    followUp.append(heading);
+    stage.afterMemory.forEach((text) => {
+      const paragraph = document.createElement("p");
+      paragraph.textContent = text;
+      followUp.append(paragraph);
+    });
+    panel.append(followUp);
+  }
+
+  const source = document.createElement("p");
+  source.className = "citation memory-source";
+  source.textContent = `Source: ${stage.citation}`;
+  panel.append(source);
+
+  contentEl.append(panel);
 }
 
 function createGroup(title) {
@@ -406,6 +496,14 @@ function createReferenceChip({ className, label, title, ariaLabel, onClick }) {
 
 function renderVisuals(stage) {
   visualsEl.innerHTML = "";
+  if (stage.type === "memory") {
+    const note = document.createElement("p");
+    note.className = "empty-note";
+    note.textContent = "Memory actions are shown in the main panel. Use the cited QRH checklist after the memory actions are complete.";
+    visualsEl.append(note);
+    return;
+  }
+
   const wrapper = document.createElement("div");
   wrapper.className = "visuals-grid";
   const matches = visualLibrary.filter((entry) => entry.matcher.test(stage.rawTitle) || entry.matcher.test(stage.title));
