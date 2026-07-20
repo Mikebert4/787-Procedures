@@ -186,7 +186,8 @@ const modeButtons = {
   normal: document.getElementById("mode-normal"),
   nonNormal: document.getElementById("mode-non-normal"),
   memory: document.getElementById("mode-memory"),
-  limitations: document.getElementById("mode-limitations")
+  limitations: document.getElementById("mode-limitations"),
+  callouts: document.getElementById("mode-callouts")
 };
 
 init();
@@ -198,6 +199,7 @@ async function init() {
     state.profiles.nonNormal = parseMarkdown(window.NON_NORMAL_MARKDOWN || "", "nonNormal");
     state.profiles.memory = parseMemoryItems(window.MEMORY_ITEMS || []);
     state.profiles.limitations = parseMarkdown(window.LIMITATIONS_MARKDOWN || "", "limitations");
+    state.profiles.callouts = parseCalloutItems(window.CALLOUTS || []);
     state.stages = state.profiles[state.activeMode];
     applyNavState();
     renderTabs();
@@ -296,6 +298,7 @@ function bindControls() {
   modeButtons.nonNormal.addEventListener("click", () => setMode("nonNormal"));
   modeButtons.memory.addEventListener("click", () => setMode("memory"));
   modeButtons.limitations.addEventListener("click", () => setMode("limitations"));
+  modeButtons.callouts.addEventListener("click", () => setMode("callouts"));
 }
 
 function setMode(mode) {
@@ -366,6 +369,10 @@ function renderStageBody(stage) {
   }
   if (stage.mode === "limitations") {
     renderLimitationsStage(stage);
+    return;
+  }
+  if (stage.mode === "callouts") {
+    renderCalloutsStage(stage);
     return;
   }
 
@@ -543,10 +550,74 @@ function parseMemoryItems(items) {
   }));
 }
 
+function parseCalloutItems(items) {
+  return items.map((item, index) => ({
+    ...item,
+    type: "callouts",
+    mode: "callouts",
+    rawTitle: item.title,
+    title: item.title,
+    citation: item.citation || "",
+    body: "",
+    order: index + 1
+  }));
+}
+
 function stageLabel(stage, index) {
   if (state.activeMode === "memory") return `Memory items - Item ${index + 1}`;
   if (state.activeMode === "limitations") return `Limitations - Section ${index + 1}`;
+  if (state.activeMode === "callouts") return `Callouts - Phase ${index + 1}`;
   return `${state.activeMode === "normal" ? "Normal" : "Non-Normal"} - ${stage.id === "operating-frame" ? "Profile" : `Stage ${stageNumber(index)}`}`;
+}
+
+function renderCalloutsStage(stage) {
+  const panel = document.createElement("section");
+  panel.className = "callouts-panel";
+
+  if (stage.note) {
+    const note = document.createElement("p");
+    note.className = "callouts-note";
+    note.textContent = stage.note;
+    panel.append(note);
+  }
+
+  if (stage.rows?.length) {
+    const table = document.createElement("table");
+    table.className = "callouts-table";
+    const thead = document.createElement("thead");
+    const headerRow = document.createElement("tr");
+    ["Condition / Location", "Callout", "Speaker", "Source"].forEach((label) => {
+      const th = document.createElement("th");
+      th.scope = "col";
+      th.textContent = label;
+      headerRow.append(th);
+    });
+    thead.append(headerRow);
+    table.append(thead);
+
+    const tbody = document.createElement("tbody");
+    stage.rows.forEach((row) => {
+      const tr = document.createElement("tr");
+      [row.condition, row.callout, row.speaker, row.source].forEach((value, index) => {
+        const cell = document.createElement("td");
+        if (index === 1) cell.className = "callout-phrase";
+        cell.textContent = value || "";
+        tr.append(cell);
+      });
+      tbody.append(tr);
+    });
+    table.append(tbody);
+    panel.append(table);
+  }
+
+  if (stage.footer) {
+    const footer = document.createElement("p");
+    footer.className = "citation";
+    footer.textContent = stage.footer;
+    panel.append(footer);
+  }
+
+  contentEl.append(panel);
 }
 
 function renderMemoryStage(stage) {
@@ -695,7 +766,7 @@ function renderVisuals(stage) {
   wrapper.className = "visuals-grid";
   const matches = visualLibrary.filter((entry) => entry.matcher.test(stage.rawTitle) || entry.matcher.test(stage.title));
   const fctmImages = getStageGuidance(stage, { includeItemMatches: true }).flatMap((entry) => entry.images || []);
-  const images = uniqueImages([...matches.flatMap((entry) => entry.images), ...fctmImages]);
+  const images = uniqueImages([...(stage.images || []), ...matches.flatMap((entry) => entry.images), ...fctmImages]);
 
   if (!images.length) {
     const note = document.createElement("p");
@@ -922,6 +993,7 @@ function refreshCompletionBadges() {
 }
 
 function stageCompletion(stage) {
+  if (stage.mode === "callouts") return { total: 0, checked: 0, percent: 100, complete: true };
   if (stage.mode === "limitations") return { total: 0, checked: 0, percent: 100, complete: true };
   const total = countChecklistItems(stage.body);
   if (!total) return { total, checked: 0, percent: 100, complete: true };
