@@ -1,492 +1,4 @@
-window.SCAN_FLOW_DETAILS = {
-  default: {
-    citation: "Norse Scan Flows v1.2; Norse FCOM Rev 9; Norse FCTM Rev 19.",
-    bullets: [
-      "Use the scan-flow item as a panel-location prompt, then complete the applicable FCOM normal procedure or checklist item.",
-      "FCTM callout and CRM guidance says the PM normally makes callouts from indications, FMAs, or observations, and the PF verifies or acknowledges."
-    ]
-  },
-  battery: {
-    citation: "Norse FCOM Rev 9, PDF pp.190, 242; FCOM NP.21.12, NP.21.64.",
-    bullets: [
-      "FCOM Preflight Procedure - First Officer sets the BATTERY switch ON and verifies the OFF light is extinguished.",
-      "FCOM Secure Procedure later sets the BATTERY switch Off."
-    ]
-  },
-  hydraulicPumps: {
-    citation: "Norse FCOM Rev 9, PDF pp.191, 209-210, 240; FCOM NP.21.13, NP.21.31-NP.21.32, NP.21.62.",
-    bullets: [
-      "Preflight hydraulic panel setup includes engine primary pumps ON and center electric pumps OFF with expected fault indications before pressurization.",
-      "Before Start sets the right electric demand pump, center 1 and center 2 electric pump selectors, and left electric demand pump to AUTO and verifies FAULT lights extinguish.",
-      "Shutdown sets the left/center/right electric demand/center pump selectors OFF."
-    ]
-  },
-  wipers: {
-    citation: "Norse FCOM Rev 9, PDF pp.190, 195; FCOM NP.21.12, NP.21.17.",
-    bullets: [
-      "Preflight scan includes the left and right wiper selectors in the overhead/sidewall flow.",
-      "FCOM Preflight Procedure verifies the right wiper selector OFF."
-    ]
-  },
-  landingGearLever: {
-    citation: "Norse FCOM Rev 9, PDF pp.202, 225, 229, 233; FCOM NP.21.24, NP.21.47, NP.21.51, NP.21.55.",
-    bullets: [
-      "Preflight captain scan includes the landing gear panel.",
-      "Approach procedures call GEAR DOWN at glideslope/glidepath alive or approximately 2 NM before the FAF, as applicable."
-    ]
-  },
-  alternateFlaps: {
-    citation: "Norse FCOM Rev 9, PDF pp.190-203; FCOM NP.21.12-NP.21.25.",
-    bullets: [
-      "The scan-flow item is a panel-location reminder for the alternate flaps area during power-up/preflight.",
-      "Use the FCOM preflight panel setup as the controlling normal-procedure source."
-    ]
-  },
-  electricalPower: {
-    citation: "Norse Scan Flows v1.2 PDF p.2; Norse FCOM Rev 9, PDF p.209; FCOM NP.21.31.",
-    bullets: [
-      "The scan flow states: Electrical power - Establish (Ext PWR or APU).",
-      "Before Start FCOM electrical power context includes setting electrical power and checking APU/external power as needed before shutdown; for power-up, use the applicable supplementary procedure."
-    ]
-  },
-  irsSelectors: {
-    citation: "Norse FCOM Rev 9, PDF pp.179, 242; FCOM NP.21.1, NP.21.64.",
-    bullets: [
-      "Preliminary Preflight sets IRS selectors OFF for 30 seconds, then ON, and verifies the ON BAT light is extinguished.",
-      "Secure Procedure sets IRS selectors OFF."
-    ]
-  },
-  statusDisplay: {
-    citation: "Norse FCOM Rev 9, PDF pp.179, 197, 240; FCOM NP.21.1, NP.21.19, NP.21.62.",
-    bullets: [
-      "Preliminary Preflight checks the STATUS display and verifies only expected messages are shown.",
-      "Preflight Procedure selects the status display, checks status messages, verifies airline database/reset items, and uses the checklist display.",
-      "Shutdown checks status messages and notes PFC self-test timing after hydraulic shutdown."
-    ]
-  },
-  sufficientForFlight: {
-    citation: "Norse FCOM Rev 9, PDF p.179; FCOM NP.21.1.",
-    bullets: [
-      "Preliminary Preflight verifies crew oxygen pressure, hydraulic quantity, and engine oil quantity are sufficient for flight.",
-      "After crew change or maintenance action, it verifies CREW OXYGEN LOW is blank and crew oxygen pressure is sufficient for dispatch."
-    ]
-  },
-  eicasDisplay: {
-    citation: "Norse FCOM Rev 9, PDF pp.179, 197, 210, 214; FCOM NP.21.1, NP.21.19, NP.21.32, NP.21.36.",
-    bullets: [
-      "Preliminary Preflight checks the EICAS display and verifies only expected alert and memo messages are shown.",
-      "After message review, CANC/RCL is pushed to clear EICAS so new alert messages are detected promptly.",
-      "Before Start and Before Taxi use CANCEL/RECALL or Recall checks to verify only expected messages are shown."
-    ]
-  },
-  maintenanceDocuments: {
-    citation: "Norse FCOM Rev 9, PDF pp.179-180; FCOM NP.21.1-NP.21.2.",
-    bullets: [
-      "Preliminary Preflight checks ATL and aircraft documents.",
-      "It also checks portable EFBs, cabin iPads, associated chargers, and other needed equipment."
-    ]
-  },
-  emergencyEquipment: {
-    citation: "Norse FCOM Rev 9, PDF pp.179-180; FCOM NP.21.1-NP.21.2.",
-    bullets: [
-      "Preliminary Preflight checks emergency equipment including fire extinguisher, crash axe, protective gloves, emergency descent devices, and protective breathing equipment.",
-      "The EMK is checked stowed with all four green seals intact."
-    ]
-  },
-  parkingBrake: {
-    citation: "Norse FCOM Rev 9, PDF pp.180, 202, 238-240; FCOM NP.21.2, NP.21.24, NP.21.60-NP.21.62.",
-    bullets: [
-      "Preliminary Preflight sets the parking brake as needed, including if brake wear indicators are to be checked during exterior inspection.",
-      "Captain preflight includes the parking brake area.",
-      "Shutdown sets the parking brake and verifies PARKING BRAKE SET, then releases it after wheel chocks are in place."
-    ]
-  },
-  efisDspMcp: {
-    citation: "Norse FCOM Rev 9, PDF pp.195, 200-201; FCOM NP.21.17, NP.21.22-NP.21.23. Norse FCTM Rev 19, PDF p.71; FCTM 1.19.",
-    bullets: [
-      "Captain Preflight sets EFIS controls, display selections, and the MCP including flight director, autothrottle arm, autopilot disengage bar, heading/track, bank limit, vertical speed/FPA, and altitude increment as needed.",
-      "FCTM guidance says both pilots should regularly check flight instruments and FMAs to verify selections are correct for the phase of flight."
-    ]
-  },
-  oxygenLeft: {
-    citation: "Norse FCOM Rev 9, PDF pp.196, 201; FCOM NP.21.18, NP.21.23.",
-    bullets: [
-      "Preflight oxygen test includes mask stowed/doors closed, RESET/TEST push and hold, release, and selector set to 100%.",
-      "The scan item directs the pilot to include the relevant sidewall area in the flow."
-    ]
-  },
-  forwardPanelIsfd: {
-    citation: "Norse FCOM Rev 9, PDF pp.196, 201-202; FCOM NP.21.18, NP.21.23-NP.21.24.",
-    bullets: [
-      "Preflight sets forward panel brightness controls and air data/attitude source/PFD-MFD selections.",
-      "Captain preflight sets and checks the integrated standby flight display, including local altimeter setting and no flags/messages."
-    ]
-  },
-  speedThrustFlap: {
-    citation: "Norse FCOM Rev 9, PDF p.202; FCOM NP.21.24.",
-    bullets: [
-      "Captain Preflight verifies SPEEDBRAKE lever DOWN, reverse levers down, thrust levers closed, and flap lever set to agree with flap position.",
-      "These items establish the baseline configuration before checklist completion."
-    ]
-  },
-  stabFuelAlt: {
-    citation: "Norse FCOM Rev 9, PDF pp.202-203; FCOM NP.21.24-NP.21.25.",
-    bullets: [
-      "Captain Preflight includes parking brake, stabilizer cutout guards closed, fuel control switches CUTOFF, and alternate flaps panel OFF/guarded as applicable.",
-      "The preflight scan verifies key engine and flight-control guarded items before the Preflight Checklist."
-    ]
-  },
-  acpTcp: {
-    citation: "Norse FCOM Rev 9, PDF pp.197-198, 203; FCOM NP.21.19-NP.21.20, NP.21.25.",
-    bullets: [
-      "Preflight sets tuning/control panels, VHF/HF, weather radar, transponder, TCAS, and audio panels as needed.",
-      "The F/O and captain each set their assigned audio and tuning/control panel areas."
-    ]
-  },
-  seatRudder: {
-    citation: "Norse FCOM Rev 9, PDF pp.199, 203; FCOM NP.21.21, NP.21.25.",
-    bullets: [
-      "Preflight adjusts seat for proper eye reference and rudder pedals for full rudder pedal and brake pedal movement.",
-      "FCOM cautions to stow the rudder pedal adjust crank after use."
-    ]
-  },
-  seatBeltsHarness: {
-    citation: "Norse FCOM Rev 9, PDF pp.199, 203; FCOM NP.21.21, NP.21.25.",
-    bullets: [
-      "Preflight adjusts the seat belt and shoulder harness.",
-      "This scan-flow item keeps the restraint check in the seat/rudder setup sequence."
-    ]
-  },
-  hudCombiner: {
-    citation: "Norse FCOM Rev 9, PDF pp.199, 242; FCOM NP.21.21, NP.21.64.",
-    bullets: [
-      "Preflight sets the HUD combiner down and adjusts HUD brightness.",
-      "Secure Procedure stows the HUD combiner and notes it must be fully raised and latched."
-    ]
-  },
-  overheadPanel: {
-    citation: "Norse FCOM Rev 9, PDF pp.190-195; FCOM NP.21.12-NP.21.17.",
-    bullets: [
-      "F/O Preflight overhead flow includes flight controls, electrical, flight deck door power, emergency lights, window heat, RAT indication, hydraulics, fire, engine, fuel, anti-ice, lights, cargo, air conditioning, and pressurization-related panels.",
-      "The scan-flow item groups overhead panel setup into the F/O scan."
-    ]
-  },
-  flightDirector: {
-    citation: "Norse FCOM Rev 9, PDF pp.195, 201, 240; FCOM NP.21.17, NP.21.23, NP.21.62.",
-    bullets: [
-      "Preflight sets the flight director switch ON and verifies expected flight mode annunciations.",
-      "Shutdown sets both flight director switches OFF."
-    ]
-  },
-  landingGearPanel: {
-    citation: "Norse FCOM Rev 9, PDF pp.202, 225, 229, 233; FCOM NP.21.24, NP.21.47, NP.21.51, NP.21.55.",
-    bullets: [
-      "Preflight includes the landing gear panel in the F/O forward-panel/gear-panel flow.",
-      "Approach procedures direct the landing gear lever to DN when GEAR DOWN is called."
-    ]
-  },
-  secondaryEngineIndications: {
-    citation: "Norse FCOM Rev 9, PDF pp.213-214; FCOM NP.21.35-NP.21.36.",
-    bullets: [
-      "Engine Start Procedure selects secondary engine indications.",
-      "Before Taxi Procedure sets Secondary Engine Indications Off."
-    ]
-  },
-  checklistDisplay: {
-    citation: "Norse FCOM Rev 9, PDF pp.197, 211, 214, 223, 240, 242; FCOM NP.21.19, NP.21.33, NP.21.36, NP.21.45, NP.21.62, NP.21.64.",
-    bullets: [
-      "Preflight pushes CHECKLIST display and verifies reset/database items.",
-      "Normal procedures call for the applicable checklist at phase completion; F/O does the checklist where specified.",
-      "FCTM callout discipline treats missing callouts or expected responses as an important crew crosscheck."
-    ]
-  },
-  fdDoor: {
-    citation: "Norse FCOM Rev 9, PDF pp.209, 242; FCOM NP.21.31, NP.21.64.",
-    bullets: [
-      "Before Start sets FLIGHT DECK DOOR POWER ON and verifies the flight deck door closed and locked.",
-      "Secure Procedure sets FD DOOR POWER OFF."
-    ]
-  },
-  cduDisplay: {
-    citation: "Norse FCOM Rev 9, PDF pp.181-183, 208-209; FCOM NP.21.3-NP.21.5, NP.21.30-NP.21.31. Norse FCTM Rev 19, PDF pp.56-57; FCTM 1.26-1.27.",
-    bullets: [
-      "CDU/EFB Preflight requires initial, navigation, and performance data entries and verification by the other pilot.",
-      "Before Start normally has PF select TAKEOFF REF and PM select LEGS.",
-      "FCTM FMC route verification guidance emphasizes comparing route entries, waypoint sequence, distance, fuel, and performance predictions."
-    ]
-  },
-  mcpBeforeStart: {
-    citation: "Norse FCOM Rev 9, PDF pp.208-209; FCOM NP.21.30-NP.21.31.",
-    bullets: [
-      "Before Start sets MCP speed/V2, arms LNAV as needed and VNAV, and sets initial heading or track and initial altitude.",
-      "The CDU/FMC preflight complete call and crosscheck support the MCP setup."
-    ]
-  },
-  briefing: {
-    citation: "Norse FCOM Rev 9, PDF pp.204, 221-222; FCOM NP.21.26, NP.21.43-NP.21.44. Norse FCTM Rev 19, PDF p.71; FCTM 1.19.",
-    bullets: [
-      "Departure Preparations require taxi and takeoff briefings by the takeoff pilot.",
-      "Descent/Approach procedures update arrival and approach briefings as needed.",
-      "FCTM guidance emphasizes continuous awareness of altitude, position, energy state, configuration, and phase-appropriate situational awareness."
-    ]
-  },
-  exteriorDoors: {
-    citation: "Norse FCOM Rev 9, PDF p.209; FCOM NP.21.31.",
-    bullets: [
-      "Before Start verifies exterior doors closed.",
-      "The flight deck door is closed and locked after required papers/forms and passenger information are handled."
-    ]
-  },
-  startClearance: {
-    citation: "Norse FCOM Rev 9, PDF pp.209, 211; FCOM NP.21.31, NP.21.33.",
-    bullets: [
-      "Before Start obtains clearance to pressurize hydraulic systems.",
-      "F/O obtains ATC clearance to start engines and pushback as needed before beacon and checklist."
-    ]
-  },
-  noseGearSteering: {
-    citation: "Norse FCOM Rev 9, PDF pp.209-212; FCOM NP.21.31-NP.21.34.",
-    bullets: [
-      "If pushback is needed, Before Start verifies nose gear steering locked out before hydraulic pressurization.",
-      "Pushback/Towing verifies the tow bar is not connected and nose gear steering is not locked out when complete."
-    ]
-  },
-  fuelPanel: {
-    citation: "Norse FCOM Rev 9, PDF pp.192, 210, 240; FCOM NP.21.14, NP.21.32, NP.21.62.",
-    bullets: [
-      "Preflight fuel/jettison panel setup verifies jettison nozzles off, fuel to remain selector in, jettison arm off, and expected lights.",
-      "Before Start sets left/right fuel pumps ON and center pumps ON if FUEL IN CENTER shows.",
-      "Shutdown sets fuel pump switches OFF."
-    ]
-  },
-  beacon: {
-    citation: "Norse FCOM Rev 9, PDF pp.193, 211, 240; FCOM NP.21.15, NP.21.33, NP.21.62.",
-    bullets: [
-      "Preflight initially sets beacon OFF.",
-      "Before Start sets beacon ON only after required ground/ATC clearances.",
-      "Shutdown sets beacon OFF."
-    ]
-  },
-  cancelRecall: {
-    citation: "Norse FCOM Rev 9, PDF pp.179, 210, 214; FCOM NP.21.1, NP.21.32, NP.21.36.",
-    bullets: [
-      "EICAS messages are reviewed and then cleared with CANC/RCL to detect new alert messages promptly.",
-      "Before Start and Before Taxi verify only expected alert and memo messages are shown."
-    ]
-  },
-  trim: {
-    citation: "Norse FCOM Rev 9, PDF pp.210-211; FCOM NP.21.32-NP.21.33.",
-    bullets: [
-      "Before Start sets stabilizer trim for takeoff and verifies trim is in the greenband.",
-      "Rudder trim is set to 0 units."
-    ]
-  },
-  apu: {
-    citation: "Norse FCOM Rev 9, PDF pp.214, 237, 240; FCOM NP.21.36, NP.21.59, NP.21.62.",
-    bullets: [
-      "Before Taxi sets APU selector OFF after engine generators are online.",
-      "After Landing sets APU selector START then ON as needed.",
-      "Shutdown leaves APU selector as needed."
-    ]
-  },
-  antiIce: {
-    citation: "Norse FCOM Rev 9, PDF pp.193, 214, 237; FCOM NP.21.15, NP.21.36, NP.21.59.",
-    bullets: [
-      "Preflight sets wing and engine anti-ice selectors AUTO.",
-      "Before Taxi and After Landing set engine anti-ice as needed."
-    ]
-  },
-  groundEquipmentClear: {
-    citation: "Norse FCOM Rev 9, PDF p.214; FCOM NP.21.36.",
-    bullets: [
-      "Before Taxi verifies ground personnel and equipment are clear.",
-      "This is a joint captain/F/O awareness item before aircraft movement."
-    ]
-  },
-  flightControls: {
-    citation: "Norse FCOM Rev 9, PDF p.214; FCOM NP.21.36.",
-    bullets: [
-      "Before Taxi checks flight controls with slow, deliberate full-travel inputs.",
-      "The rudder pedal disconnect switch is held down during the rudder check to prevent nose wheel movement."
-    ]
-  },
-  flapLever: {
-    citation: "Norse FCOM Rev 9, PDF pp.202, 214, 224-225, 229, 233, 237; FCOM NP.21.24, NP.21.36, NP.21.46-NP.21.47, NP.21.51, NP.21.55, NP.21.59.",
-    bullets: [
-      "Preflight sets the flap lever to agree with flap position.",
-      "Before Taxi sets takeoff flaps after the captain calls FLAPS ___.",
-      "Approach procedures use the flap extension schedule; After Landing sets flaps UP."
-    ]
-  },
-  transponder: {
-    citation: "Norse FCOM Rev 9, PDF pp.212, 214, 216, 237, 240; FCOM NP.21.34, NP.21.36, NP.21.38, NP.21.59, NP.21.62.",
-    bullets: [
-      "Pushback/Towing and Before Taxi set transponder as needed.",
-      "Takeoff sets transponder mode TA/RA when entering the runway.",
-      "After Landing and Shutdown set transponder as needed/STANDBY."
-    ]
-  },
-  wxRadarTerrain: {
-    citation: "Norse FCOM Rev 9, PDF pp.198, 215, 237; FCOM NP.21.20, NP.21.37, NP.21.59. Norse FCTM Rev 19, PDF p.63; FCTM 1.33.",
-    bullets: [
-      "Before Takeoff sets weather radar, VSD, and terrain display as needed.",
-      "After Landing sets weather radar off.",
-      "FCTM recommends one pilot monitor weather radar while the other monitors terrain when adverse weather and terrain/obstacles may affect the path."
-    ]
-  },
-  vsd: {
-    citation: "Norse FCOM Rev 9, PDF pp.215, 222; FCOM NP.21.37, NP.21.44. Norse FCTM Rev 19, PDF p.63; FCTM 1.33.",
-    bullets: [
-      "Before Takeoff and Approach set/select VSD as needed.",
-      "FCTM display guidance links terrain/weather/vertical-situation monitoring to phase-appropriate situational awareness."
-    ]
-  },
-  strobeLights: {
-    citation: "Norse FCOM Rev 9, PDF pp.193, 216; FCOM NP.21.15, NP.21.38.",
-    bullets: [
-      "Preflight initially sets strobe OFF.",
-      "Takeoff Procedure sets strobe ON when entering the departure runway."
-    ]
-  },
-  landingLights: {
-    citation: "Norse FCOM Rev 9, PDF pp.216, 217, 222, 237; FCOM NP.21.38-NP.21.39, NP.21.44, NP.21.59.",
-    bullets: [
-      "Takeoff Procedure sets landing lights ON when cleared for takeoff.",
-      "Approach Procedure sets runway turnoff, taxi, and landing lights ON at 10,000 feet AAL.",
-      "After Landing sets exterior lights as needed."
-    ]
-  },
-  recallNotes: {
-    citation: "Norse FCOM Rev 9, PDF pp.210, 214, 221; FCOM NP.21.32, NP.21.36, NP.21.43.",
-    bullets: [
-      "Descent reviews all alert and memo messages and operational notes.",
-      "Before Start/Before Taxi recall checks verify only expected messages are shown."
-    ]
-  },
-  landingPerformance: {
-    citation: "Norse FCOM Rev 9, PDF pp.207, 221; FCOM NP.21.29, NP.21.43. Norse FCTM Rev 19, PDF p.217; FCTM 5.3.",
-    bullets: [
-      "Descent compares OPT landing performance calculations and sets landing data.",
-      "FCTM approach preparation guidance links landing performance, briefing, and stabilized approach readiness."
-    ]
-  },
-  minimums: {
-    citation: "Norse FCOM Rev 9, PDF pp.200, 221, 223; FCOM NP.21.22, NP.21.43, NP.21.45. Norse FCTM Rev 19, PDF pp.72-74; FCTM 1.20-1.22.",
-    bullets: [
-      "Preflight/Descent/Approach set radio or baro minimums as required.",
-      "FCTM callout guidance treats CONTINUE or GO-AROUND at minimums as an explicit PF callout, not merely an altitude callout."
-    ]
-  },
-  vref: {
-    citation: "Norse FCOM Rev 9, PDF p.221; FCOM NP.21.43.",
-    bullets: [
-      "Descent verifies VREF on APPROACH REF; PM enters VREF on APPROACH REF.",
-      "Landing data supports approach speed and landing checklist setup."
-    ]
-  },
-  navrad: {
-    citation: "Norse FCOM Rev 9, PDF pp.183, 221, 225; FCOM NP.21.5, NP.21.43, NP.21.47.",
-    bullets: [
-      "CDU/EFB Preflight tunes NAV RADIO as needed.",
-      "Descent includes NAVRAD setup.",
-      "ILS/GLS approach verifies navigation radios tuned and identified with deviation pointers shown."
-    ]
-  },
-  autobrake: {
-    citation: "Norse FCOM Rev 9, PDF pp.221, 236-237; FCOM NP.21.43, NP.21.58-NP.21.59.",
-    bullets: [
-      "Descent sets the AUTOBRAKE selector.",
-      "Landing Roll verifies correct autobrake operation.",
-      "After Landing sets AUTOBRAKE selector OFF."
-    ]
-  },
-  cabinLandingPa: {
-    citation: "Norse FCOM Rev 9, PDF pp.222, 225, 229, 233; FCOM NP.21.44, NP.21.47, NP.21.51, NP.21.55.",
-    bullets: [
-      "Approach Procedure has PM announce CABIN CREW, PREPARE THE CABIN FOR LANDING approximately 30 minutes before landing or through FL300.",
-      "Landing procedures announce CABIN CREW, BE SEATED FOR LANDING after verifying the cabin is secure."
-    ]
-  },
-  rnp: {
-    citation: "Norse FCOM Rev 9, PDF pp.182, 220, 222; FCOM NP.21.4, NP.21.42, NP.21.44. Norse FCTM Rev 19, PDF pp.56-57; FCTM 1.26-1.27.",
-    bullets: [
-      "CDU/EFB Preflight verifies correct departure RNP as needed.",
-      "Climb/Cruise and Approach verify RNP as needed.",
-      "FCTM FMC route verification emphasizes matching the route, constraints, and performance data against the flight plan."
-    ]
-  },
-  altimeter: {
-    citation: "Norse FCOM Rev 9, PDF pp.200, 220, 223; FCOM NP.21.22, NP.21.42, NP.21.45. Norse FCTM Rev 19, PDF p.72; FCTM 1.20.",
-    bullets: [
-      "Captain Preflight sets local altimeter references.",
-      "Climb/Cruise and Approach set main altimeters to standard/QNH when cleared and conditions are met.",
-      "FCTM recommended callouts include transition altitude/level and altimeter setting callouts."
-    ]
-  },
-  seatbelts: {
-    citation: "Norse FCOM Rev 9, PDF pp.209, 222, 240; FCOM NP.21.31, NP.21.44, NP.21.62.",
-    bullets: [
-      "Before Start sets SEAT BELTS selector ON.",
-      "Approach Procedure sets seatbelt signs ON about 20 minutes before landing or through FL200/20,000 feet AAL.",
-      "Shutdown sets SEAT BELTS selector OFF."
-    ]
-  },
-  updateArrivalApproach: {
-    citation: "Norse FCOM Rev 9, PDF pp.221-222; FCOM NP.21.43-NP.21.44. Norse FCTM Rev 19, PDF pp.56-57; FCTM 1.26-1.27.",
-    bullets: [
-      "Descent verifies CDU RTE LEGS pages are correctly set up for arrival.",
-      "Approach updates the arrival and approach as needed and does not manually build or add waypoints to the selected FMC procedure.",
-      "FCTM route verification focuses on waypoint sequence, constraints, discontinuities, and route correctness."
-    ]
-  },
-  speedbrake: {
-    citation: "Norse FCOM Rev 9, PDF pp.202, 226, 230, 236-237; FCOM NP.21.24, NP.21.48, NP.21.52, NP.21.58-NP.21.59. Norse FCTM Rev 19, PDF p.239; FCTM 6.41.",
-    bullets: [
-      "Preflight verifies SPEEDBRAKE lever DOWN.",
-      "Approach arms the speedbrake before landing checklist.",
-      "Landing Roll verifies SPEEDBRAKE lever UP and PM calls SPEEDBRAKES UP or SPEEDBRAKES NOT UP.",
-      "After Landing captain positions or verifies SPEEDBRAKE lever DOWN."
-    ]
-  },
-  exteriorLights: {
-    citation: "Norse FCOM Rev 9, PDF pp.193, 216-217, 222, 237; FCOM NP.21.15, NP.21.38-NP.21.39, NP.21.44, NP.21.59.",
-    bullets: [
-      "Preflight initially sets exterior lights as needed/off.",
-      "Runway entry/takeoff and approach set strobe/landing/runway/taxi lights by phase.",
-      "After Landing sets exterior lights as needed."
-    ]
-  },
-  fuelControl: {
-    citation: "Norse FCOM Rev 9, PDF pp.202, 213, 238; FCOM NP.21.24, NP.21.35, NP.21.60.",
-    bullets: [
-      "Preflight verifies fuel control switches CUTOFF.",
-      "Engine Start moves the called engine fuel control switch RUN.",
-      "Shutdown sets fuel control switches CUTOFF."
-    ]
-  },
-  efb: {
-    citation: "Norse FCOM Rev 9, PDF pp.182, 209, 240, 242; FCOM NP.21.4, NP.21.31, NP.21.62, NP.21.64.",
-    bullets: [
-      "CDU/EFB Preflight establishes charging/internet connectivity and verifies WebManuals, FD Pro, OPT, and QRH applications and databases.",
-      "Before Start verifies Portable EFBs, Cabin iPads, and PEDs are in Flight Mode.",
-      "Shutdown sets Portable EFB Flight Mode Off; Secure completes EFB procedures, closes apps, switches screens off, and unplugs chargers."
-    ]
-  },
-  doorsManual: {
-    citation: "Norse FCOM Rev 9, PDF p.241; FCOM NP.21.63.",
-    bullets: [
-      "Passenger Doors Status Procedure uses EICAS display DOORS MANUAL after Shutdown Procedure and/or when passenger entry doors need to be opened.",
-      "F/O announces CABIN CREW, YOU MAY OPEN DOORS."
-    ]
-  },
-  packs: {
-    citation: "Norse FCOM Rev 9, PDF pp.194, 242; FCOM NP.21.16, NP.21.64.",
-    bullets: [
-      "Preflight air conditioning panel setup includes packs and related air conditioning controls.",
-      "Secure Procedure sets PACK switches OFF."
-    ]
-  }
-};
+window.SCAN_FLOW_DETAILS = {};
 
 window.SCAN_FLOWS = [
   {
@@ -814,3 +326,1112 @@ window.SCAN_FLOWS = [
     ]
   }
 ];
+
+Object.assign(window.SCAN_FLOW_DETAILS, {
+  preflightBattery: {
+    citation: "Norse FCOM Rev 9, PDF p.190; FCOM NP.21.12.",
+    bullets: [
+      "ELECTRICAL panel ........................................................................... Set",
+      "BATTERY switch .................................................................... ON",
+      "Verify that the OFF light is extinguished."
+    ]
+  },
+  secureBattery: {
+    citation: "Norse FCOM Rev 9, PDF p.242; FCOM NP.21.64.",
+    bullets: [
+      "BATTERY switch ............................................................ Off F/O"
+    ]
+  },
+  preflightHydraulicPumps: {
+    citation: "Norse FCOM Rev 9, PDF p.191; FCOM NP.21.13.",
+    bullets: [
+      "HYDRAULIC panel ............................................................................Set",
+      "LEFT and RIGHT ENGINE PRIMARY pump switches .........ON",
+      "Verify that the FAULT lights are illuminated.",
+      "CENTER 1 and CENTER 2 ELECTRIC pump selectors ...... OFF"
+    ]
+  },
+  beforeStartHydraulicPumps: {
+    citation: "Norse FCOM Rev 9, PDF pp.209-210; FCOM NP.21.31-NP.21.32.",
+    bullets: [
+      "Call \"BEFORE START PROCEDURE.\" C",
+      "If pushback is needed: Nose gear steering .......................... Verify locked out C",
+      "HYDRAULIC panel ........................................................ Set F/O",
+      "RIGHT ELECTRIC DEMAND pump selector ..................AUTO",
+      "Verify that FAULT light is extinguished.",
+      "CENTER 1 and CENTER 2 ELECTRIC pump selectors ..AUTO",
+      "Verify that the FAULT lights are extinguished.",
+      "LEFT ELECTRIC DEMAND pump selector ..................... AUTO",
+      "Verify that the FAULT light is extinguished."
+    ]
+  },
+  shutdownHydraulicPumps: {
+    citation: "Norse FCOM Rev 9, PDF p.240; FCOM NP.21.62.",
+    bullets: [
+      "HYDRAULIC panel........................................................ Set F/O",
+      "LEFT ELECTRIC DEMAND pump selector .........................OFF",
+      "CENTER 1 and CENTER 2 ELECTRIC pump selectors ......OFF",
+      "RIGHT ELECTRIC DEMAND pump selector ......................OFF"
+    ]
+  },
+  preflightWipers: {
+    citation: "Norse FCOM Rev 9, PDF pp.190, 195; FCOM NP.21.12, NP.21.17.",
+    bullets: [
+      "L WIPER selector ............................................................................. OFF",
+      "R WIPER selector ............................................................................. OFF"
+    ]
+  },
+  preflightLandingGearLever: {
+    citation: "Norse FCOM Rev 9, PDF p.202; FCOM NP.21.24.",
+    bullets: [
+      "Landing gear panel .......................................................................... Set",
+      "Landing gear lever .................................................................. DN",
+      "ALTERNATE GEAR switch ........................................... Guard closed"
+    ]
+  },
+  preflightAlternateFlaps: {
+    citation: "Norse FCOM Rev 9, PDF p.202; FCOM NP.21.24.",
+    bullets: [
+      "Alternate flaps panel ...................................................................... Set",
+      "ALTERNATE FLAPS selector .............................................. OFF",
+      "Verify that the guard is closed."
+    ]
+  },
+  preliminaryIrsSelectors: {
+    citation: "Norse FCOM Rev 9, PDF p.179; FCOM NP.21.1.",
+    bullets: [
+      "IRS selectors ................................................... OFF 30 seconds, then ON",
+      "Verify that the ON BAT light is extinguished."
+    ]
+  },
+  secureIrsSelectors: {
+    citation: "Norse FCOM Rev 9, PDF p.242; FCOM NP.21.64.",
+    bullets: [
+      "IRS selectors ................................................................. OFF F/O"
+    ]
+  },
+  preliminaryStatusDisplay: {
+    citation: "Norse FCOM Rev 9, PDF p.179; FCOM NP.21.1.",
+    bullets: [
+      "STATUS display ............................................................................ Check",
+      "Verify that only expected messages are shown.",
+      "Verify that the following are sufficient for flight:",
+      "Crew oxygen pressure; Hydraulic quantity; Engine oil quantity."
+    ]
+  },
+  preliminarySufficientForFlight: {
+    citation: "Norse FCOM Rev 9, PDF p.179; FCOM NP.21.1.",
+    bullets: [
+      "Verify that the following are sufficient for flight:",
+      "Crew oxygen pressure",
+      "Hydraulic quantity",
+      "Engine oil quantity",
+      "Verify the CREW OXYGEN LOW alert message is blank and that MFD SYS page OXYGEN CREW PRESS is sufficient for dispatch."
+    ]
+  },
+  preliminaryEicasDisplay: {
+    citation: "Norse FCOM Rev 9, PDF p.179; FCOM NP.21.1.",
+    bullets: [
+      "EICAS display ............................................................................... Check",
+      "Verify that only expected alert and memo messages are shown.",
+      "After all messages have been reviewed, push CANC/RCL to clear the EICAS display.",
+      "This ensures prompt detection of new alert messages."
+    ]
+  },
+  preliminaryParkingBrake: {
+    citation: "Norse FCOM Rev 9, PDF p.180; FCOM NP.21.2.",
+    bullets: [
+      "Parking brake ................................................................ As needed",
+      "Set the parking brake if the brake wear indicators are to be checked during the exterior inspection."
+    ]
+  },
+  shutdownParkingBrake: {
+    citation: "Norse FCOM Rev 9, PDF pp.238-240; FCOM NP.21.60-NP.21.62.",
+    bullets: [
+      "Parking brake .................................................................. Set C or F/O",
+      "Verify that the PARKING BRAKE SET message is shown.",
+      "After wheel chocks are in place: Parking brake .................................................Release C"
+    ]
+  },
+  preflightEfisDspMcp: {
+    citation: "Norse FCOM Rev 9, PDF pp.200-201; FCOM NP.21.22-NP.21.23.",
+    bullets: [
+      "EFIS control panel .............................................................................. Set",
+      "MINIMUMS reference selector ........................RADIO or BARO",
+      "MINIMUMS selector ..... Set decision height or altitude reference",
+      "BAROMETRIC selector ....................... Set local altimeter setting",
+      "Mode control panel ..............................................................................Set",
+      "FLIGHT DIRECTOR switch ...................................................ON",
+      "AUTOTHROTTLE ARM switches...................................... ARM",
+      "Autopilot DISENGAGE bar ..................................................... UP"
+    ]
+  },
+  preflightOxygen: {
+    citation: "Norse FCOM Rev 9, PDF pp.196, 201; FCOM NP.21.18, NP.21.23.",
+    bullets: [
+      "Oxygen .................................................................................. Test and set",
+      "Oxygen mask ..........................................Stowed and doors closed",
+      "RESET/TEST switch ...............................................Push and hold",
+      "Verify that the yellow cross shows momentarily in the flow indicator.",
+      "RESET/TEST switch ......................................................... Release",
+      "Emergency/100%/Normal selector....................................... 100%"
+    ]
+  },
+  preflightForwardPanelIsfd: {
+    citation: "Norse FCOM Rev 9, PDF pp.196, 201-202; FCOM NP.21.18, NP.21.23-NP.21.24.",
+    bullets: [
+      "FORWARD PANEL brightness control ...............................Mid position",
+      "AIR DATA/ATTITUDE source selector ....................................... AUTO",
+      "PFD/MFD selector ....................................................................... NORM",
+      "Integrated standby flight display ......................................................... Set",
+      "Verify that the approach mode display is blank.",
+      "Set local altimeter setting.",
+      "Verify that the flight instrument indications are correct.",
+      "Verify that no flags or messages are shown."
+    ]
+  },
+  preflightSpeedThrustFlap: {
+    citation: "Norse FCOM Rev 9, PDF p.202; FCOM NP.21.24.",
+    bullets: [
+      "SPEEDBRAKE lever ...................................................................DOWN",
+      "Reverse thrust levers ............................................................... Down",
+      "Thrust levers .......................................................................... Closed",
+      "Flap lever ................................................. Set to agree with flap position"
+    ]
+  },
+  preflightStabFuelAlt: {
+    citation: "Norse FCOM Rev 9, PDF pp.202-203; FCOM NP.21.24-NP.21.25.",
+    bullets: [
+      "Parking brake ............................................................................ Set",
+      "STAB CUTOUT switches ................................................. Guards closed",
+      "FUEL CONTROL switches ................................................... CUTOFF",
+      "Alternate flaps panel ...................................................................... Set",
+      "ALTERNATE FLAPS selector .............................................. OFF"
+    ]
+  },
+  preflightAcpTcp: {
+    citation: "Norse FCOM Rev 9, PDF pp.197-198, 203; FCOM NP.21.19-NP.21.20, NP.21.25.",
+    bullets: [
+      "Left tuning and control panel...............................................................Set",
+      "Right tuning and control panel ............................................................ Set",
+      "VHF/HF ................................................................................. Select/Set",
+      "WEATHER RADAR ........................................................... Select",
+      "TRANSPONDER ................................................................ Select",
+      "Captain's/First officer's audio control panel ........................ As needed"
+    ]
+  },
+  preflightSeatRudder: {
+    citation: "Norse FCOM Rev 9, PDF pp.199, 203; FCOM NP.21.21, NP.21.25.",
+    bullets: [
+      "Seat ................................................................................................ Adjust",
+      "Adjust the seat for optimum eye reference.",
+      "Rudder pedals ................................................................................ Adjust",
+      "Adjust the rudder pedals to allow full rudder pedal and brake pedal movement.",
+      "Stow the rudder pedal adjust crank."
+    ]
+  },
+  preflightSeatBeltsHarness: {
+    citation: "Norse FCOM Rev 9, PDF pp.199, 203; FCOM NP.21.21, NP.21.25.",
+    bullets: [
+      "Seat belt and shoulder harness ....................................................... Adjust"
+    ]
+  },
+  preflightHudCombiner: {
+    citation: "Norse FCOM Rev 9, PDF p.199; FCOM NP.21.21.",
+    bullets: [
+      "HUD combiner ............................................................................... Down",
+      "HUD BRIGHTNESS control ..............................................Adjust"
+    ]
+  },
+  secureHudCombiner: {
+    citation: "Norse FCOM Rev 9, PDF p.242; FCOM NP.21.64.",
+    bullets: [
+      "HUD combiner ............................................................. Stow C, F/O",
+      "Ensure the combiner is fully raised and securely latched in the stowed position."
+    ]
+  },
+  preflightOverheadPanel: {
+    citation: "Norse FCOM Rev 9, PDF pp.190-195; FCOM NP.21.12-NP.21.17.",
+    bullets: [
+      "FLIGHT CONTROL SURFACES panel ............................................ Set",
+      "ELECTRICAL panel ........................................................................... Set",
+      "WINDOW HEAT panel .......................................................................Set",
+      "HYDRAULIC panel ............................................................................Set",
+      "APU, CARGO FIRE, ENGINE, FUEL JETTISON, ANTI-ICE, lighting, cargo, and AIR CONDITIONING panels ................................ Set as applicable."
+    ]
+  },
+  preflightFlightDirector: {
+    citation: "Norse FCOM Rev 9, PDF pp.195, 201-202; FCOM NP.21.17, NP.21.23-NP.21.24.",
+    bullets: [
+      "FLIGHT DIRECTOR switch .............................................................. ON",
+      "Verify that the flight mode annunciations are correct:",
+      "Autothrottle mode is blank; Roll mode is TO/GA or HUD TO/GA; Pitch mode is TO/GA; AFDS status is FLT DIR."
+    ]
+  },
+  shutdownFlightDirector: {
+    citation: "Norse FCOM Rev 9, PDF p.240; FCOM NP.21.62.",
+    bullets: [
+      "FLIGHT DIRECTOR switches ..................................... OFF C, F/O"
+    ]
+  },
+  preflightLandingGearPanel: {
+    citation: "Norse FCOM Rev 9, PDF p.202; FCOM NP.21.24.",
+    bullets: [
+      "Landing gear panel .......................................................................... Set",
+      "Landing gear lever .................................................................. DN",
+      "ALTERNATE GEAR switch ........................................... Guard closed"
+    ]
+  },
+  preflightSecondaryEngineIndications: {
+    citation: "Norse FCOM Rev 9, PDF p.197; FCOM NP.21.19.",
+    bullets: [
+      "Engine indications ...................................................................... Check",
+      "Verify that existing engine indications show.",
+      "Verify that no exceedance is shown."
+    ]
+  },
+  beforeTaxiSecondaryEngineIndications: {
+    citation: "Norse FCOM Rev 9, PDF p.214; FCOM NP.21.36.",
+    bullets: [
+      "Secondary Engine Indications ......................................... Off F/O"
+    ]
+  },
+  preflightStatusChecklist: {
+    citation: "Norse FCOM Rev 9, PDF p.197; FCOM NP.21.19.",
+    bullets: [
+      "MFD .............................................................................................. Check",
+      "Select the status display.",
+      "Status messages ............................................................Check",
+      "CHECKLIST display switch ..................................................Push",
+      "RESETS ...............................................................................Select",
+      "Verify that the AIRLINE DATABASE is correct.",
+      "RESET ALL .........................................................................Select"
+    ]
+  },
+  preflightFdDoorAccess: {
+    citation: "Norse FCOM Rev 9, PDF p.197; FCOM NP.21.19.",
+    bullets: [
+      "FLIGHT DECK DOOR ACCESS selector ...................................AUTO"
+    ]
+  },
+  beforeStartFdDoor: {
+    citation: "Norse FCOM Rev 9, PDF p.209; FCOM NP.21.31.",
+    bullets: [
+      "FLIGHT DECK DOOR POWER switch ....................... ON F/O",
+      "Flight deck door .......................................Closed and locked F/O",
+      "Lock the flight deck door after papers are on board, required forms/documents have been given to ground staff, and final passenger information has been provided by the SCCM."
+    ]
+  },
+  secureFdDoor: {
+    citation: "Norse FCOM Rev 9, PDF p.242; FCOM NP.21.64.",
+    bullets: [
+      "FD DOOR POWER switch ........................................... OFF F/O"
+    ]
+  },
+  beforeStartCduDisplay: {
+    citation: "Norse FCOM Rev 9, PDF p.209; FCOM NP.21.31.",
+    bullets: [
+      "CDU display .................................................................... Set C, F/O",
+      "Normally the PF selects the TAKEOFF REF page.",
+      "Normally the PM selects the LEGS page."
+    ]
+  },
+  beforeStartMcp: {
+    citation: "Norse FCOM Rev 9, PDF p.209; FCOM NP.21.31.",
+    bullets: [
+      "MCP ................................................................................. Set C",
+      "IAS/MACH selector ................................................................. Set",
+      "Verify LNAV armed as needed.",
+      "Verify VNAV armed.",
+      "Initial heading or track ............................................................. Set",
+      "Initial altitude ........................................................................... Set"
+    ]
+  },
+  beforeStartNoseGearSteering: {
+    citation: "Norse FCOM Rev 9, PDF pp.209-210; FCOM NP.21.31-NP.21.32.",
+    bullets: [
+      "If pushback is needed:",
+      "Nose gear steering .......................... Verify locked out C",
+      "If the tow bar is connected, do not pressurize hydraulic systems until nose gear steering is locked out."
+    ]
+  },
+  beforeStartTrim: {
+    citation: "Norse FCOM Rev 9, PDF pp.210-211; FCOM NP.21.32-NP.21.33.",
+    bullets: [
+      "Trim ................................................................................. Set C",
+      "Stabilizer trim - ___ UNITS",
+      "Set the trim for takeoff.",
+      "Verify that the trim is in the greenband.",
+      "Rudder trim .........................................................................0 units"
+    ]
+  },
+  beforeStartExteriorDoors: {
+    citation: "Norse FCOM Rev 9, PDF p.209; FCOM NP.21.31.",
+    bullets: [
+      "Exterior doors ..................................................Verify closed F/O"
+    ]
+  },
+  beforeStartFuelPanel: {
+    citation: "Norse FCOM Rev 9, PDF p.210; FCOM NP.21.32.",
+    bullets: [
+      "Fuel panel ........................................................................ Set F/O",
+      "LEFT and RIGHT FUEL PUMP switches ............................... ON",
+      "If the FUEL IN CENTER message shows:",
+      "CENTER FUEL PUMP switches .....................................ON"
+    ]
+  },
+  shutdownFuelPumps: {
+    citation: "Norse FCOM Rev 9, PDF p.240; FCOM NP.21.62.",
+    bullets: [
+      "FUEL PUMP switches .................................................. OFF F/O"
+    ]
+  },
+  beforeStartBeacon: {
+    citation: "Norse FCOM Rev 9, PDF p.211; FCOM NP.21.33.",
+    bullets: [
+      "Start clearance............................................................ Obtain F/O",
+      "BEACON light switch .................................................... ON F/O",
+      "The aircraft beacon light must not be switched on prior to ground staff clearance to pressurize hydraulic systems and ATC clearance to start engines and/or pushback."
+    ]
+  },
+  shutdownBeacon: {
+    citation: "Norse FCOM Rev 9, PDF p.240; FCOM NP.21.62.",
+    bullets: [
+      "BEACON light switch .................................................. OFF F/O"
+    ]
+  },
+  beforeStartCancelRecall: {
+    citation: "Norse FCOM Rev 9, PDF p.210; FCOM NP.21.32.",
+    bullets: [
+      "CANCEL/RECALL switch ...........................................Push F/O",
+      "Verify that only the expected alert and memo messages are shown.",
+      "CANCEL/RECALL switch ...........................................Push F/O",
+      "Verify that the messages cancel."
+    ]
+  },
+  beforeTaxiApu: {
+    citation: "Norse FCOM Rev 9, PDF p.214; FCOM NP.21.36.",
+    bullets: [
+      "Verify that all engine generator OFF lights are extinguished.",
+      "APU selector ................................................................. OFF F/O"
+    ]
+  },
+  afterLandingApu: {
+    citation: "Norse FCOM Rev 9, PDF p.237; FCOM NP.21.59.",
+    bullets: [
+      "Set the APU selector to START, then ON, as needed.",
+      "APU start may be delayed if a long taxi time is expected."
+    ]
+  },
+  shutdownCooldown: {
+    citation: "Norse FCOM Rev 9, PDF p.238; FCOM NP.21.60.",
+    bullets: [
+      "Engine cooldown timing ............................Verify 5 minutes C",
+      "Verify that at least five minutes have lapsed since the reversers were stowed."
+    ]
+  },
+  beforeTaxiAntiIce: {
+    citation: "Norse FCOM Rev 9, PDF p.214; FCOM NP.21.36.",
+    bullets: [
+      "ENGINE ANTI-ICE selectors .............................As needed F/O"
+    ]
+  },
+  afterLandingAntiIce: {
+    citation: "Norse FCOM Rev 9, PDF p.237; FCOM NP.21.59.",
+    bullets: [
+      "Set the ENGINE ANTI-ICE selectors to ON, if needed."
+    ]
+  },
+  beforeTaxiFlightControls: {
+    citation: "Norse FCOM Rev 9, PDF p.214; FCOM NP.21.36.",
+    bullets: [
+      "Flight controls ............................................................ Check C",
+      "Make slow and deliberate inputs, one direction at a time.",
+      "Move the control wheel and the control column to full travel in both directions and verify freedom of movement and return to center.",
+      "Hold the rudder pedal disconnect switch down during the rudder check to prevent nose wheel movement.",
+      "Move the rudder pedals to full travel in both directions and verify freedom of movement and return to center."
+    ]
+  },
+  beforeTaxiRecall: {
+    citation: "Norse FCOM Rev 9, PDF p.214; FCOM NP.21.36.",
+    bullets: [
+      "Recall ......................................................................... Check C, F/O",
+      "Verify that only expected alert and memo messages are shown."
+    ]
+  },
+  beforeTaxiFlapLever: {
+    citation: "Norse FCOM Rev 9, PDF p.214; FCOM NP.21.36.",
+    bullets: [
+      "Call \"FLAPS ___\" as needed for takeoff. C",
+      "Flap lever .................................................... Set takeoff flaps F/O"
+    ]
+  },
+  afterLandingFlapLever: {
+    citation: "Norse FCOM Rev 9, PDF p.237; FCOM NP.21.59.",
+    bullets: [
+      "Set the flap lever to UP."
+    ]
+  },
+  beforeTaxiTransponder: {
+    citation: "Norse FCOM Rev 9, PDF p.214; FCOM NP.21.36.",
+    bullets: [
+      "Transponder .........................................................As needed. F/O"
+    ]
+  },
+  takeoffTransponder: {
+    citation: "Norse FCOM Rev 9, PDF p.216; FCOM NP.21.38.",
+    bullets: [
+      "When entering the departure runway, set the STROBE light switch to ON.",
+      "Set the transponder mode selector to TA/RA."
+    ]
+  },
+  afterLandingTransponder: {
+    citation: "Norse FCOM Rev 9, PDF p.237; FCOM NP.21.59.",
+    bullets: [
+      "Set the transponder mode selector as needed."
+    ]
+  },
+  shutdownTransponder: {
+    citation: "Norse FCOM Rev 9, PDF p.240; FCOM NP.21.62.",
+    bullets: [
+      "TRANSPONDER MODE selector .................... STANDBY F/O"
+    ]
+  },
+  beforeTakeoffWxTerrain: {
+    citation: "Norse FCOM Rev 9, PDF p.215; FCOM NP.21.37.",
+    bullets: [
+      "Set the weather radar display as needed.",
+      "Select VSD on as needed.",
+      "Set the terrain display as needed."
+    ]
+  },
+  afterLandingWxRadar: {
+    citation: "Norse FCOM Rev 9, PDF p.237; FCOM NP.21.59.",
+    bullets: [
+      "Set the weather radar to off."
+    ]
+  },
+  beforeTakeoffVsd: {
+    citation: "Norse FCOM Rev 9, PDF p.215; FCOM NP.21.37.",
+    bullets: [
+      "VSD .................................................................................. As needed"
+    ]
+  },
+  approachVsd: {
+    citation: "Norse FCOM Rev 9, PDF p.222; FCOM NP.21.44.",
+    bullets: [
+      "Select VSD on as needed."
+    ]
+  },
+  departureCabinPa: {
+    citation: "Norse FCOM Rev 9, PDF p.216; FCOM NP.21.38.",
+    bullets: [
+      "When cleared to enter the departure runway, announce on the PA \"CABIN CREW, BE SEATED FOR DEPARTURE\"."
+    ]
+  },
+  descentCabinPa: {
+    citation: "Norse FCOM Rev 9, PDF p.222; FCOM NP.21.44.",
+    bullets: [
+      "Approximately 30 minutes before landing or when the aircraft descends through FL300, announce on the PA: \"CABIN CREW, PREPARE THE CABIN FOR LANDING.\""
+    ]
+  },
+  takeoffStrobeLights: {
+    citation: "Norse FCOM Rev 9, PDF p.216; FCOM NP.21.38.",
+    bullets: [
+      "When entering the departure runway, set the STROBE light switch to ON.",
+      "Use other lights as needed."
+    ]
+  },
+  takeoffLandingLights: {
+    citation: "Norse FCOM Rev 9, PDF p.217; FCOM NP.21.39.",
+    bullets: [
+      "When cleared for takeoff, set all LANDING light switches to ON."
+    ]
+  },
+  approachLandingLights: {
+    citation: "Norse FCOM Rev 9, PDF p.222; FCOM NP.21.44.",
+    bullets: [
+      "At 10 000 feet AAL, RUNWAY TURNOFF, TAXI, and all LANDING light switches to ON."
+    ]
+  },
+  descentRecallNotes: {
+    citation: "Norse FCOM Rev 9, PDF p.221; FCOM NP.21.43.",
+    bullets: [
+      "Review all alert and memo messages.",
+      "Recall and review all alert and memo messages.",
+      "Review all operational notes.",
+      "Recall and review all operational notes.",
+      "Review NOTAM, Company NOTAM, relevant points from the Airport Briefing, and other notes, as needed.",
+      "Review ATIS and other weather reports, as needed."
+    ]
+  },
+  descentLandingPerformance: {
+    citation: "Norse FCOM Rev 9, PDF p.221; FCOM NP.21.43.",
+    bullets: [
+      "Compare the OPT landing performance calculations.",
+      "Set the AUTOBRAKE selector to the needed brake setting.",
+      "Do the approach briefing."
+    ]
+  },
+  descentMinimums: {
+    citation: "Norse FCOM Rev 9, PDF p.221; FCOM NP.21.43.",
+    bullets: [
+      "Individually verify and set the RADIO/BARO minimums as needed for the approach."
+    ]
+  },
+  descentVref: {
+    citation: "Norse FCOM Rev 9, PDF p.221; FCOM NP.21.43.",
+    bullets: [
+      "Verify VREF on the APPROACH REF page.",
+      "Enter VREF on the APPROACH REF page."
+    ]
+  },
+  descentRnp: {
+    citation: "Norse FCOM Rev 9, PDF p.221; FCOM NP.21.43.",
+    bullets: [
+      "Verify that the CDU RTE LEGS pages are correctly set up for arrival."
+    ]
+  },
+  approachRnp: {
+    citation: "Norse FCOM Rev 9, PDF p.222; FCOM NP.21.44.",
+    bullets: [
+      "During arrival and approach, verify the RNP as needed."
+    ]
+  },
+  descentNavrad: {
+    citation: "Norse FCOM Rev 9, PDF pp.183, 221; FCOM NP.21.5, NP.21.43.",
+    bullets: [
+      "NAV RADIO page: Tune the navigation radios as needed.",
+      "For HUD TAKEOFF operations, verify the navigation radios are autotuned and verify the correct frequency/course.",
+      "Descent procedure includes NAVRAD setup."
+    ]
+  },
+  descentAutobrake: {
+    citation: "Norse FCOM Rev 9, PDF p.221; FCOM NP.21.43.",
+    bullets: [
+      "Set the AUTOBRAKE selector to the needed brake setting."
+    ]
+  },
+  afterLandingAutobrake: {
+    citation: "Norse FCOM Rev 9, PDF p.237; FCOM NP.21.59.",
+    bullets: [
+      "Set the AUTOBRAKE selector OFF."
+    ]
+  },
+  approachAltimeter: {
+    citation: "Norse FCOM Rev 9, PDF p.223; FCOM NP.21.45.",
+    bullets: [
+      "When cleared to descend below the transition level, and the aircraft is below all altitude constraints referenced to STD in the CDU LEGS page, set the main altimeters to QNH.",
+      "Call \"SET ALTIMETERS\"",
+      "Select QNH/altimeter barometric setting on the EFIS Control Panel.",
+      "Call \"QNH/ALTIMETER ____ SET.\""
+    ]
+  },
+  approachUpdateArrival: {
+    citation: "Norse FCOM Rev 9, PDF p.222; FCOM NP.21.44.",
+    bullets: [
+      "Update the arrival and approach, as needed.",
+      "Select VSD on as needed.",
+      "Update the approach briefing as needed.",
+      "Do not manually build the approach or add waypoints to the selected FMC procedure.",
+      "Add cold temperature corrections to waypoint altitude constraints as appropriate."
+    ]
+  },
+  approachSeatbelts: {
+    citation: "Norse FCOM Rev 9, PDF p.222; FCOM NP.21.44.",
+    bullets: [
+      "Approximately 20 minutes before landing, or when the aircraft descends through FL200/20,000ft AAL, set the SEATBELTS sign switch to ON.",
+      "If the seatbelt sign is already on due to turbulence, inform the cabin crew that 20 minutes remain until landing."
+    ]
+  },
+  afterLandingSpeedbrake: {
+    citation: "Norse FCOM Rev 9, PDF p.237; FCOM NP.21.59.",
+    bullets: [
+      "The captain positions or verifies that the SPEEDBRAKE lever is DOWN.",
+      "After the reversers are stowed, start timing to comply with the engine cooldown requirements."
+    ]
+  },
+  afterLandingExteriorLights: {
+    citation: "Norse FCOM Rev 9, PDF p.237; FCOM NP.21.59.",
+    bullets: [
+      "Set the exterior lights as needed."
+    ]
+  },
+  shutdownFuelControl: {
+    citation: "Norse FCOM Rev 9, PDF p.238; FCOM NP.21.60.",
+    bullets: [
+      "Call \"SHUTDOWN PROCEDURE.\" C",
+      "FUEL CONTROL switches .................................. CUTOFF C"
+    ]
+  },
+  shutdownEfb: {
+    citation: "Norse FCOM Rev 9, PDF p.240; FCOM NP.21.62.",
+    bullets: [
+      "Portable EFB .............................................. Flight Mode Off C, F/O"
+    ]
+  },
+  secureEfb: {
+    citation: "Norse FCOM Rev 9, PDF p.242; FCOM NP.21.64.",
+    bullets: [
+      "Portable EFB Procedures ...................................... Complete C, F/O",
+      "Complete the OFP.",
+      "Complete the ATL and Journey Log entries.",
+      "Reset the FD Pro application.",
+      "Close all Portable EFB applications.",
+      "Switch off all Portable EFB screens and unplug all chargers.",
+      "EFB PWR switch ............................................................ Off C, F/O"
+    ]
+  },
+  shutdownSeatbelts: {
+    citation: "Norse FCOM Rev 9, PDF p.240; FCOM NP.21.62.",
+    bullets: [
+      "SEAT BELTS selector ................................................... OFF F/O"
+    ]
+  },
+  secureEmergencyLights: {
+    citation: "Norse FCOM Rev 9, PDF p.242; FCOM NP.21.64.",
+    bullets: [
+      "EMERGENCY LIGHTS switch ................................... OFF F/O"
+    ]
+  },
+  securePacks: {
+    citation: "Norse FCOM Rev 9, PDF p.242; FCOM NP.21.64.",
+    bullets: [
+      "PACK switches .............................................................. OFF F/O"
+    ]
+  }
+});
+
+(() => {
+  const remap = {
+    "electrical-power-up|Captain or F/O|1. Battery": "preflightBattery",
+    "electrical-power-up|Captain or F/O|2. C1 & C2 Elec pumps": "preflightHydraulicPumps",
+    "electrical-power-up|Captain or F/O|3. Demand pumps": "preflightHydraulicPumps",
+    "electrical-power-up|Captain or F/O|4. Wipers": "preflightWipers",
+    "electrical-power-up|Captain or F/O|5. Landing Gear lever": "preflightLandingGearLever",
+    "electrical-power-up|Captain or F/O|6. Alternate flaps": "preflightAlternateFlaps",
+    "preliminary-preflight-procedure|Captain or F/O|1. IRS Selectors": "preliminaryIrsSelectors",
+    "preliminary-preflight-procedure|Captain or F/O|2. STATUS Display": "preliminaryStatusDisplay",
+    "preliminary-preflight-procedure|Captain or F/O|3. Verify sufficient for flight": "preliminarySufficientForFlight",
+    "preliminary-preflight-procedure|Captain or F/O|4. EICAS Display": "preliminaryEicasDisplay",
+    "preliminary-preflight-procedure|Captain or F/O|5. Parking brake": "preliminaryParkingBrake",
+    "pre-flight-procedure|Captain|1. EFIS, DSP & MCP": "preflightEfisDspMcp",
+    "pre-flight-procedure|Captain|2. Oxygen & left sidewall": "preflightOxygen",
+    "pre-flight-procedure|Captain|3. Fwd panel & ISFD": "preflightForwardPanelIsfd",
+    "pre-flight-procedure|Captain|4. Speed brake, Thrust levers, Flap lever": "preflightSpeedThrustFlap",
+    "pre-flight-procedure|Captain|5. Parking brake, Stab cutout, Fuel control switches, Alt flaps reset": "preflightStabFuelAlt",
+    "pre-flight-procedure|Captain|6. Left ACP": "preflightAcpTcp",
+    "pre-flight-procedure|Captain|7. HUD combiner down": "preflightHudCombiner",
+    "pre-flight-procedure|F/O|1-4 Overhead panel": "preflightOverheadPanel",
+    "pre-flight-procedure|F/O|5. F/D, DSP & EFIS": "preflightFlightDirector",
+    "pre-flight-procedure|F/O|6. Oxygen & right sidewall": "preflightOxygen",
+    "pre-flight-procedure|F/O|7. Fwd panel & Ldg gear panel": "preflightLandingGearPanel",
+    "pre-flight-procedure|F/O|8. Secondary engine indications": "preflightSecondaryEngineIndications",
+    "pre-flight-procedure|F/O|9. Status messages & Checklist": "preflightStatusChecklist",
+    "pre-flight-procedure|F/O|10. Left TCP": "preflightAcpTcp",
+    "pre-flight-procedure|F/O|11. Observer ACP, FD door access": "preflightFdDoorAccess",
+    "pre-flight-procedure|F/O|12. Engine fire panel, ATP, Center TCP, Printer": "preflightAcpTcp",
+    "pre-flight-procedure|F/O|13. Right TCP, Right ACP, Lights": "preflightAcpTcp",
+    "pre-flight-procedure|F/O|14. HUD combiner down": "preflightHudCombiner",
+    "before-start-procedure|Captain|1. CDU Display": "beforeStartCduDisplay",
+    "before-start-procedure|Captain|2. MCP (Speed selector, LNAV/VNAV, HDG/TRK, Altitude)": "beforeStartMcp",
+    "before-start-procedure|Captain|3. Nose gear steering": "beforeStartNoseGearSteering",
+    "before-start-procedure|Captain|4. Trim": "beforeStartTrim",
+    "before-start-procedure|F/O|1. FD door": "beforeStartFdDoor",
+    "before-start-procedure|F/O|2. CDU display": "beforeStartCduDisplay",
+    "before-start-procedure|F/O|3. Exterior doors": "beforeStartExteriorDoors",
+    "before-start-procedure|F/O|4. Hydraulic panel": "beforeStartHydraulicPumps",
+    "before-start-procedure|F/O|5. Fuel panel": "beforeStartFuelPanel",
+    "before-start-procedure|F/O|6. Beacon light": "beforeStartBeacon",
+    "before-start-procedure|F/O|7. CANCEL/RECALL switch": "beforeStartCancelRecall",
+    "before-taxi-procedure|Captain|1. Flight control check": "beforeTaxiFlightControls",
+    "before-taxi-procedure|Captain|2. RECALL check": "beforeTaxiRecall",
+    "before-taxi-procedure|F/O|1. APU": "beforeTaxiApu",
+    "before-taxi-procedure|F/O|2. Anti-ice": "beforeTaxiAntiIce",
+    "before-taxi-procedure|F/O|4. Flap lever": "beforeTaxiFlapLever",
+    "before-taxi-procedure|F/O|5. Transponder": "beforeTaxiTransponder",
+    "before-taxi-procedure|F/O|6. Secondary engine indications": "beforeTaxiSecondaryEngineIndications",
+    "before-taxi-procedure|F/O|7. RECALL check": "beforeTaxiRecall",
+    "before-takeoff-takeoff-procedure|PF|1. WX radar/Terrain display": "beforeTakeoffWxTerrain",
+    "before-takeoff-takeoff-procedure|PF|2. VSD": "beforeTakeoffVsd",
+    "before-takeoff-takeoff-procedure|PM|1. PA \"CABIN CREW BE SEATED FOR DEPARTURE\"": "departureCabinPa",
+    "before-takeoff-takeoff-procedure|PM|2. Transponder TA/RA": "takeoffTransponder",
+    "before-takeoff-takeoff-procedure|PM|3. WX radar/Terrain display": "beforeTakeoffWxTerrain",
+    "before-takeoff-takeoff-procedure|PM|4. VSD": "beforeTakeoffVsd",
+    "before-takeoff-takeoff-procedure|PM|5. Strobe lights": "takeoffStrobeLights",
+    "before-takeoff-takeoff-procedure|PM|6. Landing lights (with takeoff clearance)": "takeoffLandingLights",
+    "decent-procedure|PF|1. RECALL & Notes check": "descentRecallNotes",
+    "decent-procedure|PF|2. Landing performance": "descentLandingPerformance",
+    "decent-procedure|PF|3. Baro/Radio Minimums": "descentMinimums",
+    "decent-procedure|PF|4. Verify VREF": "descentVref",
+    "decent-procedure|PM|1. RNP check": "descentRnp",
+    "decent-procedure|PM|2. RECALL & Notes check": "descentRecallNotes",
+    "decent-procedure|PM|3. Landing performance": "descentLandingPerformance",
+    "decent-procedure|PM|4. Baro/Radio Minimums": "descentMinimums",
+    "decent-procedure|PM|5. Enter VREF": "descentVref",
+    "decent-procedure|PM|6. NAVRAD": "descentNavrad",
+    "decent-procedure|PM|7. AUTOBRAKE": "descentAutobrake",
+    "decent-procedure|PM|8. PA -\"CABIN CREW, PREPARE CABIN FOR LANDING\" (25.000')": "descentCabinPa",
+    "approach-procedure|PF|1. Altimeter (transition)": "approachAltimeter",
+    "approach-procedure|PF|2. VSD": "approachVsd",
+    "approach-procedure|PF|3. Update arrival & approach": "approachUpdateArrival",
+    "approach-procedure|PM|1. RNP check": "approachRnp",
+    "approach-procedure|PM|2. Seatbelts (15.000')": "approachSeatbelts",
+    "approach-procedure|PM|3. Landing lights (10.000')": "approachLandingLights",
+    "approach-procedure|PM|4. Altimeter (transition)": "approachAltimeter",
+    "approach-procedure|PM|5. VSD": "approachVsd",
+    "approach-procedure|PM|6. Update arrival & approach": "approachUpdateArrival",
+    "after-landing-procedure|PF|1. Speedbrake (Verified by CPT)": "afterLandingSpeedbrake",
+    "after-landing-procedure|PF|2. WX Radar": "afterLandingWxRadar",
+    "after-landing-procedure|PM|1. APU": "afterLandingApu",
+    "after-landing-procedure|PM|2. Engine Anti-Ice": "afterLandingAntiIce",
+    "after-landing-procedure|PM|3. Exterior lights": "afterLandingExteriorLights",
+    "after-landing-procedure|PM|4. WX radar": "afterLandingWxRadar",
+    "after-landing-procedure|PM|5. Autobrake": "afterLandingAutobrake",
+    "after-landing-procedure|PM|6. Flap lever": "afterLandingFlapLever",
+    "after-landing-procedure|PM|7. Transponder": "afterLandingTransponder",
+    "shutdown-procedure|Captain|1. Parking Brake": "shutdownParkingBrake",
+    "shutdown-procedure|Captain|2. Verify 5 min cooldown": "shutdownCooldown",
+    "shutdown-procedure|Captain|3. Fuel control switches": "shutdownFuelControl",
+    "shutdown-procedure|Captain|4. Flight director": "shutdownFlightDirector",
+    "shutdown-procedure|Captain|5. EFB": "shutdownEfb",
+    "shutdown-procedure|F/O|1. Seat belt selector": "shutdownSeatbelts",
+    "shutdown-procedure|F/O|2. Hydraulic panel": "shutdownHydraulicPumps",
+    "shutdown-procedure|F/O|3. Fuel pump switches": "shutdownFuelPumps",
+    "shutdown-procedure|F/O|4. Beacon light": "shutdownBeacon",
+    "shutdown-procedure|F/O|5. Flight director": "shutdownFlightDirector",
+    "shutdown-procedure|F/O|6. Transponder": "shutdownTransponder",
+    "shutdown-procedure|F/O|7. EFB": "shutdownEfb",
+    "secure-procedure|Captain|1. EFB power": "secureEfb",
+    "secure-procedure|Captain|2. HUD combiner": "secureHudCombiner",
+    "secure-procedure|F/O|1. IRS selectors": "secureIrsSelectors",
+    "secure-procedure|F/O|2. Battery": "secureBattery",
+    "secure-procedure|F/O|3. Emergency lights": "secureEmergencyLights",
+    "secure-procedure|F/O|4. Flight deck door power": "secureFdDoor",
+    "secure-procedure|F/O|5. Pack switches": "securePacks",
+    "secure-procedure|F/O|6. EFB power": "secureEfb",
+    "secure-procedure|F/O|7. HUD combiner": "secureHudCombiner"
+  };
+
+  window.SCAN_FLOWS.forEach((flow) => {
+    flow.sections.forEach((section) => {
+      section.items.forEach((item) => {
+        const key = `${flow.id}|${section.role}|${item.text}`;
+        if (remap[key]) item.detail = remap[key];
+      });
+    });
+  });
+})();
+
+Object.assign(window.SCAN_FLOW_DETAILS, {
+  preflightOverheadPanel: {
+    citation: "Norse FCOM Rev 9, PDF pp.190-195; FCOM NP.21.12-NP.21.17.",
+    bullets: [
+      "FLIGHT CONTROL SURFACES panel ............................................ Set",
+      "ELECTRICAL panel ........................................................................... Set",
+      "WINDOW HEAT panel .......................................................................Set",
+      "HYDRAULIC panel ............................................................................Set",
+      "APU fire panel..................................................................................... Set",
+      "CARGO FIRE panel ........................................................................... Set",
+      "ENGINE panel .................................................................................... Set",
+      "FUEL JETTISON panel ...................................................................... Set",
+      "FUEL panel ......................................................................................... Set",
+      "ANTI-ICE panel..................................................................................Set",
+      "Lighting panel ......................................................................................Set",
+      "AIR CONDITIONING panel .............................................................. Set",
+      "PRESSURIZATION panel .................................................................. Set"
+    ]
+  },
+  preflightEfisDspMcp: {
+    citation: "Norse FCOM Rev 9, PDF pp.200-201; FCOM NP.21.22-NP.21.23.",
+    bullets: [
+      "EFIS control panel .............................................................................. Set",
+      "MINIMUMS reference selector ........................RADIO or BARO",
+      "MINIMUMS selector ..... Set decision height or altitude reference",
+      "BAROMETRIC reference selector ...............................IN or HPA",
+      "BAROMETRIC selector ....................... Set local altimeter setting",
+      "Display select panel............................................................................. Set",
+      "Mode control panel ..............................................................................Set",
+      "FLIGHT DIRECTOR switch ...................................................ON",
+      "AUTOTHROTTLE ARM switches...................................... ARM",
+      "Autopilot DISENGAGE bar ..................................................... UP"
+    ]
+  },
+  preflightForwardPanelIsfd: {
+    citation: "Norse FCOM Rev 9, PDF pp.201-202; FCOM NP.21.23-NP.21.24.",
+    bullets: [
+      "FORWARD PANEL brightness control ............................... Mid position",
+      "AIR DATA/ATTITUDE source selector ........................................AUTO",
+      "PFD/MFD selector ........................................................................NORM",
+      "Flight instruments .......................................................................... Check",
+      "Verify that the flight instrument indications are correct.",
+      "Integrated standby flight display ......................................................... Set",
+      "Verify that the approach mode display is blank.",
+      "Set local altimeter setting.",
+      "Verify that the flight instrument indications are correct.",
+      "Verify that no flags or messages are shown."
+    ]
+  },
+  preflightLandingGearLever: {
+    citation: "Norse FCOM Rev 9, PDF p.196; FCOM NP.21.18.",
+    bullets: [
+      "Landing gear panel .............................................................................. Set",
+      "Landing gear lever ................................................................... DN",
+      "ALTERNATE GEAR switch ....................................Guard closed",
+      "AUTOBRAKE selector ......................................................... RTO"
+    ]
+  },
+  preflightLandingGearPanel: {
+    citation: "Norse FCOM Rev 9, PDF p.196; FCOM NP.21.18.",
+    bullets: [
+      "Landing gear panel .............................................................................. Set",
+      "Landing gear lever ................................................................... DN",
+      "ALTERNATE GEAR switch ....................................Guard closed",
+      "AUTOBRAKE selector ......................................................... RTO"
+    ]
+  },
+  preflightAlternateFlaps: {
+    citation: "Norse FCOM Rev 9, PDF p.202; FCOM NP.21.24.",
+    bullets: [
+      "ALTERNATE FLAPS panel ............................................................... Set",
+      "ALTERNATE FLAPS ARM switch ........................................ Off",
+      "ALTERNATE FLAPS selector ...............................................OFF"
+    ]
+  },
+  preflightSpeedThrustFlap: {
+    citation: "Norse FCOM Rev 9, PDF p.202; FCOM NP.21.24.",
+    bullets: [
+      "SPEEDBRAKE lever ...................................................................DOWN",
+      "Reverse thrust levers ...................................................................... Down",
+      "Forward thrust levers..................................................................... Closed",
+      "Flap lever ............................................................................................. Set",
+      "Set the flap lever to agree with the flap position."
+    ]
+  },
+  preflightStabFuelAlt: {
+    citation: "Norse FCOM Rev 9, PDF p.202; FCOM NP.21.24.",
+    bullets: [
+      "Parking brake ...................................................................................... Set",
+      "Verify that the PARKING BRAKE SET message is shown.",
+      "STABILIZER cutout switches .......................................... Guards closed",
+      "FUEL CONTROL switches ...................................................... CUTOFF",
+      "FUEL CONTROL switch fire warning lights ...........Verify extinguished",
+      "ALTERNATE FLAPS panel ............................................................... Set",
+      "ALTERNATE FLAPS ARM switch ........................................ Off",
+      "ALTERNATE FLAPS selector ...............................................OFF"
+    ]
+  },
+  preflightAcpTcp: {
+    citation: "Norse FCOM Rev 9, PDF pp.197-198, 203; FCOM NP.21.19-NP.21.20, NP.21.25.",
+    bullets: [
+      "Left tuning and control panel...............................................................Set",
+      "WEATHER RADAR ............................................................Select",
+      "GAIN and MODE ................................................ As Needed",
+      "TRANSPONDER .................................................................Select",
+      "CAPT TCAS Display ............................................ As needed",
+      "TCAS ALT ............................................................ As needed",
+      "VHF ......................................................................................Select",
+      "Captain's audio control panel .................................................. As needed",
+      "Right tuning and control panel ............................................................ Set",
+      "Verify that the OFF light is extinguished.",
+      "VHF ..................................................................................... Select",
+      "R VHF ............................................................................... Set",
+      "HF ........................................................................................ Select",
+      "R HF ................................................................................. Set",
+      "WEATHER RADAR ........................................................... Select",
+      "GAIN and MODE ..................................................As needed",
+      "TRANSPONDER ................................................................ Select",
+      "F/O TCAS Display ................................................As needed",
+      "TCAS ALT .............................................................As needed",
+      "First officer's audio control panel ........................................... As needed"
+    ]
+  },
+  preflightSeatRudder: {
+    citation: "Norse FCOM Rev 9, PDF pp.198, 203; FCOM NP.21.20, NP.21.25.",
+    bullets: [
+      "Seat ................................................................................................ Adjust",
+      "Adjust the seat for optimum eye reference.",
+      "Rudder pedals ................................................................................ Adjust",
+      "Adjust the rudder pedals to allow full rudder pedal and brake pedal movement.",
+      "Stow the rudder pedal adjust crank."
+    ]
+  },
+  preflightSeatBeltsHarness: {
+    citation: "Norse FCOM Rev 9, PDF pp.199, 203; FCOM NP.21.21, NP.21.25.",
+    bullets: [
+      "Seat belt and shoulder harness ....................................................... Adjust"
+    ]
+  },
+  preflightHudCombiner: {
+    citation: "Norse FCOM Rev 9, PDF pp.199, 203; FCOM NP.21.21, NP.21.25.",
+    bullets: [
+      "HUD combiner ............................................................................... Down",
+      "HUD BRIGHTNESS control ..............................................Adjust"
+    ]
+  },
+  preflightFlightDirector: {
+    citation: "Norse FCOM Rev 9, PDF pp.195, 201-202; FCOM NP.21.17, NP.21.23-NP.21.24.",
+    bullets: [
+      "FLIGHT DIRECTOR switch .............................................................. ON",
+      "FLIGHT DIRECTOR switch ...................................................ON",
+      "Verify that the flight mode annunciations are correct:",
+      "Autothrottle mode is blank",
+      "Roll mode is TO/GA or HUD TO/GA",
+      "Pitch mode is TO/GA",
+      "AFDS status is FLT DIR"
+    ]
+  },
+  preflightSecondaryEngineIndications: {
+    citation: "Norse FCOM Rev 9, PDF pp.196-197; FCOM NP.21.18-NP.21.19.",
+    bullets: [
+      "EICAS display ................................................................................ Check",
+      "Secondary engine indications ........................................... Display",
+      "Verify that the engine indications show existing conditions.",
+      "Verify that no exceedance is shown."
+    ]
+  },
+  preflightFdDoorAccess: {
+    citation: "Norse FCOM Rev 9, PDF p.197; FCOM NP.21.19.",
+    bullets: [
+      "FLIGHT DECK DOOR ACCESS selector ...................................AUTO"
+    ]
+  },
+  beforeStartFdDoor: {
+    citation: "Norse FCOM Rev 9, PDF p.209; FCOM NP.21.31.",
+    bullets: [
+      "FLIGHT DECK DOOR POWER switch ....................... ON F/O",
+      "Flight deck door .......................................Closed and locked F/O",
+      "Lock the flight deck door after papers are on board, any required forms and documents have been given to the ground staff, and the final passenger information has been provided by the SCCM."
+    ]
+  },
+  beforeStartNoseGearSteering: {
+    citation: "Norse FCOM Rev 9, PDF pp.209-210; FCOM NP.21.31-NP.21.32.",
+    bullets: [
+      "If pushback is needed:",
+      "Nose gear steering .......................... Verify locked out C",
+      "If the tow bar is connected, do not pressurize the hydraulic systems until the nose gear steering is locked out.",
+      "Unwanted tow bar movement can occur."
+    ]
+  },
+  beforeStartFuelPanel: {
+    citation: "Norse FCOM Rev 9, PDF p.210; FCOM NP.21.32.",
+    bullets: [
+      "Fuel panel ........................................................................ Set F/O",
+      "LEFT and RIGHT FUEL PUMP switches ............................... ON",
+      "The PRESS lights are illuminated because of load shedding.",
+      "If the APU is running, the left aft pump PRESS light is extinguished.",
+      "If the FUEL IN CENTER message shows:",
+      "CENTER FUEL PUMP switches .....................................ON",
+      "Both PRESS lights illuminate until after engine start because of load shedding."
+    ]
+  },
+  beforeStartBeacon: {
+    citation: "Norse FCOM Rev 9, PDF p.211; FCOM NP.21.33.",
+    bullets: [
+      "Start clearance............................................................ Obtain F/O",
+      "BEACON light switch .................................................... ON F/O",
+      "The aircraft beacon light must not be switched on prior to ground staff clearance to pressurize the hydraulic systems, and ATC clearance to start the engines and/or pushback have been obtained."
+    ]
+  },
+  beforeTaxiFlightControls: {
+    citation: "Norse FCOM Rev 9, PDF p.214; FCOM NP.21.36.",
+    bullets: [
+      "Flight controls ............................................................ Check C",
+      "Make slow and deliberate inputs, one direction at a time.",
+      "Move the control wheel and the control column to full travel in both directions and verify:",
+      "Freedom of movement",
+      "That the controls return to center",
+      "Hold the rudder pedal disconnect switch down during the rudder check to prevent nose wheel movement.",
+      "Move the rudder pedals to full travel in both directions and verify:",
+      "Freedom of movement",
+      "That the rudder pedals return to center"
+    ]
+  },
+  beforeTakeoffWxTerrain: {
+    citation: "Norse FCOM Rev 9, PDF p.215; FCOM NP.21.37.",
+    bullets: [
+      "Set the weather radar display as needed.",
+      "Select VSD on as needed.",
+      "Set the terrain display as needed."
+    ]
+  },
+  cabinLandingPa: {
+    citation: "Norse FCOM Rev 9, PDF p.222; FCOM NP.21.44.",
+    bullets: [
+      "Approximately 30 minutes before landing or when the aircraft descends through FL300, announce on the PA:",
+      "\"CABIN CREW, PREPARE THE CABIN FOR LANDING.\""
+    ]
+  },
+  descentMinimums: {
+    citation: "Norse FCOM Rev 9, PDF p.221; FCOM NP.21.43.",
+    bullets: [
+      "Individually verify and set the RADIO/BARO minimums as needed for the approach."
+    ]
+  },
+  descentLandingPerformance: {
+    citation: "Norse FCOM Rev 9, PDF p.221; FCOM NP.21.43.",
+    bullets: [
+      "Compare the OPT landing performance calculations.",
+      "Do the approach briefing."
+    ]
+  },
+  descentRnp: {
+    citation: "Norse FCOM Rev 9, PDF p.221; FCOM NP.21.43.",
+    bullets: [
+      "During the descent, verify the RNP as needed."
+    ]
+  },
+  descentNavrad: {
+    citation: "Norse FCOM Rev 9, PDF p.221; FCOM NP.21.43.",
+    bullets: [
+      "Verify/set the NAV RADIO page for the approach."
+    ]
+  },
+  approachSeatbelts: {
+    citation: "Norse FCOM Rev 9, PDF p.222; FCOM NP.21.44.",
+    bullets: [
+      "Approximately 20 minutes before landing, or when the aircraft descends through FL200/20,000ft AAL, set the SEATBELTS sign switch to ON.",
+      "If the seatbelt sign is already on due to turbulence, inform the cabin crew that 20 minutes remain until landing."
+    ]
+  },
+  approachLandingLights: {
+    citation: "Norse FCOM Rev 9, PDF p.222; FCOM NP.21.44.",
+    bullets: [
+      "At 10 000 feet AAL, RUNWAY TURNOFF, TAXI, and all LANDING light switches to ON."
+    ]
+  },
+  afterLandingApu: {
+    citation: "Norse FCOM Rev 9, PDF p.237; FCOM NP.21.59.",
+    bullets: [
+      "Set the APU selector to START, then ON, as needed.",
+      "APU start may be delayed if a long taxi time is expected."
+    ]
+  },
+  secureHudCombiner: {
+    citation: "Norse FCOM Rev 9, PDF p.242; FCOM NP.21.64.",
+    bullets: [
+      "HUD combiner ............................................................. Stow C, F/O",
+      "To prevent the possibility of injury, ensure the combiner is fully raised and securely latched in the stowed position."
+    ]
+  }
+});
+
+(() => {
+  const remap = {
+    "approach-procedure|PM|2. Seatbelts (15.000')": "approachSeatbelts",
+    "approach-procedure|PM|2. Seatbelts (15.000\u2019)": "approachSeatbelts",
+    "approach-procedure|PM|3. Landing lights (10.000')": "approachLandingLights",
+    "approach-procedure|PM|3. Landing lights (10.000\u2019)": "approachLandingLights",
+    "decent-procedure|PM|8. PA -\"CABIN CREW, PREPARE CABIN FOR LANDING\" (25.000')": "cabinLandingPa",
+    "decent-procedure|PM|8. PA -\"CABIN CREW, PREPARE CABIN FOR LANDING\" (25.000\u2019)": "cabinLandingPa"
+  };
+
+  window.SCAN_FLOWS.forEach((flow) => {
+    flow.sections.forEach((section) => {
+      section.items.forEach((item) => {
+        const key = `${flow.id}|${section.role}|${item.text}`;
+        if (remap[key]) item.detail = remap[key];
+      });
+    });
+  });
+})();
