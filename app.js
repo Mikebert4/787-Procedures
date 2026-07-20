@@ -364,6 +364,10 @@ function renderStageBody(stage) {
     renderMemoryStage(stage);
     return;
   }
+  if (stage.mode === "limitations") {
+    renderLimitationsStage(stage);
+    return;
+  }
 
   const lines = stage.body.split(/\r?\n/);
   let group = createGroup("Procedure");
@@ -411,6 +415,120 @@ function renderStageBody(stage) {
   }
 
   if (groupHasContent(group)) contentEl.append(group);
+}
+
+function renderLimitationsStage(stage) {
+  const sections = parseLimitationSections(stage.body);
+  const panel = document.createElement("section");
+  panel.className = "limitations-panel";
+
+  const note = document.createElement("p");
+  note.className = stage.title.includes("Not a Limit") ? "limitations-guidance-note" : "limitations-priority-note";
+  note.textContent = stage.title.includes("Not a Limit")
+    ? "Guidance values are shown for training context and are not aircraft limitations."
+    : "Limitations are shown as reference tables. Use the cited manual source for the controlling text.";
+  panel.append(note);
+
+  sections.forEach((section) => {
+    const wrapper = document.createElement("section");
+    wrapper.className = "limitations-table-block";
+
+    const heading = document.createElement("h3");
+    heading.textContent = section.title;
+    wrapper.append(heading);
+
+    if (section.notes.length) {
+      section.notes.forEach((text) => {
+        const paragraph = document.createElement("p");
+        paragraph.className = "procedure-text";
+        paragraph.textContent = text;
+        wrapper.append(paragraph);
+      });
+    }
+
+    if (section.rows.length) {
+      const table = document.createElement("table");
+      table.className = "limitations-table";
+      const thead = document.createElement("thead");
+      const headerRow = document.createElement("tr");
+      ["Item", "Limit / Value", "Source"].forEach((label) => {
+        const th = document.createElement("th");
+        th.scope = "col";
+        th.textContent = label;
+        headerRow.append(th);
+      });
+      thead.append(headerRow);
+      table.append(thead);
+
+      const tbody = document.createElement("tbody");
+      section.rows.forEach((row) => {
+        const tr = document.createElement("tr");
+        if (row.guidance) tr.className = "is-guidance";
+        [row.item, row.value, row.source].forEach((value) => {
+          const cell = document.createElement("td");
+          cell.textContent = value;
+          tr.append(cell);
+        });
+        tbody.append(tr);
+      });
+      table.append(tbody);
+      wrapper.append(table);
+    }
+
+    panel.append(wrapper);
+  });
+
+  contentEl.append(panel);
+}
+
+function parseLimitationSections(body) {
+  const sections = [];
+  let current = { title: "Limitations", rows: [], notes: [] };
+
+  body.split(/\r?\n/).forEach((rawLine) => {
+    const line = rawLine.trim();
+    if (!line || /^References?:/.test(line)) return;
+
+    if (/^####\s+/.test(line)) {
+      if (current.rows.length || current.notes.length) sections.push(current);
+      current = { title: line.replace(/^####\s+/, ""), rows: [], notes: [] };
+      return;
+    }
+
+    if (/^\s*-\s+/.test(rawLine)) {
+      current.rows.push(parseLimitationRow(line.replace(/^-\s+/, ""), current.title));
+      return;
+    }
+
+    current.notes.push(line);
+  });
+
+  if (current.rows.length || current.notes.length) sections.push(current);
+  return sections;
+}
+
+function parseLimitationRow(text, sectionTitle) {
+  const sourceMatch = text.match(/\s*(\[[^\]]+\])$/);
+  const source = sourceMatch ? sourceMatch[1].replace(/^\[|\]$/g, "") : "";
+  const main = sourceMatch ? text.slice(0, sourceMatch.index).trim() : text.trim();
+  const colonIndex = main.indexOf(":");
+  const guidance = /guidance|recommended|advisory|not limitations|not a limitation/i.test(`${sectionTitle} ${main}`);
+
+  if (colonIndex > 0) {
+    return {
+      item: main.slice(0, colonIndex).trim(),
+      value: main.slice(colonIndex + 1).trim(),
+      source,
+      guidance
+    };
+  }
+
+  return {
+    item: main,
+    value: guidance ? "Guidance" : "Limitation",
+    source,
+    guidance
+  };
 }
 
 function parseMemoryItems(items) {
@@ -804,6 +922,7 @@ function refreshCompletionBadges() {
 }
 
 function stageCompletion(stage) {
+  if (stage.mode === "limitations") return { total: 0, checked: 0, percent: 100, complete: true };
   const total = countChecklistItems(stage.body);
   if (!total) return { total, checked: 0, percent: 100, complete: true };
   let checked = 0;

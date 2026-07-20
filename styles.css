@@ -543,6 +543,109 @@ h3 {
   margin-top: 0;
 }
 
+.limitations-panel {
+  display: grid;
+  gap: 16px;
+}
+
+.limitations-priority-note,
+.limitations-guidance-note {
+  margin: 0;
+  padding: 12px 14px;
+  border-radius: 8px;
+  font-weight: 700;
+}
+
+.limitations-priority-note {
+  border: 1px solid #8bb8b2;
+  background: #eaf6f4;
+  color: var(--accent-strong);
+}
+
+.limitations-guidance-note {
+  border: 1px solid #e2c279;
+  background: var(--warning-soft);
+  color: #5e3b00;
+}
+
+.limitations-table-block {
+  display: grid;
+  gap: 8px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+
+.limitations-table-block:first-of-type {
+  border-top: 0;
+  padding-top: 0;
+}
+
+.limitations-table-block h3 {
+  color: var(--accent-strong);
+}
+
+.limitations-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--surface);
+  table-layout: fixed;
+}
+
+.limitations-table th,
+.limitations-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--line);
+  border-right: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+  overflow-wrap: anywhere;
+}
+
+.limitations-table th:last-child,
+.limitations-table td:last-child {
+  border-right: 0;
+}
+
+.limitations-table tr:last-child td {
+  border-bottom: 0;
+}
+
+.limitations-table thead th {
+  background: #eef3f2;
+  color: var(--muted);
+  font-size: 0.76rem;
+  text-transform: uppercase;
+}
+
+.limitations-table td:nth-child(1) {
+  width: 34%;
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.limitations-table td:nth-child(2) {
+  width: 36%;
+  font-weight: 700;
+}
+
+.limitations-table td:nth-child(3) {
+  width: 30%;
+  color: var(--muted);
+  font-size: 0.86rem;
+}
+
+.limitations-table tr.is-guidance {
+  background: #fffaf0;
+}
+
+.limitations-table tr.is-guidance td:nth-child(2)::before {
+  content: "Guidance: ";
+  color: #7b4d00;
+}
+
 .visual-pane {
   min-width: 0;
   padding: 14px;
@@ -835,6 +938,60 @@ h3 {
   .memory-action label {
     grid-column: 2;
     grid-row: 1 / span 2;
+  }
+
+  .limitations-table,
+  .limitations-table thead,
+  .limitations-table tbody,
+  .limitations-table tr,
+  .limitations-table th,
+  .limitations-table td {
+    display: block;
+  }
+
+  .limitations-table thead {
+    display: none;
+  }
+
+  .limitations-table tr {
+    border-bottom: 1px solid var(--line);
+  }
+
+  .limitations-table tr:last-child {
+    border-bottom: 0;
+  }
+
+  .limitations-table td {
+    width: 100%;
+    border-right: 0;
+  }
+
+  .limitations-table td:nth-child(1) {
+    width: 100%;
+    background: #f6faf9;
+  }
+
+  .limitations-table td:nth-child(2),
+  .limitations-table td:nth-child(3) {
+    width: 100%;
+  }
+
+  .limitations-table td:nth-child(2)::before,
+  .limitations-table td:nth-child(3)::before {
+    display: block;
+    margin-bottom: 3px;
+    color: var(--muted);
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .limitations-table td:nth-child(2)::before {
+    content: "Limit / Value";
+  }
+
+  .limitations-table td:nth-child(3)::before {
+    content: "Source";
   }
 
   .fctm-dialog-head,
