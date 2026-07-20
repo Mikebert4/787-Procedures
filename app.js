@@ -2,6 +2,71 @@ const sourceFile = "source.md";
 
 const visualLibrary = [
   {
+    matcher: /Weather and Speed|Severe Turbulent|Turbulence/i,
+    images: [
+      {
+        src: "assets/norse-fcom-limitations-0163.png",
+        alt: "Norse FCOM limitations page for severe turbulent air penetration speed and weight limits",
+        caption: "Severe turbulent air penetration speed and weight limitations. Source: Norse FCOM Rev 9 PDF p.163; L.10.3."
+      }
+    ]
+  },
+  {
+    matcher: /Wind Limits|Landing and Autoland|Takeoff and Landing Wind|Low Visibility HUD|Autoland Wind|Ground Wind/i,
+    images: [
+      {
+        src: "assets/norse-fcom-limitations-0162.png",
+        alt: "Norse FCOM limitations page for wind, tailwind, crosswind, runway slope and altitude",
+        caption: "Wind, runway slope, tailwind, crosswind and altitude limitations. Source: Norse FCOM Rev 9 PDF p.162; L.10.2."
+      },
+      {
+        src: "assets/norse-fcom-limitations-0164.png",
+        alt: "Norse FCOM limitations page for autoflight and autoland wind limits",
+        caption: "Autoflight, HUD takeoff and autoland wind limitations. Source: Norse FCOM Rev 9 PDF p.164; L.10.4."
+      },
+      {
+        src: "assets/norse-fcom-limitations-0165.png",
+        alt: "Norse FCOM limitations page for autoland capability and ground wind engine operating envelope",
+        caption: "Autoland capability and ground wind engine operating envelope. Source: Norse FCOM Rev 9 PDF p.165; L.10.5."
+      }
+    ]
+  },
+  {
+    matcher: /Landing Weight|Landing Distance|Tire Speed/i,
+    images: [
+      {
+        src: "assets/norse-fcom-limitations-0163.png",
+        alt: "Norse FCOM limitations page for weight limitations",
+        caption: "Weight limitations including maximum landing weight. Source: Norse FCOM Rev 9 PDF p.163; L.10.3."
+      },
+      {
+        src: "assets/norse-qrh-landing-distance-492.png",
+        alt: "Norse QRH normal configuration landing distance table with wind adjustment column",
+        caption: "Landing distance table format including wind, slope and speed adjustments. Source: Norse QRH Rev 9 PDF p.492; PI-QRH.11.2."
+      }
+    ]
+  },
+  {
+    matcher: /Crosswind Landing Guidance|Non-TALPA|TALPA|Technique Notes/i,
+    images: [
+      {
+        src: "assets/norse-fctm-crosswind-landing-338.png",
+        alt: "Norse FCTM crosswind landing non-TALPA guidelines",
+        caption: "Crosswind landing guidelines, non-TALPA. Source: Norse FCTM Rev 19 PDF p.338; FCTM 6.40."
+      },
+      {
+        src: "assets/norse-fctm-crosswind-landing-340.png",
+        alt: "Norse FCTM crosswind landing TALPA guidelines",
+        caption: "Crosswind landing guidelines, TALPA. Source: Norse FCTM Rev 19 PDF p.340; FCTM 6.42."
+      },
+      {
+        src: "assets/norse-fctm-crosswind-landing-339.png",
+        alt: "Norse FCTM crosswind landing guidance continuation",
+        caption: "Crosswind landing guidance continuation. Source: Norse FCTM Rev 19 PDF p.339; FCTM 6.41."
+      }
+    ]
+  },
+  {
     matcher: /Operating Frame|Preflight Procedure - First Officer|Preflight Procedure - Captain/i,
     images: [
       {
@@ -120,7 +185,8 @@ const imageCloseButton = document.getElementById("image-close");
 const modeButtons = {
   normal: document.getElementById("mode-normal"),
   nonNormal: document.getElementById("mode-non-normal"),
-  memory: document.getElementById("mode-memory")
+  memory: document.getElementById("mode-memory"),
+  limitations: document.getElementById("mode-limitations")
 };
 
 init();
@@ -131,6 +197,7 @@ async function init() {
     state.profiles.normal = parseMarkdown(markdown, "normal");
     state.profiles.nonNormal = parseMarkdown(window.NON_NORMAL_MARKDOWN || "", "nonNormal");
     state.profiles.memory = parseMemoryItems(window.MEMORY_ITEMS || []);
+    state.profiles.limitations = parseMarkdown(window.LIMITATIONS_MARKDOWN || "", "limitations");
     state.stages = state.profiles[state.activeMode];
     applyNavState();
     renderTabs();
@@ -228,6 +295,7 @@ function bindControls() {
   modeButtons.normal.addEventListener("click", () => setMode("normal"));
   modeButtons.nonNormal.addEventListener("click", () => setMode("nonNormal"));
   modeButtons.memory.addEventListener("click", () => setMode("memory"));
+  modeButtons.limitations.addEventListener("click", () => setMode("limitations"));
 }
 
 function setMode(mode) {
@@ -359,6 +427,7 @@ function parseMemoryItems(items) {
 
 function stageLabel(stage, index) {
   if (state.activeMode === "memory") return `Memory items - Item ${index + 1}`;
+  if (state.activeMode === "limitations") return `Limitations - Section ${index + 1}`;
   return `${state.activeMode === "normal" ? "Normal" : "Non-Normal"} - ${stage.id === "operating-frame" ? "Profile" : `Stage ${stageNumber(index)}`}`;
 }
 
