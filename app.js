@@ -187,7 +187,8 @@ const modeButtons = {
   nonNormal: document.getElementById("mode-non-normal"),
   memory: document.getElementById("mode-memory"),
   limitations: document.getElementById("mode-limitations"),
-  callouts: document.getElementById("mode-callouts")
+  callouts: document.getElementById("mode-callouts"),
+  scanFlows: document.getElementById("mode-scan-flows")
 };
 
 init();
@@ -200,6 +201,7 @@ async function init() {
     state.profiles.memory = parseMemoryItems(window.MEMORY_ITEMS || []);
     state.profiles.limitations = parseMarkdown(window.LIMITATIONS_MARKDOWN || "", "limitations");
     state.profiles.callouts = parseCalloutItems(window.CALLOUTS || []);
+    state.profiles.scanFlows = parseScanFlowItems(window.SCAN_FLOWS || []);
     state.stages = state.profiles[state.activeMode];
     applyNavState();
     renderTabs();
@@ -299,6 +301,7 @@ function bindControls() {
   modeButtons.memory.addEventListener("click", () => setMode("memory"));
   modeButtons.limitations.addEventListener("click", () => setMode("limitations"));
   modeButtons.callouts.addEventListener("click", () => setMode("callouts"));
+  modeButtons.scanFlows.addEventListener("click", () => setMode("scanFlows"));
 }
 
 function setMode(mode) {
@@ -373,6 +376,10 @@ function renderStageBody(stage) {
   }
   if (stage.mode === "callouts") {
     renderCalloutsStage(stage);
+    return;
+  }
+  if (stage.mode === "scanFlows") {
+    renderScanFlowStage(stage);
     return;
   }
 
@@ -563,11 +570,106 @@ function parseCalloutItems(items) {
   }));
 }
 
+function parseScanFlowItems(items) {
+  return items.map((item, index) => ({
+    ...item,
+    type: "scanFlow",
+    mode: "scanFlows",
+    rawTitle: item.title,
+    title: item.title,
+    citation: item.citation || "",
+    body: "",
+    order: index + 1
+  }));
+}
+
 function stageLabel(stage, index) {
   if (state.activeMode === "memory") return `Memory items - Item ${index + 1}`;
   if (state.activeMode === "limitations") return `Limitations - Section ${index + 1}`;
   if (state.activeMode === "callouts") return `Callouts - Phase ${index + 1}`;
+  if (state.activeMode === "scanFlows") return `Scan Flows - Page ${stage.sourcePage || index + 1}`;
   return `${state.activeMode === "normal" ? "Normal" : "Non-Normal"} - ${stage.id === "operating-frame" ? "Profile" : `Stage ${stageNumber(index)}`}`;
+}
+
+function renderScanFlowStage(stage) {
+  const panel = document.createElement("section");
+  panel.className = "scan-flow-panel";
+
+  if (stage.note) {
+    const note = document.createElement("p");
+    note.className = "scan-flow-note";
+    note.textContent = stage.note;
+    panel.append(note);
+  }
+
+  const grid = document.createElement("div");
+  grid.className = "scan-flow-grid";
+
+  stage.sections.forEach((section) => {
+    const card = document.createElement("section");
+    card.className = "scan-flow-role";
+
+    const heading = document.createElement("h3");
+    heading.textContent = section.role;
+    card.append(heading);
+
+    const list = document.createElement("ol");
+    list.className = "scan-flow-list";
+    section.items.forEach((item) => {
+      const row = document.createElement("li");
+      const button = document.createElement("button");
+      button.type = "button";
+      button.className = "scan-flow-item";
+      button.textContent = item.text;
+      button.addEventListener("click", () => openScanFlowDetail(stage, section, item));
+      row.append(button);
+      list.append(row);
+    });
+    card.append(list);
+
+    if (section.notes?.length) {
+      const notes = document.createElement("ul");
+      notes.className = "scan-flow-notes";
+      section.notes.forEach((text) => {
+        const note = document.createElement("li");
+        note.textContent = text;
+        notes.append(note);
+      });
+      card.append(notes);
+    }
+
+    grid.append(card);
+  });
+
+  panel.append(grid);
+
+  const source = document.createElement("p");
+  source.className = "citation";
+  source.textContent = `Verbatim scan-flow source: ${stage.citation}`;
+  panel.append(source);
+
+  contentEl.append(panel);
+}
+
+function openScanFlowDetail(stage, section, item) {
+  const detail = getScanFlowDetail(item.detail);
+  openReferenceDialog([{
+    title: `${section.role}: ${item.text}`,
+    citation: detail.citation,
+    bullets: [
+      `Scan flow source: ${stage.citation}`,
+      ...detail.bullets
+    ],
+    images: detail.images || []
+  }], `${stage.title} - ${item.text}`, "FCOM / FCTM Expansion");
+}
+
+function getScanFlowDetail(key) {
+  const fallback = window.SCAN_FLOW_DETAILS?.default || {
+    citation: "Norse Scan Flows v1.2; Norse FCOM/FCTM references not mapped.",
+    bullets: ["No expanded source mapping has been added for this item yet."]
+  };
+  return window.SCAN_FLOW_DETAILS?.[key] || fallback;
 }
 
 function renderCalloutsStage(stage) {
@@ -993,6 +1095,7 @@ function refreshCompletionBadges() {
 }
 
 function stageCompletion(stage) {
+  if (stage.mode === "scanFlows") return { total: 0, checked: 0, percent: 100, complete: true };
   if (stage.mode === "callouts") return { total: 0, checked: 0, percent: 100, complete: true };
   if (stage.mode === "limitations") return { total: 0, checked: 0, percent: 100, complete: true };
   const total = countChecklistItems(stage.body);

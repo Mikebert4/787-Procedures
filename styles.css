@@ -723,6 +723,84 @@ h3 {
   font-size: 0.86rem;
 }
 
+.scan-flow-panel {
+  display: grid;
+  gap: 14px;
+}
+
+.scan-flow-note {
+  margin: 0;
+  padding: 12px 14px;
+  border: 1px solid #8bb8b2;
+  border-radius: 8px;
+  background: #eaf6f4;
+  color: var(--accent-strong);
+  font-weight: 700;
+}
+
+.scan-flow-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 14px;
+}
+
+.scan-flow-role {
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--surface);
+}
+
+.scan-flow-role h3 {
+  padding: 10px 12px;
+  background: var(--surface-strong);
+  color: var(--accent-strong);
+}
+
+.scan-flow-list {
+  display: grid;
+  gap: 1px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  background: var(--line);
+}
+
+.scan-flow-list li {
+  min-width: 0;
+}
+
+.scan-flow-item {
+  width: 100%;
+  min-height: 42px;
+  padding: 10px 12px;
+  border: 0;
+  background: var(--surface);
+  color: var(--ink);
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+  overflow-wrap: anywhere;
+}
+
+.scan-flow-item:hover,
+.scan-flow-item:focus-visible {
+  background: #eef8f7;
+  color: var(--accent-strong);
+  outline: none;
+}
+
+.scan-flow-notes {
+  display: grid;
+  gap: 6px;
+  margin: 0;
+  padding: 10px 12px 12px 26px;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-weight: 700;
+}
+
 .visual-pane {
   min-width: 0;
   padding: 14px;
