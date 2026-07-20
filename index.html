@@ -4,9 +4,19 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>787 NP Training Aide</title>
-    <link rel="stylesheet" href="styles.css?v=20260720-callouts-fix">
+    <link rel="stylesheet" href="styles.css?v=20260720-password-gate">
   </head>
-  <body>
+  <body class="auth-locked">
+    <section id="auth-gate" class="auth-gate" aria-labelledby="auth-title">
+      <form id="auth-form" class="auth-card" autocomplete="off">
+        <p class="eyebrow">Restricted Training Aide</p>
+        <h1 id="auth-title">787 Procedures Training Aide</h1>
+        <label for="auth-password">Password</label>
+        <input id="auth-password" type="password" inputmode="text" autocomplete="current-password" required>
+        <p id="auth-error" class="auth-error" role="alert" aria-live="polite"></p>
+        <button type="submit" class="icon-button primary">Unlock</button>
+      </form>
+    </section>
     <div class="app-shell">
       <header class="topbar">
         <div>
@@ -89,14 +99,14 @@
       </div>
     </dialog>
 
-    <script src="source-data.js?v=20260720-scan-flows"></script>
-    <script src="non-normal-data.js?v=20260720-scan-flows"></script>
-    <script src="memory-items.js?v=20260720-scan-flows"></script>
-    <script src="limitations-data.js?v=20260720-scan-flows"></script>
-    <script src="callouts-data.js?v=20260720-scan-flows"></script>
-    <script src="scan-flows-data.js?v=20260720-scan-flows"></script>
-    <script src="fctm-guidance.js?v=20260720-scan-flows"></script>
-    <script src="norse-differences.js?v=20260720-scan-flows"></script>
-    <script src="app.js?v=20260720-scan-flows"></script>
+    <script src="source-data.js?v=20260720-password-gate"></script>
+    <script src="non-normal-data.js?v=20260720-password-gate"></script>
+    <script src="memory-items.js?v=20260720-password-gate"></script>
+    <script src="limitations-data.js?v=20260720-password-gate"></script>
+    <script src="callouts-data.js?v=20260720-password-gate"></script>
+    <script src="scan-flows-data.js?v=20260720-password-gate"></script>
+    <script src="fctm-guidance.js?v=20260720-password-gate"></script>
+    <script src="norse-differences.js?v=20260720-password-gate"></script>
+    <script src="app.js?v=20260720-password-gate"></script>
   </body>
 </html>

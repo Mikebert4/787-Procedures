@@ -1,4 +1,6 @@
 const sourceFile = "source.md";
+const authHash = "deab6998d935ac474061318ed55c1056fff07557ac0d25eaa57627a779ef9b05";
+const authStorageKey = "b787-procedures:auth-ok";
 
 const visualLibrary = [
   {
@@ -182,6 +184,10 @@ const imageDialogTitleEl = document.getElementById("image-dialog-title");
 const imageDialogImgEl = document.getElementById("image-dialog-img");
 const imageDialogCaptionEl = document.getElementById("image-dialog-caption");
 const imageCloseButton = document.getElementById("image-close");
+const authGateEl = document.getElementById("auth-gate");
+const authFormEl = document.getElementById("auth-form");
+const authPasswordEl = document.getElementById("auth-password");
+const authErrorEl = document.getElementById("auth-error");
 const modeButtons = {
   normal: document.getElementById("mode-normal"),
   nonNormal: document.getElementById("mode-non-normal"),
@@ -195,6 +201,8 @@ init();
 
 async function init() {
   try {
+    const authenticated = await requireAuthentication();
+    if (!authenticated) return;
     const markdown = window.PROFILE_MARKDOWN || await loadMarkdown();
     state.profiles.normal = parseMarkdown(markdown, "normal");
     state.profiles.nonNormal = parseMarkdown(window.NON_NORMAL_MARKDOWN || "", "nonNormal");
@@ -214,6 +222,57 @@ async function init() {
     message.textContent = "The procedure source could not be loaded from the local server.";
     contentEl.append(message);
   }
+}
+
+async function requireAuthentication() {
+  if (sessionStorage.getItem(authStorageKey) === "1") {
+    unlockApp();
+    return true;
+  }
+
+  authPasswordEl?.focus();
+  authFormEl?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const candidateHash = await sha256(authPasswordEl.value);
+    if (candidateHash === authHash) {
+      sessionStorage.setItem(authStorageKey, "1");
+      authPasswordEl.value = "";
+      unlockApp();
+      await startAppAfterUnlock();
+      return;
+    }
+
+    authErrorEl.textContent = "Password incorrect.";
+    authPasswordEl.select();
+  });
+
+  return false;
+}
+
+async function startAppAfterUnlock() {
+  const markdown = window.PROFILE_MARKDOWN || await loadMarkdown();
+  state.profiles.normal = parseMarkdown(markdown, "normal");
+  state.profiles.nonNormal = parseMarkdown(window.NON_NORMAL_MARKDOWN || "", "nonNormal");
+  state.profiles.memory = parseMemoryItems(window.MEMORY_ITEMS || []);
+  state.profiles.limitations = parseMarkdown(window.LIMITATIONS_MARKDOWN || "", "limitations");
+  state.profiles.callouts = parseCalloutItems(window.CALLOUTS || []);
+  state.profiles.scanFlows = parseScanFlowItems(window.SCAN_FLOWS || []);
+  state.stages = state.profiles[state.activeMode];
+  applyNavState();
+  renderTabs();
+  selectStage(0);
+  bindControls();
+}
+
+function unlockApp() {
+  document.body.classList.remove("auth-locked");
+  authGateEl?.setAttribute("hidden", "");
+}
+
+async function sha256(text) {
+  const bytes = new TextEncoder().encode(text);
+  const digest = await crypto.subtle.digest("SHA-256", bytes);
+  return [...new Uint8Array(digest)].map((byte) => byte.toString(16).padStart(2, "0")).join("");
 }
 
 async function loadMarkdown() {
