@@ -700,16 +700,37 @@ function parseSessionItems(data) {
 }
 
 function parseTechQuizItems(data) {
-  return [{
-    id: "tech-quiz-bank",
+  const questions = data.questions || [];
+  if (!questions.length) {
+    return [{
+      id: "tech-quiz-empty",
+      type: "techQuiz",
+      mode: "techQuiz",
+      rawTitle: "Question Bank",
+      title: "Question Bank",
+      citation: data.citation || "QB 101 787 1; source-checked audit notes.",
+      questions,
+      body: ""
+    }];
+  }
+
+  return questions.map((question, index) => ({
+    id: question.id,
     type: "techQuiz",
     mode: "techQuiz",
-    rawTitle: "Question Bank",
-    title: "Question Bank",
+    rawTitle: `Question ${question.number}`,
+    title: `Q${question.number} - ${quizPromptTitle(question.prompt)}`,
     citation: data.citation || "QB 101 787 1; source-checked audit notes.",
-    questions: data.questions || [],
-    body: ""
-  }];
+    question,
+    questions,
+    body: "",
+    order: index + 1
+  }));
+}
+
+function quizPromptTitle(prompt) {
+  const clean = String(prompt || "").replace(/\s+/g, " ").trim();
+  return clean.length > 54 ? `${clean.slice(0, 51)}...` : clean;
 }
 
 function stageLabel(stage, index) {
@@ -718,7 +739,7 @@ function stageLabel(stage, index) {
   if (state.activeMode === "callouts") return `Callouts - Phase ${index + 1}`;
   if (state.activeMode === "scanFlows") return `Scan Flows - Page ${stage.sourcePage || index + 1}`;
   if (state.activeMode === "sessions") return index === 0 ? "Sessions - Study Plan" : `Sessions - ${stage.category || "Session"} ${index}`;
-  if (state.activeMode === "techQuiz") return "Tech Quiz - Single Question Bank";
+  if (state.activeMode === "techQuiz") return `Tech Quiz - Question ${index + 1} of ${state.stages.length}`;
   return `${state.activeMode === "normal" ? "Normal" : "Non-Normal"} - ${stage.id === "operating-frame" ? "Profile" : `Stage ${stageNumber(index)}`}`;
 }
 
@@ -780,39 +801,28 @@ function renderSessionStage(stage) {
 function renderTechQuizStage(stage) {
   const panel = document.createElement("section");
   panel.className = "tech-quiz-panel";
+  const questions = getTechQuizQuestions(stage);
+  const question = stage.question || questions[0];
 
   const intro = document.createElement("div");
   intro.className = "tech-quiz-intro";
   const introText = document.createElement("p");
-  introText.textContent = "Single question bank. Choose an answer to mark the question and reveal the explanation, manual/source reference, and any audit note.";
+  introText.textContent = `Single question bank. Question ${state.current + 1} of ${state.stages.length}. Choose an answer to mark it and reveal the explanation, manual/source reference, and any audit note.`;
   intro.append(introText);
 
   const controls = document.createElement("div");
   controls.className = "tech-quiz-controls";
-  const showAnswers = document.createElement("button");
-  showAnswers.type = "button";
-  showAnswers.className = "ghost-button";
-  showAnswers.textContent = "Show all answers";
-  showAnswers.addEventListener("click", () => {
-    stage.questions.forEach((question) => {
-      localStorage.setItem(quizAnswerKey(question), question.correctAnswer);
-    });
-    contentEl.innerHTML = "";
-    renderStageBody(stage);
-    updateProgress();
-  });
-
   const reset = document.createElement("button");
   reset.type = "button";
   reset.className = "ghost-button";
   reset.textContent = "Reset quiz";
   reset.addEventListener("click", () => {
-    stage.questions.forEach((question) => localStorage.removeItem(quizAnswerKey(question)));
+    questions.forEach((question) => localStorage.removeItem(quizAnswerKey(question)));
     contentEl.innerHTML = "";
     renderStageBody(stage);
     updateProgress();
   });
-  controls.append(showAnswers, reset);
+  controls.append(reset);
   intro.append(controls);
   panel.append(intro);
 
@@ -821,15 +831,44 @@ function renderTechQuizStage(stage) {
   score.id = "tech-quiz-score";
   panel.append(score);
 
-  const list = document.createElement("ol");
-  list.className = "tech-quiz-list";
-  stage.questions.forEach((question) => {
+  if (question) {
+    const list = document.createElement("ol");
+    list.className = "tech-quiz-list";
     list.append(createQuizQuestionCard(question));
-  });
-  panel.append(list);
+    panel.append(list);
+  } else {
+    const empty = document.createElement("p");
+    empty.className = "empty-note";
+    empty.textContent = "No quiz questions are available.";
+    panel.append(empty);
+  }
+
+  panel.append(createTechQuizNav());
 
   contentEl.append(panel);
   updateTechQuizScore(stage);
+}
+
+function createTechQuizNav() {
+  const nav = document.createElement("div");
+  nav.className = "tech-quiz-question-nav";
+
+  const previous = document.createElement("button");
+  previous.type = "button";
+  previous.className = "icon-button";
+  previous.textContent = "Previous question";
+  previous.disabled = state.current === 0;
+  previous.addEventListener("click", () => selectStage(Math.max(0, state.current - 1)));
+
+  const next = document.createElement("button");
+  next.type = "button";
+  next.className = "icon-button primary";
+  next.textContent = "Next question";
+  next.disabled = state.current === state.stages.length - 1;
+  next.addEventListener("click", () => selectStage(Math.min(state.stages.length - 1, state.current + 1)));
+
+  nav.append(previous, next);
+  return nav;
 }
 
 function createQuizQuestionCard(question) {
@@ -946,19 +985,20 @@ function createQuizFeedback(question, selected, correct) {
 
 function updateTechQuizScore(stage) {
   const score = document.getElementById("tech-quiz-score");
-  if (!score || !stage?.questions) return;
-  const total = stage.questions.length;
+  const questions = getTechQuizQuestions(stage);
+  if (!score || !questions.length) return;
+  const total = questions.length;
   let attempted = 0;
   let correct = 0;
-  stage.questions.forEach((question) => {
+  questions.forEach((question) => {
     const selected = localStorage.getItem(quizAnswerKey(question));
     if (!selected) return;
     attempted += 1;
     if (selected === question.correctAnswer) correct += 1;
   });
   const percent = attempted ? Math.round((correct / attempted) * 100) : 0;
-  const auditFlags = stage.questions.filter((question) => question.status && question.status !== "confirmed").length;
-  const correctedKeys = stage.questions.filter((question) => question.bankAnswer !== question.correctAnswer).length;
+  const auditFlags = questions.filter((question) => question.status && question.status !== "confirmed").length;
+  const correctedKeys = questions.filter((question) => question.bankAnswer !== question.correctAnswer).length;
   score.innerHTML = "";
   [
     ["Attempted", `${attempted}/${total}`],
@@ -976,6 +1016,14 @@ function updateTechQuizScore(stage) {
     metric.append(strong, small);
     score.append(metric);
   });
+}
+
+function getTechQuizQuestions(stage) {
+  if (stage?.questions?.length) return stage.questions;
+  if (state.profiles.techQuiz?.length) {
+    return state.profiles.techQuiz.map((item) => item.question).filter(Boolean);
+  }
+  return stage?.question ? [stage.question] : [];
 }
 
 function quizAnswerKey(question) {
@@ -1697,11 +1745,14 @@ function storageKey(stage, index) {
 }
 
 function resetAllProgress() {
+  if (state.activeMode === "techQuiz") {
+    getTechQuizQuestions(state.stages[state.current]).forEach((question) => localStorage.removeItem(quizAnswerKey(question)));
+    selectStage(state.current);
+    refreshCompletionBadges();
+    return;
+  }
+
   state.stages.forEach((stage) => {
-    if (stage.mode === "techQuiz") {
-      stage.questions?.forEach((question) => localStorage.removeItem(quizAnswerKey(question)));
-      return;
-    }
     const total = countChecklistItems(stage.body);
     for (let index = 0; index < total; index += 1) {
       localStorage.removeItem(storageKey(stage, index));
