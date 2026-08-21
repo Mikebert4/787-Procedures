@@ -386,6 +386,7 @@ function renderTabs() {
     const button = document.createElement("button");
     button.type = "button";
     button.className = "tab-button";
+    if (!showsCompletionBadge(stage)) button.classList.add("no-completion");
     button.id = `tab-${stage.id}`;
     button.role = "tab";
     button.setAttribute("aria-controls", "stage-content");
@@ -399,14 +400,20 @@ function renderTabs() {
     title.className = "tab-title";
     title.textContent = stage.title;
 
-    const complete = document.createElement("span");
-    complete.className = "tab-complete";
-    complete.dataset.state = stageCompletion(stage).complete ? "done" : "open";
-    complete.textContent = stageCompletion(stage).complete ? "Done" : "-";
-
-    button.append(number, title, complete);
+    button.append(number, title);
+    if (showsCompletionBadge(stage)) {
+      const complete = document.createElement("span");
+      complete.className = "tab-complete";
+      complete.dataset.state = stageCompletion(stage).complete ? "done" : "open";
+      complete.textContent = stageCompletion(stage).complete ? "Done" : "-";
+      button.append(complete);
+    }
     tabsEl.append(button);
   });
+}
+
+function showsCompletionBadge(stage) {
+  return !["limitations", "callouts", "scanFlows", "sessions"].includes(stage.mode);
 }
 
 function selectStage(index) {
@@ -1379,6 +1386,7 @@ function refreshCompletionBadges() {
   [...tabsEl.children].forEach((tab, index) => {
     const completion = stageCompletion(state.stages[index]);
     const badge = tab.querySelector(".tab-complete");
+    if (!badge) return;
     badge.dataset.state = completion.complete ? "done" : "open";
     badge.textContent = completion.complete ? "Done" : "-";
   });

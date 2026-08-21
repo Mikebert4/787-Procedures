@@ -277,6 +277,10 @@ h3 {
   cursor: pointer;
 }
 
+.tab-button.no-completion {
+  grid-template-columns: 28px minmax(0, 1fr);
+}
+
 .tab-button:hover {
   background: #f7faf9;
 }
@@ -1288,6 +1292,11 @@ h3 {
     min-width: 250px;
     border-bottom: 0;
     border-right: 1px solid var(--line);
+  }
+
+  .tab-button.no-completion {
+    grid-template-columns: 24px 170px;
+    min-width: 220px;
   }
 
   .tab-button[aria-selected="true"] {
