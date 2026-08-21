@@ -264,18 +264,30 @@ window.STUDY_SESSIONS = {
       summary: "London Gatwick to London Heathrow session for preflight, normal procedures, manual flight characteristics, ground handling, UPRT, envelope protection, ILS approaches, landing practice, and all-engine missed approach.",
       emphasis: ["Normal procedures", "Manual handling", "Ground handling", "UPRT", "Envelope protection", "HUD", "ILS", "Landings"],
       route: [
-        ["Origin", "London Gatwick (EGKK) Gate 21"],
+        ["Origin", "London Gatwick (EGKK) (Gate 21)"],
         ["Departure", "RWY26L ADMAG __ X"],
         ["Route", "ADMAG DVR LAM"],
         ["Destination", "EGLL - London Heathrow"],
-        ["Flight number", "By instructor"]
+        ["Alternate", "Blank in source"],
+        ["Flight number", "By Instructor"]
       ],
       planning: [
         ["GR WT", "192400kg"],
         ["FUEL", "4000kg"],
         ["ZFW", "152400kg"],
+        ["RESERVES", "4000kg"],
         ["CRZ ALT", "FL 150 / FL150"],
-        ["RUNWAY", "Dry"]
+        ["COST INDEX", "100"],
+        ["RUNWAY", "Dry"],
+        ["THRUST RTG", "TO"],
+        ["ASSUMED TEMP", "Max"],
+        ["FLAP CONFIG", "Optimum"],
+        ["CG", "25%"],
+        ["EO ACCEL HT", "1000'"],
+        ["ACCEL HT", "3000'"],
+        ["THR REDUCTION", "1500'"],
+        ["WEATHER", "EGKK METAR 25015KT 9999 SCT 030 25/17 Q1020; EGLL METAR 24012KT 9999 SCT 028 26/17 Q1018"],
+        ["CLEARANCE", "C/S IS CLEARED TO HEATHROW, ADMAG __ X DEPARTURE, SQUAWK 4326; C/S, READ BACK CORRECT, CONTACT GROUND CONTROL 121.805 FOR PUSHBACK AND START"]
       ],
       prep: ["Normal", "Callouts", "Limitations", "Scan Flows"]
     },
@@ -287,18 +299,30 @@ window.STUDY_SESSIONS = {
       summary: "Long-haul Amsterdam to San Francisco and return-to-Schiphol profile with normal/non-normal practice, rejected takeoffs, TCAS, non-ILS approaches using VNAV/FPA, icing, crosswind, and raw data ILS.",
       emphasis: ["RTO", "Crosswind takeoff", "TCAS", "VOR/raw data", "VNAV/FPA", "Circling", "Rejected landing"],
       route: [
-        ["Origin", "Amsterdam Schiphol (EHAM) Gate C-18"],
+        ["Origin", "Amsterdam Schiphol (EHAM) (Gate C-18)"],
         ["Departure", "RWY27 BERGI, UL602 MIMVA, L602 TIR Oceanic"],
         ["Route", "BERGI __P"],
         ["Destination", "San Francisco KSFO"],
-        ["Alternate", "London Gatwick EGKK"]
+        ["Alternate", "London Gatwick EGKK)"],
+        ["Flight number", "By Instructor"]
       ],
       planning: [
         ["GR WT", "250200kg"],
         ["FUEL", "77000kg"],
         ["ZFW", "173200kg"],
+        ["RESERVES", "9100kg"],
+        ["CRZ ALT", "250.200kg (as printed)"],
         ["COST INDEX", "100"],
-        ["RUNWAY", "Dry"]
+        ["RUNWAY", "Dry"],
+        ["THRUST RTG", "TO"],
+        ["ASSUMED TEMP", "Max"],
+        ["FLAP CONFIG", "Optimum"],
+        ["CG", "25%"],
+        ["EO ACCEL HT", "1000'"],
+        ["ACCEL HT", "3000'"],
+        ["THR REDUCTION", "1500'"],
+        ["WEATHER", "EHAM METAR 350 20KT 5000 OVC014 2/1 Q1003; TA: 3,000' TL: FL035"],
+        ["CLEARANCE", "C/S IS CLEARED TO KSFO, BERGI __ P DEPARTURE, INITIAL CLIMB FLIGHT LEVEL 60 SQUAWK 4326; C/S, READ BACK CORRECT, CONTACT GROUND CONTROL 121.905 FOR PUSHBACK AND START"]
       ],
       prep: ["Non-Normal", "Limitations", "Callouts", "Memory items"]
     },
@@ -310,18 +334,31 @@ window.STUDY_SESSIONS = {
       summary: "Local London Gatwick session emphasizing one-engine-inoperative performance and characteristics, EFATO familiarization/practice, windshear handling, and stall recovery after takeoff.",
       emphasis: ["Engine inoperative", "EFATO", "Windshear recovery", "Stall after takeoff", "Flaps 15 takeoff", "Crosswind"],
       route: [
-        ["Origin", "London Gatwick (EGKK) Gate 21"],
-        ["Runway", "RWY26L for departure and landing"],
-        ["Departure", "SFD __X, radar vectors ILS RWY26L"],
+        ["Origin", "London Gatwick (EGKK) (Gate 21)"],
+        ["Runway", "RWY26L for departure, 26L for landing"],
+        ["Departure", "SFD __X, Radar Vectors ILS RWY26L"],
         ["Route", "SFD __X"],
-        ["Destination", "London Gatwick (EGKK)"]
+        ["Destination", "London Gatwick (EGKK)"],
+        ["Alternate", "Blank in source"],
+        ["Flight number", "By Instructor"]
       ],
       planning: [
         ["GR WT", "192700kg"],
         ["FUEL", "40000kg"],
         ["ZFW", "152400kg"],
+        ["RESERVES", "4000kg"],
         ["CRZ ALT", "4000ft"],
-        ["RUNWAY", "Dry"]
+        ["COST INDEX", "100"],
+        ["RUNWAY", "Dry"],
+        ["THRUST RTG", "TO1"],
+        ["ASSUMED TEMP", "Max"],
+        ["FLAP CONFIG", "Optimum"],
+        ["CG", "25%"],
+        ["EO ACCEL HT", "1000'"],
+        ["ACCEL HT", "3000'"],
+        ["THR REDUCTION", "1500'"],
+        ["WEATHER", "EGKK METAR 180/20 4000 BKN050 18/16 Q1013 TA: 5,000'"],
+        ["CLEARANCE", "C/S IS CLEARED TO EGKK FOR LOCAL FLYING. SFD __X DEPARTURE. AFTER SFD, EXPECT RADAR VECTORS TO ILS RWY26L; C/S, READ BACK CORRECT, CONTACT GROUND ON 121.805 FOR PUSHBACK AND START"]
       ],
       prep: ["Memory items", "Non-Normal", "Callouts", "Limitations"]
     },
@@ -337,14 +374,26 @@ window.STUDY_SESSIONS = {
         ["Departure", "RWY27L BPK __G"],
         ["Route", "BPK CLN L620 TULIP UZ 700 NIKIL Direct HEL"],
         ["Destination", "Helsinki (EFHK)"],
-        ["Alternate", "London Stansted (EGSS)"]
+        ["Alternate", "London Stansted (EGSS)"],
+        ["Flight number", "By Instructor"]
       ],
       planning: [
-        ["GR WT", "206500g"],
+        ["GR WT", "206500g (as printed)"],
         ["FUEL", "44000kg"],
         ["ZFW", "162500kg"],
+        ["RESERVES", "4000kg"],
         ["CRZ ALT", "FL310"],
-        ["RUNWAY", "Dry"]
+        ["COST INDEX", "100"],
+        ["RUNWAY", "Dry"],
+        ["THRUST RTG", "TO"],
+        ["ASSUMED TEMP", "Max"],
+        ["FLAP CONFIG", "Optimum"],
+        ["CG", "25%"],
+        ["EO ACCEL HT", "1000'"],
+        ["ACCEL HT", "3000'"],
+        ["THR REDUCTION", "1500'"],
+        ["WEATHER", "EGLL METAR 23015KT 9999 OVC020 11/8 Q1011; TA: 6,000' TL: FL70; EFHK METAR 30015KT 4000 BKN20 8/6 Q1013; TA: 18,000; EGSS METAR 190/15G20KT 4000 RA BKN013 OVC030 12/8 Q1010; TA: 6,000' TL: FL070"],
+        ["CLEARANCE", "C/S is cleared to EFHK, BPK __ G departure, 5000' squawk 4326; C/S, read back correct, contact ground control 121.705 for taxi."]
       ],
       prep: ["Memory items", "Non-Normal", "Callouts", "Scan Flows"]
     },
@@ -360,14 +409,26 @@ window.STUDY_SESSIONS = {
         ["Departure", "RNAV LISTO"],
         ["Route", "OVERHEAD TNT - MCT"],
         ["Destination", "Stockholm Arlanda ESSA"],
-        ["Alternates", "Glasgow EGPF / Prestwick EGPK"]
+        ["Alternates", "Glasgow EGPF; Prestwick EGPK"],
+        ["Flight number", "By Instructor"]
       ],
       planning: [
-        ["GR WT", "206500kg"],
-        ["FUEL", "44000kg"],
-        ["ZFW", "162500kg"],
+        ["GR WT", "206,500Kg"],
+        ["FUEL", "44000Kg"],
+        ["ZFW", "162,500Kg"],
+        ["RESERVES", "4000Kg"],
         ["CRZ ALT", "FL 310"],
-        ["RUNWAY", "Dry"]
+        ["COST INDEX", "100"],
+        ["RUNWAY", "Dry"],
+        ["THRUST RTG", "TO"],
+        ["ASSUMED TEMP", "MAX"],
+        ["FLAP CONFIG", "Optimum"],
+        ["CG", "25%"],
+        ["EO ACCEL HT", "1000"],
+        ["ACCEL HT", "3000"],
+        ["THR REDUCTION", "1500"],
+        ["WEATHER", "EGSS: METAR 190/15G20KT 4000 RA BKN013 OVC030 12/8 Q1010; TA: 6,000' TL: FL070; ESSA: METAR 23015KT 9999 OVC020 11/8 Q1011; TL: 18000; EGCC: METAR 30015KT 4000 BKN20 8/6 Q1013"],
+        ["CLEARANCE", "C/S is cleared to ESSA, LISTO departure, 4000' squawk 4224; C/S, read back correct, contact ground control 121.705 for taxi."]
       ],
       prep: ["Memory items", "Non-Normal", "Limitations", "Callouts"]
     },
@@ -380,17 +441,29 @@ window.STUDY_SESSIONS = {
       emphasis: ["Rapid descent", "Cabin altitude", "Terrain avoidance", "Airspeed unreliable", "Raw data ILS", "Heavyweight EFATO", "Fuel jettison"],
       route: [
         ["Origin", "Manchester EGCC"],
+        ["Departure", "Blank in source"],
         ["Route", "Overhead HON, cleared direct to LAM"],
         ["Destination", "Tenerife South (GCTS)"],
-        ["Alternates", "London Gatwick (EGKK) / Malaga (LEMG)"],
-        ["Flight number", "By instructor"]
+        ["Alternates", "London Gatwick (EGKK); Malaga (LEMG)"],
+        ["Flight number", "By Instructor"]
       ],
       planning: [
         ["GR WT", "192700kg"],
         ["FUEL", "34000kg"],
         ["ZFW", "158700kg"],
+        ["RESERVES", "4000kg"],
         ["CRZ ALT", "FL300"],
-        ["RUNWAY", "Dry"]
+        ["COST INDEX", "100"],
+        ["RUNWAY", "Dry"],
+        ["THRUST RTG", "TO"],
+        ["ASSUMED TEMP", "Max"],
+        ["FLAP CONFIG", "Optimum"],
+        ["CG", "25%"],
+        ["EO ACCEL HT", "1000'"],
+        ["ACCEL HT", "3000'"],
+        ["THR REDUCTION", "1500'"],
+        ["WEATHER", "EGCC - METAR 31015KT 3000 -RA FEW010 OVC020 02/01 Q1003; TEMPO 2000-SN; TA: 3500'; LEMG - METAR 30015KT 3000 OVC20 03/01 Q1003; TA:"],
+        ["CLEARANCE", "C/S IS CLEARED DIRECT LAM, BOGNA MAINTAIN FL300."]
       ],
       prep: ["Memory items", "Non-Normal", "Limitations", "Callouts"]
     },
@@ -402,18 +475,30 @@ window.STUDY_SESSIONS = {
       summary: "LOFT-style preparation for the LST from Paris to Manchester with diversion to Gatwick, full pushback/start, selected non-normals, smoke/fumes, TCAS, RTO, crew incapacitation, and diversion decisions.",
       emphasis: ["LOFT", "Smoke and fumes", "Smoke removal", "TCAS", "RTO", "Crew incapacitation", "Diversion decision"],
       route: [
-        ["Origin", "Paris Charles de Gaulle (LFPG) Gate C10"],
+        ["Origin", "Paris Charles de Gaulle (LFPG) (Gate C10)"],
         ["Departure", "RWY08L OPALE __H"],
         ["Route", "OPALE, T421 BIG, T420 TNT, MCT"],
         ["Destination", "Manchester (EGCC)"],
-        ["Alternates", "Gatwick (EGKK)"]
+        ["Alternates", "Gatwick (EGKK)"],
+        ["Flight number", "By instructor"]
       ],
       planning: [
         ["GR WT", "180500kg"],
         ["FUEL", "31800kg"],
         ["ZFW", "148700kg"],
+        ["RESERVES", "4000kg"],
         ["CRZ ALT", "FL300"],
-        ["RUNWAY", "Wet"]
+        ["COST INDEX", "100"],
+        ["RUNWAY", "Wet"],
+        ["THRUST RTG", "TO1"],
+        ["ASSUMED TEMP", "Max"],
+        ["FLAP CONFIG", "Optimum"],
+        ["CG", "25%"],
+        ["EO ACCEL HT", "1000'"],
+        ["ACCEL HT", "3000'"],
+        ["THR REDUCTION", "1500'"],
+        ["WEATHER", "LFPG METAR 07005KT 400 RA FEW001 BKN003 OVC010 06/04 Q1006 GRADU CAVOK; Note: 6mm standing water. Braking action Med-Good; TA: 5,000' TL: FL60; EGCC METAR 2105KT 600 -RA BKN005OVC010 07/05 Q1010; ALTERNATE EGKK METAR 23010KT 3000 SHRA SCT004 OVC006 07/06 Q1008; TA: 5,000' TL: FL060"],
+        ["CLEARANCE", "C/S, IS CLEARED TO MANCHESTER, RUNWAY 08L OPALE_H DEPARTURE. CLIMB INITIALLY TO 5000 FEET, SQUAWK 4326, DEPARTURE SLOT TIME OF ___; C/S, READ BACK CORRECT, CONTACT GROUND ON 121.980 FOR PUSHBACK AND START"]
       ],
       prep: ["Memory items", "Non-Normal", "Callouts", "Limitations"]
     },
@@ -429,14 +514,26 @@ window.STUDY_SESSIONS = {
         ["Departure", "Blank in source"],
         ["Route", "Blank in source"],
         ["Destination", "Blank in source"],
-        ["Alternates", "Blank in source"]
+        ["Alternates", "Blank in source"],
+        ["Flight number", "Blank in source"]
       ],
       planning: [
         ["GR WT", "Blank in source"],
         ["FUEL", "Blank in source"],
         ["ZFW", "Blank in source"],
+        ["RESERVES", "Blank in source"],
         ["CRZ ALT", "Blank in source"],
-        ["RUNWAY", "Blank in source"]
+        ["COST INDEX", "Blank in source"],
+        ["RUNWAY", "Blank in source"],
+        ["THRUST RTG", "Blank in source"],
+        ["ASSUMED TEMP", "Blank in source"],
+        ["FLAP CONFIG", "Blank in source"],
+        ["CG", "Blank in source"],
+        ["EO ACCEL HT", "Blank in source"],
+        ["ACCEL HT", "Blank in source"],
+        ["THR REDUCTION", "Blank in source"],
+        ["WEATHER", "Blank in source"],
+        ["CLEARANCE", "Blank in source"]
       ],
       prep: ["Normal", "Non-Normal", "Memory items", "Callouts", "Limitations"]
     },
@@ -448,18 +545,32 @@ window.STUDY_SESSIONS = {
       summary: "Optional ZFTT detail after LST completion. Each trainee must complete a minimum of six takeoffs and landings, with three unassisted.",
       emphasis: ["Takeoffs and landings", "Normal weights", "Crosswind", "Variable flap settings", "Weather variation"],
       route: [
-        ["Route", "Instructor's choice"],
         ["Origin", "Blank in source"],
         ["Departure", "Blank in source"],
+        ["Route", "Blank in source"],
+        ["Route note", "Instructor's choice."],
         ["Destination", "Blank in source"],
-        ["Alternates", "Blank in source"]
+        ["Alternates", "Blank in source"],
+        ["Flight number", "Blank in source"]
       ],
       planning: [
+        ["Performance note", "Performance, cockpit preparation, start and shutdown checks may be covered if time permits."],
         ["GR WT", "Blank in source"],
         ["FUEL", "Blank in source"],
         ["ZFW", "Blank in source"],
+        ["RESERVES", "Blank in source"],
         ["CRZ ALT", "Blank in source"],
-        ["RUNWAY", "Blank in source"]
+        ["COST INDEX", "Blank in source"],
+        ["RUNWAY", "Blank in source"],
+        ["THRUST RTG", "Blank in source"],
+        ["ASSUMED TEMP", "Blank in source"],
+        ["FLAP CONFIG", "Blank in source"],
+        ["CG", "Blank in source"],
+        ["EO ACCEL HT", "Blank in source"],
+        ["ACCEL HT", "Blank in source"],
+        ["THR REDUCTION", "Blank in source"],
+        ["WEATHER", "Blank in source"],
+        ["CLEARANCE", "Blank in source"]
       ],
       prep: ["Normal", "Callouts", "Limitations", "Scan Flows"]
     }

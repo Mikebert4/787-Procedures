@@ -727,7 +727,7 @@ function renderSessionStage(stage) {
   const grid = document.createElement("div");
   grid.className = "session-grid";
   grid.append(createSessionTable("Route", ["Item", "Details"], stage.route || []));
-  grid.append(createSessionPlanningTable(stage.planning || []));
+  grid.append(createSessionPlanningTable(stage));
   panel.append(grid);
 
   if (stage.prep?.length) {
@@ -817,8 +817,9 @@ function createSessionTable(title, headers, rows) {
   return wrapper;
 }
 
-function createSessionPlanningTable(rows) {
-  return createSessionTable("787-9 Planning Figures", ["Item", "787-9"], rows);
+function createSessionPlanningTable(stage) {
+  const title = stage.category === "FFS" ? "Flight Plan and Performance - 787-9" : "787-9 Planning Figures";
+  return createSessionTable(title, ["Item", "787-9"], stage.planning || []);
 }
 
 function renderScanFlowStage(stage) {
