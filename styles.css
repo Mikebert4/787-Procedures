@@ -862,6 +862,150 @@ h3 {
   font-weight: 700;
 }
 
+.session-panel,
+.study-focus-panel {
+  display: grid;
+  gap: 16px;
+}
+
+.session-summary {
+  margin: 0;
+  padding: 12px 14px;
+  border: 1px solid #8bb8b2;
+  border-radius: 8px;
+  background: #eaf6f4;
+  color: var(--accent-strong);
+  font-weight: 700;
+}
+
+.session-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.session-tags span {
+  padding: 5px 8px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: var(--surface-strong);
+  color: var(--ink);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.session-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 14px;
+  align-items: start;
+}
+
+.session-table-block {
+  min-width: 0;
+  display: grid;
+  gap: 8px;
+}
+
+.session-table-block h3,
+.session-prep h3,
+.study-focus-card h3 {
+  color: var(--accent-strong);
+}
+
+.session-table {
+  width: 100%;
+  border-collapse: collapse;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--surface);
+  table-layout: fixed;
+}
+
+.session-table th,
+.session-table td {
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--line);
+  border-right: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+  overflow-wrap: anywhere;
+}
+
+.session-table th:last-child,
+.session-table td:last-child {
+  border-right: 0;
+}
+
+.session-table tr:last-child td {
+  border-bottom: 0;
+}
+
+.session-table thead th {
+  background: #eef3f2;
+  color: var(--muted);
+  font-size: 0.76rem;
+  text-transform: uppercase;
+}
+
+.session-table td:first-child {
+  width: 32%;
+  color: var(--ink);
+  font-weight: 800;
+}
+
+.session-table td:not(:first-child) {
+  color: var(--muted);
+  font-weight: 700;
+}
+
+.session-prep {
+  display: grid;
+  gap: 8px;
+  padding: 12px 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fbfcfc;
+}
+
+.session-prep ul {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.session-prep li {
+  padding: 6px 9px;
+  border-radius: 6px;
+  background: var(--surface-strong);
+  color: var(--ink);
+  font-weight: 700;
+}
+
+.study-focus-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 14px;
+}
+
+.study-focus-card {
+  min-width: 0;
+  display: grid;
+  gap: 8px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.study-focus-card p {
+  margin: 0;
+}
+
 .visual-pane {
   min-width: 0;
   padding: 14px;
@@ -924,8 +1068,55 @@ h3 {
   font-size: 0.9rem;
 }
 
+.session-reference-panel {
+  display: grid;
+  gap: 12px;
+}
+
+.session-reference-panel h3 {
+  margin: 0;
+  color: var(--ink);
+  font-size: 1rem;
+}
+
+.session-reference-list {
+  display: grid;
+  gap: 8px;
+}
+
+.session-reference-link {
+  display: grid;
+  gap: 5px;
+  width: 100%;
+  min-height: 58px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--ink);
+  cursor: pointer;
+  text-align: left;
+}
+
+.session-reference-link:hover,
+.session-reference-link:focus-visible {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  outline: none;
+}
+
+.session-reference-title {
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.session-reference-source {
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
 .fctm-dialog {
-  width: min(860px, calc(100vw - 28px));
+  width: min(1040px, calc(100vw - 28px));
   max-height: min(820px, calc(100vh - 28px));
   padding: 0;
   border: 1px solid var(--line);
@@ -1027,7 +1218,7 @@ h3 {
 
 .fctm-note-images {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  grid-template-columns: minmax(0, 1fr);
   gap: 12px;
   margin-top: 14px;
 }
@@ -1158,45 +1349,57 @@ h3 {
 
   .limitations-table,
   .callouts-table,
+  .session-table,
   .limitations-table thead,
   .callouts-table thead,
+  .session-table thead,
   .limitations-table tbody,
   .callouts-table tbody,
+  .session-table tbody,
   .limitations-table tr,
   .callouts-table tr,
+  .session-table tr,
   .limitations-table th,
   .callouts-table th,
-  .limitations-table td {
+  .session-table th,
+  .limitations-table td,
+  .session-table td {
     display: block;
   }
 
-  .callouts-table td {
+  .callouts-table td,
+  .session-table td {
     display: block;
   }
 
   .limitations-table thead,
-  .callouts-table thead {
+  .callouts-table thead,
+  .session-table thead {
     display: none;
   }
 
   .limitations-table tr,
-  .callouts-table tr {
+  .callouts-table tr,
+  .session-table tr {
     border-bottom: 1px solid var(--line);
   }
 
   .limitations-table tr:last-child,
-  .callouts-table tr:last-child {
+  .callouts-table tr:last-child,
+  .session-table tr:last-child {
     border-bottom: 0;
   }
 
   .limitations-table td,
-  .callouts-table td {
+  .callouts-table td,
+  .session-table td {
     width: 100%;
     border-right: 0;
   }
 
   .limitations-table td:nth-child(1),
-  .callouts-table td:nth-child(1) {
+  .callouts-table td:nth-child(1),
+  .session-table td:nth-child(1) {
     width: 100%;
     background: #f6faf9;
   }
@@ -1205,7 +1408,9 @@ h3 {
   .limitations-table td:nth-child(3),
   .callouts-table td:nth-child(2),
   .callouts-table td:nth-child(3),
-  .callouts-table td:nth-child(4) {
+  .callouts-table td:nth-child(4),
+  .session-table td:nth-child(2),
+  .session-table td:nth-child(3) {
     width: 100%;
   }
 
@@ -1213,7 +1418,9 @@ h3 {
   .limitations-table td:nth-child(3)::before,
   .callouts-table td:nth-child(2)::before,
   .callouts-table td:nth-child(3)::before,
-  .callouts-table td:nth-child(4)::before {
+  .callouts-table td:nth-child(4)::before,
+  .session-table td:nth-child(2)::before,
+  .session-table td:nth-child(3)::before {
     display: block;
     margin-bottom: 3px;
     color: var(--muted);
@@ -1240,6 +1447,14 @@ h3 {
 
   .callouts-table td:nth-child(4)::before {
     content: "Source";
+  }
+
+  .session-table td:nth-child(2)::before {
+    content: "Details / 787-9";
+  }
+
+  .session-table td:nth-child(3)::before {
+    content: "787-9";
   }
 
   .fctm-dialog-head,

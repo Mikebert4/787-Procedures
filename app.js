@@ -160,6 +160,8 @@ const state = {
 
 const fctmGuidance = window.FCTM_GUIDANCE || [];
 const norseDifferences = window.NORSE_DIFFERENCES || [];
+const sessionReferenceDetails = window.SESSION_REFERENCE_DETAILS || {};
+const sessionReferences = window.SESSION_REFERENCES || {};
 const appShellEl = document.querySelector(".app-shell");
 const tabsEl = document.getElementById("tabs");
 const titleEl = document.getElementById("stage-title");
@@ -194,7 +196,8 @@ const modeButtons = {
   memory: document.getElementById("mode-memory"),
   limitations: document.getElementById("mode-limitations"),
   callouts: document.getElementById("mode-callouts"),
-  scanFlows: document.getElementById("mode-scan-flows")
+  scanFlows: document.getElementById("mode-scan-flows"),
+  sessions: document.getElementById("mode-sessions")
 };
 
 init();
@@ -210,6 +213,7 @@ async function init() {
     state.profiles.limitations = parseMarkdown(window.LIMITATIONS_MARKDOWN || "", "limitations");
     state.profiles.callouts = parseCalloutItems(window.CALLOUTS || []);
     state.profiles.scanFlows = parseScanFlowItems(window.SCAN_FLOWS || []);
+    state.profiles.sessions = parseSessionItems(window.STUDY_SESSIONS || {});
     state.stages = state.profiles[state.activeMode];
     applyNavState();
     renderTabs();
@@ -257,6 +261,7 @@ async function startAppAfterUnlock() {
   state.profiles.limitations = parseMarkdown(window.LIMITATIONS_MARKDOWN || "", "limitations");
   state.profiles.callouts = parseCalloutItems(window.CALLOUTS || []);
   state.profiles.scanFlows = parseScanFlowItems(window.SCAN_FLOWS || []);
+  state.profiles.sessions = parseSessionItems(window.STUDY_SESSIONS || {});
   state.stages = state.profiles[state.activeMode];
   applyNavState();
   renderTabs();
@@ -361,6 +366,7 @@ function bindControls() {
   modeButtons.limitations.addEventListener("click", () => setMode("limitations"));
   modeButtons.callouts.addEventListener("click", () => setMode("callouts"));
   modeButtons.scanFlows.addEventListener("click", () => setMode("scanFlows"));
+  modeButtons.sessions.addEventListener("click", () => setMode("sessions"));
 }
 
 function setMode(mode) {
@@ -439,6 +445,10 @@ function renderStageBody(stage) {
   }
   if (stage.mode === "scanFlows") {
     renderScanFlowStage(stage);
+    return;
+  }
+  if (stage.mode === "sessions") {
+    renderSessionStage(stage);
     return;
   }
 
@@ -642,12 +652,166 @@ function parseScanFlowItems(items) {
   }));
 }
 
+function parseSessionItems(data) {
+  const improvements = data.improvements || [];
+  const sessions = data.sessions || [];
+  const stages = [];
+
+  stages.push({
+    id: "study-focus",
+    type: "studyFocus",
+    mode: "sessions",
+    rawTitle: "Study Focus",
+    title: "Study Focus",
+    citation: "Current 787 training aide; ATO APP R B787 TR Issue 01.4; CBT study-plan thread.",
+    improvements,
+    body: ""
+  });
+
+  sessions.forEach((session, index) => {
+    stages.push({
+      ...session,
+      type: "session",
+      mode: "sessions",
+      rawTitle: session.title,
+      title: session.title,
+      body: "",
+      order: index + 1
+    });
+  });
+
+  return stages;
+}
+
 function stageLabel(stage, index) {
   if (state.activeMode === "memory") return `Memory items - Item ${index + 1}`;
   if (state.activeMode === "limitations") return `Limitations - Section ${index + 1}`;
   if (state.activeMode === "callouts") return `Callouts - Phase ${index + 1}`;
   if (state.activeMode === "scanFlows") return `Scan Flows - Page ${stage.sourcePage || index + 1}`;
+  if (state.activeMode === "sessions") return index === 0 ? "Sessions - Study Plan" : `Sessions - ${stage.category || "Session"} ${index}`;
   return `${state.activeMode === "normal" ? "Normal" : "Non-Normal"} - ${stage.id === "operating-frame" ? "Profile" : `Stage ${stageNumber(index)}`}`;
+}
+
+function renderSessionStage(stage) {
+  if (stage.type === "studyFocus") {
+    renderStudyFocusStage(stage);
+    return;
+  }
+
+  const panel = document.createElement("section");
+  panel.className = "session-panel";
+
+  const summary = document.createElement("p");
+  summary.className = "session-summary";
+  summary.textContent = stage.summary;
+  panel.append(summary);
+
+  if (stage.emphasis?.length) {
+    const tags = document.createElement("div");
+    tags.className = "session-tags";
+    stage.emphasis.forEach((text) => {
+      const tag = document.createElement("span");
+      tag.textContent = text;
+      tags.append(tag);
+    });
+    panel.append(tags);
+  }
+
+  const grid = document.createElement("div");
+  grid.className = "session-grid";
+  grid.append(createSessionTable("Route", ["Item", "Details"], stage.route || []));
+  grid.append(createSessionPlanningTable(stage.planning || []));
+  panel.append(grid);
+
+  if (stage.prep?.length) {
+    const prep = document.createElement("section");
+    prep.className = "session-prep";
+    const heading = document.createElement("h3");
+    heading.textContent = "Suggested Prep";
+    prep.append(heading);
+    const list = document.createElement("ul");
+    stage.prep.forEach((text) => {
+      const item = document.createElement("li");
+      item.textContent = text;
+      list.append(item);
+    });
+    prep.append(list);
+    panel.append(prep);
+  }
+
+  const source = document.createElement("p");
+  source.className = "citation";
+  source.textContent = `Source: ${stage.citation}`;
+  panel.append(source);
+
+  contentEl.append(panel);
+}
+
+function renderStudyFocusStage(stage) {
+  const panel = document.createElement("section");
+  panel.className = "study-focus-panel";
+
+  const note = document.createElement("p");
+  note.className = "session-summary";
+  note.textContent = "Use this page as the upgrade queue for the training aide. The session pages that follow are condensed from the ATO course detail; the other items reflect weak areas and workflows already identified while building the site.";
+  panel.append(note);
+
+  const grid = document.createElement("div");
+  grid.className = "study-focus-grid";
+  stage.improvements.forEach((entry) => {
+    const card = document.createElement("article");
+    card.className = "study-focus-card";
+    const heading = document.createElement("h3");
+    heading.textContent = entry.title;
+    const detail = document.createElement("p");
+    detail.textContent = entry.detail;
+    const source = document.createElement("p");
+    source.className = "citation";
+    source.textContent = entry.source;
+    card.append(heading, detail, source);
+    grid.append(card);
+  });
+  panel.append(grid);
+  contentEl.append(panel);
+}
+
+function createSessionTable(title, headers, rows) {
+  const wrapper = document.createElement("section");
+  wrapper.className = "session-table-block";
+  const heading = document.createElement("h3");
+  heading.textContent = title;
+  wrapper.append(heading);
+
+  const table = document.createElement("table");
+  table.className = "session-table";
+  const thead = document.createElement("thead");
+  const tr = document.createElement("tr");
+  headers.forEach((label) => {
+    const th = document.createElement("th");
+    th.scope = "col";
+    th.textContent = label;
+    tr.append(th);
+  });
+  thead.append(tr);
+  table.append(thead);
+
+  const tbody = document.createElement("tbody");
+  rows.forEach((row) => {
+    const bodyRow = document.createElement("tr");
+    row.forEach((value) => {
+      const td = document.createElement("td");
+      td.textContent = value || "";
+      bodyRow.append(td);
+    });
+    tbody.append(bodyRow);
+  });
+  table.append(tbody);
+  wrapper.append(table);
+  return wrapper;
+}
+
+function createSessionPlanningTable(rows) {
+  return createSessionTable("787-9 Planning Figures", ["Item", "787-9"], rows);
 }
 
 function renderScanFlowStage(stage) {
@@ -922,6 +1086,10 @@ function renderVisuals(stage) {
     visualsEl.append(note);
     return;
   }
+  if (stage.mode === "sessions") {
+    renderSessionReferencePanel(stage);
+    return;
+  }
 
   const wrapper = document.createElement("div");
   wrapper.className = "visuals-grid";
@@ -955,6 +1123,61 @@ function renderVisuals(stage) {
     wrapper.append(figure);
   });
   visualsEl.append(wrapper);
+}
+
+function renderSessionReferencePanel(stage) {
+  const panel = document.createElement("section");
+  panel.className = "session-reference-panel";
+
+  const heading = document.createElement("h3");
+  heading.textContent = "Quick References";
+  panel.append(heading);
+
+  if (stage.type === "studyFocus") {
+    const note = document.createElement("p");
+    note.className = "empty-note";
+    note.textContent = "Open an FFS session to see its mapped manual-reference pages.";
+    panel.append(note);
+    visualsEl.append(panel);
+    return;
+  }
+
+  const references = getSessionReferences(stage);
+  if (!references.length) {
+    const note = document.createElement("p");
+    note.className = "empty-note";
+    note.textContent = "No session-specific manual references are mapped yet.";
+    panel.append(note);
+    visualsEl.append(panel);
+    return;
+  }
+
+  const list = document.createElement("div");
+  list.className = "session-reference-list";
+  references.forEach((reference) => {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "session-reference-link";
+    button.addEventListener("click", () => openReferenceDialog([reference], reference.title, reference.sourceLabel || "Manual Reference"));
+
+    const title = document.createElement("span");
+    title.className = "session-reference-title";
+    title.textContent = reference.title;
+
+    const source = document.createElement("span");
+    source.className = "session-reference-source";
+    source.textContent = reference.sourceLabel || "Manual Reference";
+
+    button.append(title, source);
+    list.append(button);
+  });
+  panel.append(list);
+  visualsEl.append(panel);
+}
+
+function getSessionReferences(stage) {
+  const keys = sessionReferences[stage.id] || [];
+  return keys.map((key) => sessionReferenceDetails[key]).filter(Boolean);
 }
 
 function toggleNav() {
@@ -1064,29 +1287,37 @@ function openReferenceDialog(entries, title, sourceLabel) {
     citation.textContent = entry.citation;
     section.append(citation);
 
-    const list = document.createElement("ul");
-    entry.bullets.forEach((bullet) => {
-      const item = document.createElement("li");
-      item.textContent = bullet;
-      list.append(item);
-    });
-    section.append(list);
-
     if (entry.images?.length) {
       const imageGrid = document.createElement("div");
       imageGrid.className = "fctm-note-images";
       uniqueImages(entry.images).forEach((image) => {
         const figure = document.createElement("figure");
         figure.className = "visual-card";
+        const button = document.createElement("button");
+        button.type = "button";
+        button.className = "visual-open";
+        button.setAttribute("aria-label", `Open larger view of ${image.alt}`);
+        button.addEventListener("click", () => openImageDialog(image));
         const img = document.createElement("img");
         img.src = image.src;
         img.alt = image.alt;
+        button.append(img);
         const caption = document.createElement("figcaption");
         caption.textContent = image.caption;
-        figure.append(img, caption);
+        figure.append(button, caption);
         imageGrid.append(figure);
       });
       section.append(imageGrid);
+    }
+
+    if (entry.bullets?.length) {
+      const list = document.createElement("ul");
+      entry.bullets.forEach((bullet) => {
+        const item = document.createElement("li");
+        item.textContent = bullet;
+        list.append(item);
+      });
+      section.append(list);
     }
 
     fctmDialogContentEl.append(section);
@@ -1157,6 +1388,7 @@ function stageCompletion(stage) {
   if (stage.mode === "scanFlows") return { total: 0, checked: 0, percent: 100, complete: true };
   if (stage.mode === "callouts") return { total: 0, checked: 0, percent: 100, complete: true };
   if (stage.mode === "limitations") return { total: 0, checked: 0, percent: 100, complete: true };
+  if (stage.mode === "sessions") return { total: 0, checked: 0, percent: 100, complete: true };
   const total = countChecklistItems(stage.body);
   if (!total) return { total, checked: 0, percent: 100, complete: true };
   let checked = 0;
