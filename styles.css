@@ -990,6 +990,238 @@ h3 {
   font-weight: 700;
 }
 
+.tech-quiz-panel {
+  display: grid;
+  gap: 16px;
+}
+
+.tech-quiz-intro {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid #8bb8b2;
+  border-radius: 8px;
+  background: #eaf6f4;
+}
+
+.tech-quiz-intro p {
+  margin: 0;
+  color: var(--accent-strong);
+  font-weight: 700;
+}
+
+.tech-quiz-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+}
+
+.tech-quiz-score {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: 8px;
+}
+
+.tech-quiz-metric {
+  display: grid;
+  gap: 2px;
+  min-height: 66px;
+  padding: 10px 12px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface-strong);
+}
+
+.tech-quiz-metric strong {
+  color: var(--ink);
+  font-size: 1.25rem;
+}
+
+.tech-quiz-metric span {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.tech-quiz-list {
+  display: grid;
+  gap: 12px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tech-quiz-card {
+  display: grid;
+  gap: 12px;
+  padding: 14px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fbfcfc;
+}
+
+.tech-quiz-card[data-status="correct"] {
+  border-color: #a5d6b8;
+  background: #f1fbf5;
+}
+
+.tech-quiz-card[data-status="incorrect"] {
+  border-color: #e1a39c;
+  background: #fff6f4;
+}
+
+.tech-quiz-card-header {
+  display: flex;
+  align-items: start;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.tech-quiz-meta {
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
+.tech-quiz-flags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: flex-end;
+}
+
+.tech-quiz-flag {
+  padding: 3px 7px;
+  border: 1px solid #bda56b;
+  border-radius: 999px;
+  background: #fff8e7;
+  color: #5e3b00;
+  font-size: 0.72rem;
+  font-weight: 800;
+}
+
+.tech-quiz-flag.incorrect-key {
+  border-color: #9d2820;
+  background: #ffe9e5;
+  color: #7c1d16;
+}
+
+.tech-quiz-flag.source-issue,
+.tech-quiz-flag.wording-issue {
+  border-color: #9a5b00;
+  background: var(--warning-soft);
+  color: var(--warning);
+}
+
+.tech-quiz-prompt {
+  margin: 0;
+  color: var(--ink);
+  font-size: 1.03rem;
+  font-weight: 800;
+}
+
+.tech-quiz-options {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.tech-quiz-options legend {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.tech-quiz-option {
+  display: grid;
+  grid-template-columns: 24px minmax(0, 1fr);
+  gap: 8px;
+  align-items: start;
+  min-height: 42px;
+  padding: 9px 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  cursor: pointer;
+}
+
+.tech-quiz-option input {
+  width: 18px;
+  height: 18px;
+  margin-top: 2px;
+  accent-color: var(--accent);
+}
+
+.tech-quiz-option span {
+  overflow-wrap: anywhere;
+}
+
+.tech-quiz-option:has(input:checked) {
+  border-color: #8bb8b2;
+  background: #eef8f6;
+}
+
+.tech-quiz-option[data-result="correct"] {
+  border-color: #8bc79f;
+  background: #eaf8ef;
+  color: #17472b;
+  font-weight: 800;
+}
+
+.tech-quiz-option[data-result="chosen-incorrect"] {
+  border-color: #d18f86;
+  background: #fff0ed;
+  color: #7c1d16;
+  font-weight: 800;
+}
+
+.tech-quiz-feedback {
+  display: grid;
+  gap: 8px;
+  padding: 12px;
+  border-top: 1px solid var(--line);
+}
+
+.tech-quiz-feedback p {
+  margin: 0;
+}
+
+.quiz-result {
+  font-weight: 900;
+}
+
+.quiz-result.correct {
+  color: var(--done);
+}
+
+.quiz-result.incorrect {
+  color: #8b1d1d;
+}
+
+.tech-quiz-answer-line {
+  color: var(--ink);
+  font-weight: 800;
+}
+
+.tech-quiz-audit-note {
+  padding: 10px 12px;
+  border: 1px solid #d9bd75;
+  border-radius: 8px;
+  background: #fff8e7;
+  color: #5e3b00;
+  font-weight: 700;
+}
+
 .study-focus-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -1322,6 +1554,17 @@ h3 {
 
   .stage-view {
     padding: 14px;
+  }
+
+  .tech-quiz-intro,
+  .tech-quiz-card-header {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .tech-quiz-controls,
+  .tech-quiz-flags {
+    justify-content: flex-start;
   }
 
   .check-item.has-chips {

@@ -162,6 +162,7 @@ const fctmGuidance = window.FCTM_GUIDANCE || [];
 const norseDifferences = window.NORSE_DIFFERENCES || [];
 const sessionReferenceDetails = window.SESSION_REFERENCE_DETAILS || {};
 const sessionReferences = window.SESSION_REFERENCES || {};
+const techQuizData = window.TECH_QUIZ || {};
 const appShellEl = document.querySelector(".app-shell");
 const tabsEl = document.getElementById("tabs");
 const titleEl = document.getElementById("stage-title");
@@ -197,7 +198,8 @@ const modeButtons = {
   limitations: document.getElementById("mode-limitations"),
   callouts: document.getElementById("mode-callouts"),
   scanFlows: document.getElementById("mode-scan-flows"),
-  sessions: document.getElementById("mode-sessions")
+  sessions: document.getElementById("mode-sessions"),
+  techQuiz: document.getElementById("mode-tech-quiz")
 };
 
 init();
@@ -214,6 +216,7 @@ async function init() {
     state.profiles.callouts = parseCalloutItems(window.CALLOUTS || []);
     state.profiles.scanFlows = parseScanFlowItems(window.SCAN_FLOWS || []);
     state.profiles.sessions = parseSessionItems(window.STUDY_SESSIONS || {});
+    state.profiles.techQuiz = parseTechQuizItems(techQuizData);
     state.stages = state.profiles[state.activeMode];
     applyNavState();
     renderTabs();
@@ -262,6 +265,7 @@ async function startAppAfterUnlock() {
   state.profiles.callouts = parseCalloutItems(window.CALLOUTS || []);
   state.profiles.scanFlows = parseScanFlowItems(window.SCAN_FLOWS || []);
   state.profiles.sessions = parseSessionItems(window.STUDY_SESSIONS || {});
+  state.profiles.techQuiz = parseTechQuizItems(techQuizData);
   state.stages = state.profiles[state.activeMode];
   applyNavState();
   renderTabs();
@@ -367,6 +371,7 @@ function bindControls() {
   modeButtons.callouts.addEventListener("click", () => setMode("callouts"));
   modeButtons.scanFlows.addEventListener("click", () => setMode("scanFlows"));
   modeButtons.sessions.addEventListener("click", () => setMode("sessions"));
+  modeButtons.techQuiz.addEventListener("click", () => setMode("techQuiz"));
 }
 
 function setMode(mode) {
@@ -413,7 +418,7 @@ function renderTabs() {
 }
 
 function showsCompletionBadge(stage) {
-  return !["limitations", "callouts", "scanFlows", "sessions"].includes(stage.mode);
+  return !["limitations", "callouts", "scanFlows", "sessions", "techQuiz"].includes(stage.mode);
 }
 
 function selectStage(index) {
@@ -456,6 +461,10 @@ function renderStageBody(stage) {
   }
   if (stage.mode === "sessions") {
     renderSessionStage(stage);
+    return;
+  }
+  if (stage.mode === "techQuiz") {
+    renderTechQuizStage(stage);
     return;
   }
 
@@ -690,12 +699,26 @@ function parseSessionItems(data) {
   return stages;
 }
 
+function parseTechQuizItems(data) {
+  return [{
+    id: "tech-quiz-bank",
+    type: "techQuiz",
+    mode: "techQuiz",
+    rawTitle: "Question Bank",
+    title: "Question Bank",
+    citation: data.citation || "QB 101 787 1; source-checked audit notes.",
+    questions: data.questions || [],
+    body: ""
+  }];
+}
+
 function stageLabel(stage, index) {
   if (state.activeMode === "memory") return `Memory items - Item ${index + 1}`;
   if (state.activeMode === "limitations") return `Limitations - Section ${index + 1}`;
   if (state.activeMode === "callouts") return `Callouts - Phase ${index + 1}`;
   if (state.activeMode === "scanFlows") return `Scan Flows - Page ${stage.sourcePage || index + 1}`;
   if (state.activeMode === "sessions") return index === 0 ? "Sessions - Study Plan" : `Sessions - ${stage.category || "Session"} ${index}`;
+  if (state.activeMode === "techQuiz") return "Tech Quiz - Single Question Bank";
   return `${state.activeMode === "normal" ? "Normal" : "Non-Normal"} - ${stage.id === "operating-frame" ? "Profile" : `Stage ${stageNumber(index)}`}`;
 }
 
@@ -752,6 +775,219 @@ function renderSessionStage(stage) {
   panel.append(source);
 
   contentEl.append(panel);
+}
+
+function renderTechQuizStage(stage) {
+  const panel = document.createElement("section");
+  panel.className = "tech-quiz-panel";
+
+  const intro = document.createElement("div");
+  intro.className = "tech-quiz-intro";
+  const introText = document.createElement("p");
+  introText.textContent = "Single question bank. Choose an answer to mark the question and reveal the explanation, manual/source reference, and any audit note.";
+  intro.append(introText);
+
+  const controls = document.createElement("div");
+  controls.className = "tech-quiz-controls";
+  const showAnswers = document.createElement("button");
+  showAnswers.type = "button";
+  showAnswers.className = "ghost-button";
+  showAnswers.textContent = "Show all answers";
+  showAnswers.addEventListener("click", () => {
+    stage.questions.forEach((question) => {
+      localStorage.setItem(quizAnswerKey(question), question.correctAnswer);
+    });
+    contentEl.innerHTML = "";
+    renderStageBody(stage);
+    updateProgress();
+  });
+
+  const reset = document.createElement("button");
+  reset.type = "button";
+  reset.className = "ghost-button";
+  reset.textContent = "Reset quiz";
+  reset.addEventListener("click", () => {
+    stage.questions.forEach((question) => localStorage.removeItem(quizAnswerKey(question)));
+    contentEl.innerHTML = "";
+    renderStageBody(stage);
+    updateProgress();
+  });
+  controls.append(showAnswers, reset);
+  intro.append(controls);
+  panel.append(intro);
+
+  const score = document.createElement("div");
+  score.className = "tech-quiz-score";
+  score.id = "tech-quiz-score";
+  panel.append(score);
+
+  const list = document.createElement("ol");
+  list.className = "tech-quiz-list";
+  stage.questions.forEach((question) => {
+    list.append(createQuizQuestionCard(question));
+  });
+  panel.append(list);
+
+  contentEl.append(panel);
+  updateTechQuizScore(stage);
+}
+
+function createQuizQuestionCard(question) {
+  const selected = localStorage.getItem(quizAnswerKey(question));
+  const correct = selected && selected === question.correctAnswer;
+  const card = document.createElement("li");
+  card.className = "tech-quiz-card";
+  card.dataset.status = selected ? (correct ? "correct" : "incorrect") : "open";
+  card.id = question.id;
+
+  const header = document.createElement("div");
+  header.className = "tech-quiz-card-header";
+  const meta = document.createElement("span");
+  meta.className = "tech-quiz-meta";
+  meta.textContent = `${question.source} Q${question.number}`;
+  const flags = document.createElement("div");
+  flags.className = "tech-quiz-flags";
+  if (question.status && question.status !== "confirmed") {
+    const flag = document.createElement("span");
+    flag.className = `tech-quiz-flag ${question.status}`;
+    flag.textContent = statusLabel(question.status);
+    flags.append(flag);
+  }
+  if (question.bankAnswer !== question.correctAnswer && question.status !== "incorrect-key") {
+    const flag = document.createElement("span");
+    flag.className = "tech-quiz-flag incorrect-key";
+    flag.textContent = "Bank key corrected";
+    flags.append(flag);
+  }
+  header.append(meta, flags);
+
+  const prompt = document.createElement("p");
+  prompt.className = "tech-quiz-prompt";
+  prompt.textContent = question.prompt;
+
+  const fieldset = document.createElement("fieldset");
+  fieldset.className = "tech-quiz-options";
+  const legend = document.createElement("legend");
+  legend.textContent = `Answer question ${question.number}`;
+  fieldset.append(legend);
+
+  Object.entries(question.options).forEach(([letter, text]) => {
+    const option = document.createElement("label");
+    option.className = "tech-quiz-option";
+    option.dataset.option = letter;
+    if (selected) {
+      if (letter === question.correctAnswer) option.dataset.result = "correct";
+      if (letter === selected && selected !== question.correctAnswer) option.dataset.result = "chosen-incorrect";
+    }
+
+    const input = document.createElement("input");
+    input.type = "radio";
+    input.name = `quiz-${question.id}`;
+    input.value = letter;
+    input.checked = selected === letter;
+    input.addEventListener("change", () => {
+      localStorage.setItem(quizAnswerKey(question), letter);
+      const updated = createQuizQuestionCard(question);
+      card.replaceWith(updated);
+      updateTechQuizScore(state.stages[state.current]);
+      updateProgress();
+    });
+
+    const optionText = document.createElement("span");
+    optionText.textContent = `${letter}. ${text}`;
+    option.append(input, optionText);
+    fieldset.append(option);
+  });
+
+  card.append(header, prompt, fieldset);
+
+  if (selected) {
+    card.append(createQuizFeedback(question, selected, correct));
+  }
+
+  return card;
+}
+
+function createQuizFeedback(question, selected, correct) {
+  const feedback = document.createElement("section");
+  feedback.className = "tech-quiz-feedback";
+
+  const result = document.createElement("p");
+  result.className = correct ? "quiz-result correct" : "quiz-result incorrect";
+  result.textContent = correct ? "Correct." : "Incorrect.";
+  feedback.append(result);
+
+  const answers = document.createElement("p");
+  answers.className = "tech-quiz-answer-line";
+  const bankText = question.bankAnswer === question.correctAnswer
+    ? `Bank answer: ${question.bankAnswer}.`
+    : `Original bank answer: ${question.bankAnswer}; corrected answer used here: ${question.correctAnswer}.`;
+  answers.textContent = `You chose ${selected}. ${bankText}`;
+  feedback.append(answers);
+
+  const explanation = document.createElement("p");
+  explanation.textContent = question.explanation;
+  feedback.append(explanation);
+
+  if (question.auditNote) {
+    const audit = document.createElement("p");
+    audit.className = "tech-quiz-audit-note";
+    audit.textContent = question.auditNote;
+    feedback.append(audit);
+  }
+
+  const reference = document.createElement("p");
+  reference.className = "citation";
+  reference.textContent = `Reference: ${question.reference}`;
+  feedback.append(reference);
+
+  return feedback;
+}
+
+function updateTechQuizScore(stage) {
+  const score = document.getElementById("tech-quiz-score");
+  if (!score || !stage?.questions) return;
+  const total = stage.questions.length;
+  let attempted = 0;
+  let correct = 0;
+  stage.questions.forEach((question) => {
+    const selected = localStorage.getItem(quizAnswerKey(question));
+    if (!selected) return;
+    attempted += 1;
+    if (selected === question.correctAnswer) correct += 1;
+  });
+  const percent = attempted ? Math.round((correct / attempted) * 100) : 0;
+  const auditFlags = stage.questions.filter((question) => question.status && question.status !== "confirmed").length;
+  const correctedKeys = stage.questions.filter((question) => question.bankAnswer !== question.correctAnswer).length;
+  score.innerHTML = "";
+  [
+    ["Attempted", `${attempted}/${total}`],
+    ["Correct", String(correct)],
+    ["Score", `${percent}%`],
+    ["Audit flags", String(auditFlags)],
+    ["Corrected keys", String(correctedKeys)]
+  ].forEach(([label, value]) => {
+    const metric = document.createElement("span");
+    metric.className = "tech-quiz-metric";
+    const strong = document.createElement("strong");
+    strong.textContent = value;
+    const small = document.createElement("span");
+    small.textContent = label;
+    metric.append(strong, small);
+    score.append(metric);
+  });
+}
+
+function quizAnswerKey(question) {
+  return `b787-procedures:tech-quiz:${question.id}`;
+}
+
+function statusLabel(status) {
+  return {
+    "incorrect-key": "Incorrect bank key",
+    "source-issue": "Source issue",
+    "wording-issue": "Wording issue"
+  }[status] || "Audit note";
 }
 
 function renderStudyFocusStage(stage) {
@@ -1098,6 +1334,10 @@ function renderVisuals(stage) {
     renderSessionReferencePanel(stage);
     return;
   }
+  if (stage.mode === "techQuiz") {
+    renderTechQuizReferencePanel(stage);
+    return;
+  }
 
   const wrapper = document.createElement("div");
   wrapper.className = "visuals-grid";
@@ -1180,6 +1420,32 @@ function renderSessionReferencePanel(stage) {
     list.append(button);
   });
   panel.append(list);
+  visualsEl.append(panel);
+}
+
+function renderTechQuizReferencePanel(stage) {
+  const panel = document.createElement("section");
+  panel.className = "session-reference-panel";
+
+  const heading = document.createElement("h3");
+  heading.textContent = "Question Bank";
+  panel.append(heading);
+
+  const total = stage.questions?.length || 0;
+  const corrected = stage.questions?.filter((question) => question.bankAnswer !== question.correctAnswer).length || 0;
+  const flagged = stage.questions?.filter((question) => question.status && question.status !== "confirmed").length || 0;
+  [
+    `${total} questions from the parsed QB 101 787 1 bank.`,
+    `${corrected} original bank answers are corrected from the audit.`,
+    `${flagged} questions carry wording/source/audit notes.`,
+    "Question references appear after an answer is selected."
+  ].forEach((text) => {
+    const note = document.createElement("p");
+    note.className = "empty-note";
+    note.textContent = text;
+    panel.append(note);
+  });
+
   visualsEl.append(panel);
 }
 
@@ -1398,6 +1664,16 @@ function stageCompletion(stage) {
   if (stage.mode === "callouts") return { total: 0, checked: 0, percent: 100, complete: true };
   if (stage.mode === "limitations") return { total: 0, checked: 0, percent: 100, complete: true };
   if (stage.mode === "sessions") return { total: 0, checked: 0, percent: 100, complete: true };
+  if (stage.mode === "techQuiz") {
+    const total = stage.questions?.length || 0;
+    const checked = stage.questions?.filter((question) => localStorage.getItem(quizAnswerKey(question))).length || 0;
+    return {
+      total,
+      checked,
+      percent: total ? Math.round((checked / total) * 100) : 100,
+      complete: total > 0 && checked === total
+    };
+  }
   const total = countChecklistItems(stage.body);
   if (!total) return { total, checked: 0, percent: 100, complete: true };
   let checked = 0;
@@ -1422,6 +1698,10 @@ function storageKey(stage, index) {
 
 function resetAllProgress() {
   state.stages.forEach((stage) => {
+    if (stage.mode === "techQuiz") {
+      stage.questions?.forEach((question) => localStorage.removeItem(quizAnswerKey(question)));
+      return;
+    }
     const total = countChecklistItems(stage.body);
     for (let index = 0; index < total; index += 1) {
       localStorage.removeItem(storageKey(stage, index));
