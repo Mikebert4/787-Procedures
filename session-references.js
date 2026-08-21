@@ -1,6 +1,8 @@
 (() => {
+  const assetVersion = "20260821-rotated-diagrams";
+
   function image(src, alt, caption) {
-    return { src, alt, caption };
+    return { src: `${src}?v=${assetVersion}`, alt, caption };
   }
 
   function qrhImages(prefix, pages, title) {
