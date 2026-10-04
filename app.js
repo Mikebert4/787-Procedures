@@ -155,6 +155,7 @@ const state = {
   activeMode: "norseProcs",
   stages: [],
   current: 0,
+  returnRoute: null,
   navCollapsed: localStorage.getItem("b787-procedures:nav-collapsed") === "1"
 };
 
@@ -220,10 +221,7 @@ async function init() {
     state.profiles.norseProcs = parseNorseProcsItems(norseProcs);
     state.profiles.sessions = parseSessionItems(window.STUDY_SESSIONS || {});
     state.profiles.techQuiz = parseTechQuizItems(techQuizData);
-    state.stages = state.profiles[state.activeMode];
-    applyNavState();
-    renderTabs();
-    selectStage(0);
+    renderInitialProcedureView();
     bindControls();
   } catch (error) {
     contentEl.innerHTML = "";
@@ -270,11 +268,25 @@ async function startAppAfterUnlock() {
   state.profiles.norseProcs = parseNorseProcsItems(norseProcs);
   state.profiles.sessions = parseSessionItems(window.STUDY_SESSIONS || {});
   state.profiles.techQuiz = parseTechQuizItems(techQuizData);
-  state.stages = state.profiles[state.activeMode];
+  renderInitialProcedureView();
+  bindControls();
+}
+
+function renderInitialProcedureView() {
+  const route = parseProcedureRouteHash();
+  const routeIndex = route ? findProcedureStageIndex(route.mode, route.stageId) : -1;
+
+  if (routeIndex >= 0) {
+    state.activeMode = route.mode;
+    state.stages = state.profiles[route.mode];
+  } else {
+    state.stages = state.profiles[state.activeMode];
+  }
+
+  updateModeButtonState();
   applyNavState();
   renderTabs();
-  selectStage(0);
-  bindControls();
+  selectStage(routeIndex >= 0 ? routeIndex : 0);
 }
 
 function unlockApp() {
@@ -356,7 +368,7 @@ function slugify(text) {
 }
 
 function bindControls() {
-  prevButton.addEventListener("click", () => selectStage(Math.max(0, state.current - 1)));
+  prevButton.addEventListener("click", navigatePreviousStage);
   nextButton.addEventListener("click", () => selectStage(Math.min(state.stages.length - 1, state.current + 1)));
   resetAllButton.addEventListener("click", resetAllProgress);
   navToggleButton.addEventListener("click", toggleNav);
@@ -368,26 +380,101 @@ function bindControls() {
   imageDialog.addEventListener("click", (event) => {
     if (event.target === imageDialog) closeImageDialog();
   });
-  modeButtons.normal.addEventListener("click", () => setMode("normal"));
-  modeButtons.nonNormal.addEventListener("click", () => setMode("nonNormal"));
-  modeButtons.memory.addEventListener("click", () => setMode("memory"));
-  modeButtons.limitations.addEventListener("click", () => setMode("limitations"));
-  modeButtons.callouts.addEventListener("click", () => setMode("callouts"));
-  modeButtons.scanFlows.addEventListener("click", () => setMode("scanFlows"));
-  modeButtons.norseProcs.addEventListener("click", () => setMode("norseProcs"));
-  modeButtons.sessions.addEventListener("click", () => setMode("sessions"));
-  modeButtons.techQuiz.addEventListener("click", () => setMode("techQuiz"));
+  modeButtons.normal.addEventListener("click", () => setMode("normal", 0, { clearReturn: true }));
+  modeButtons.nonNormal.addEventListener("click", () => setMode("nonNormal", 0, { clearReturn: true }));
+  modeButtons.memory.addEventListener("click", () => setMode("memory", 0, { clearReturn: true }));
+  modeButtons.limitations.addEventListener("click", () => setMode("limitations", 0, { clearReturn: true }));
+  modeButtons.callouts.addEventListener("click", () => setMode("callouts", 0, { clearReturn: true }));
+  modeButtons.scanFlows.addEventListener("click", () => setMode("scanFlows", 0, { clearReturn: true }));
+  modeButtons.norseProcs.addEventListener("click", () => setMode("norseProcs", 0, { clearReturn: true }));
+  modeButtons.sessions.addEventListener("click", () => setMode("sessions", 0, { clearReturn: true }));
+  modeButtons.techQuiz.addEventListener("click", () => setMode("techQuiz", 0, { clearReturn: true }));
+  window.addEventListener("popstate", restoreProcedureHistory);
 }
 
-function setMode(mode) {
-  if (state.activeMode === mode) return;
+function setMode(mode, targetIndex = 0, options = {}) {
+  if (state.activeMode === mode) {
+    if (options.clearReturn) {
+      state.returnRoute = null;
+      updateNavState();
+    }
+    if (options.forceStage) selectStage(targetIndex, options);
+    return;
+  }
+
   state.activeMode = mode;
   state.stages = state.profiles[mode];
-  Object.entries(modeButtons).forEach(([key, button]) => {
-    button.setAttribute("aria-pressed", key === mode ? "true" : "false");
-  });
+  updateModeButtonState();
   renderTabs();
-  selectStage(0);
+  selectStage(targetIndex, options);
+}
+
+function updateModeButtonState() {
+  Object.entries(modeButtons).forEach(([key, button]) => {
+    button.setAttribute("aria-pressed", key === state.activeMode ? "true" : "false");
+  });
+}
+
+function navigatePreviousStage() {
+  if (state.returnRoute) {
+    window.history.back();
+    return;
+  }
+
+  selectStage(Math.max(0, state.current - 1));
+}
+
+function openRelatedProcedure(link) {
+  const targetIndex = findProcedureStageIndex(link.mode, link.stageId);
+  const origin = currentProcedureRoute();
+  if (targetIndex < 0 || !origin) return;
+
+  state.returnRoute = origin;
+  writeProcedureHistory(origin, { replace: true });
+  setMode(link.mode, targetIndex, { preserveReturn: true, forceStage: true });
+  writeProcedureHistory(currentProcedureRoute(), { returnRoute: origin });
+}
+
+function restoreProcedureHistory(event) {
+  const route = event.state?.b787ProcedureRoute;
+  const targetIndex = route ? findProcedureStageIndex(route.mode, route.stageId) : -1;
+  if (targetIndex < 0) return;
+
+  state.returnRoute = event.state.returnRoute || null;
+  setMode(route.mode, targetIndex, { preserveReturn: true, forceStage: true });
+}
+
+function currentProcedureRoute() {
+  const stage = state.stages[state.current];
+  return stage ? { mode: state.activeMode, stageId: stage.id } : null;
+}
+
+function getProcedureStage(mode, stageId) {
+  return state.profiles[mode]?.find((stage) => stage.id === stageId) || null;
+}
+
+function findProcedureStageIndex(mode, stageId) {
+  return state.profiles[mode]?.findIndex((stage) => stage.id === stageId) ?? -1;
+}
+
+function procedureRouteHash(route) {
+  return `#${encodeURIComponent(route.mode)}/${encodeURIComponent(route.stageId)}`;
+}
+
+function parseProcedureRouteHash() {
+  const match = window.location.hash.match(/^#(normal|scanFlows|norseProcs)\/([^/]+)$/);
+  if (!match) return null;
+  return { mode: match[1], stageId: decodeURIComponent(match[2]) };
+}
+
+function writeProcedureHistory(route, { replace = false, returnRoute = null } = {}) {
+  if (!route) return;
+  const entry = { b787ProcedureRoute: route, returnRoute };
+  if (replace) {
+    window.history.replaceState(entry, "", procedureRouteHash(route));
+  } else {
+    window.history.pushState(entry, "", procedureRouteHash(route));
+  }
 }
 
 function renderTabs() {
@@ -427,7 +514,8 @@ function showsCompletionBadge(stage) {
   return !["limitations", "callouts", "scanFlows", "norseProcs", "sessions", "techQuiz"].includes(stage.mode);
 }
 
-function selectStage(index) {
+function selectStage(index, options = {}) {
+  if (!options.preserveReturn) state.returnRoute = null;
   state.current = index;
   const stage = state.stages[index];
   updateTabSelection();
@@ -685,6 +773,7 @@ function parseScanFlowItems(items) {
 function parseNorseProcsItems(items) {
   return items.map((item, index) => ({
     ...item,
+    relatedLinks: window.NORSE_PROCS_RELATED_LINKS?.[item.id] || [],
     type: "norseProcs",
     mode: "norseProcs",
     rawTitle: item.title,
@@ -1197,6 +1286,8 @@ function renderScanFlowStage(stage) {
 function renderNorseProcsStage(stage) {
   const panel = document.createElement("section");
   panel.className = "norse-procs-panel";
+  const relatedLinks = createRelatedProcedureLinks(stage);
+  if (relatedLinks) panel.append(relatedLinks);
   let section = createNorseProcsSection();
 
   const appendSection = () => {
@@ -1315,6 +1406,61 @@ function createNorseMnemonic(block) {
   wrapper.append(list);
 
   return wrapper;
+}
+
+function createRelatedProcedureLinks(stage) {
+  const groups = [
+    { mode: "normal", title: "Normal Procedures" },
+    { mode: "scanFlows", title: "Scan Flows" }
+  ];
+  const related = document.createElement("section");
+  related.className = "related-procedure-links";
+
+  const heading = document.createElement("h3");
+  heading.textContent = "Related Procedures";
+  related.append(heading);
+
+  const groupGrid = document.createElement("div");
+  groupGrid.className = "related-procedure-link-groups";
+
+  groups.forEach((group) => {
+    const targets = (stage.relatedLinks || [])
+      .filter((link) => link.mode === group.mode)
+      .map((link) => ({ link, target: getProcedureStage(link.mode, link.stageId) }))
+      .filter(({ target }) => target);
+
+    if (!targets.length) return;
+
+    const groupEl = document.createElement("section");
+    groupEl.className = "related-procedure-link-group";
+
+    const title = document.createElement("h4");
+    title.textContent = group.title;
+    groupEl.append(title);
+
+    const list = document.createElement("ul");
+    list.className = "related-procedure-link-list";
+    targets.forEach(({ link, target }) => {
+      const item = document.createElement("li");
+      const anchor = document.createElement("a");
+      anchor.className = "related-procedure-link";
+      anchor.href = procedureRouteHash({ mode: link.mode, stageId: link.stageId });
+      anchor.textContent = target.title;
+      anchor.setAttribute("aria-label", `Open ${group.title}: ${target.title}`);
+      anchor.addEventListener("click", (event) => {
+        event.preventDefault();
+        openRelatedProcedure(link);
+      });
+      item.append(anchor);
+      list.append(item);
+    });
+    groupEl.append(list);
+    groupGrid.append(groupEl);
+  });
+
+  if (!groupGrid.children.length) return null;
+  related.append(groupGrid);
+  return related;
 }
 
 function openScanFlowDetail(stage, section, item) {
@@ -1854,7 +2000,12 @@ function closeImageDialog() {
 }
 
 function updateNavState() {
-  prevButton.disabled = state.current === 0;
+  const returnStage = state.returnRoute && getProcedureStage(state.returnRoute.mode, state.returnRoute.stageId);
+  const returnLabel = returnStage ? `Back to ${returnStage.title}` : "Previous stage";
+  prevButton.disabled = !returnStage && state.current === 0;
+  prevButton.textContent = returnStage ? "Back" : "Prev";
+  prevButton.setAttribute("aria-label", returnLabel);
+  prevButton.title = returnLabel;
   nextButton.disabled = state.current === state.stages.length - 1;
   counterEl.textContent = `Stage ${state.current + 1} of ${state.stages.length}`;
 }

@@ -627,6 +627,61 @@ h3 {
   overflow-wrap: anywhere;
 }
 
+.related-procedure-links {
+  display: grid;
+  gap: 12px;
+  padding-top: 14px;
+  border-top: 1px solid var(--line);
+}
+
+.related-procedure-links:first-child {
+  padding-top: 0;
+  border-top: 0;
+}
+
+.related-procedure-links h3 {
+  margin: 0;
+  color: var(--accent-strong);
+}
+
+.related-procedure-link-groups {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+}
+
+.related-procedure-link-group {
+  min-width: 0;
+}
+
+.related-procedure-link-group h4 {
+  margin: 0 0 7px;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.related-procedure-link-list {
+  display: grid;
+  gap: 7px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.related-procedure-link {
+  color: var(--accent-strong);
+  font-weight: 700;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 3px;
+  overflow-wrap: anywhere;
+}
+
+.related-procedure-link:hover,
+.related-procedure-link:focus-visible {
+  color: var(--accent);
+}
+
 .norse-procs-table-wrap {
   overflow-x: auto;
 }

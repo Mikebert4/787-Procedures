@@ -519,3 +519,80 @@ window.NORSE_PROCS = [
     ]
   }
 ];
+
+window.NORSE_PROCS_RELATED_LINKS = {
+  "arriving-at-the-flight-deck": [
+    { mode: "normal", stageId: "1-preliminary-preflight-captain-or-first-officer" },
+    { mode: "scanFlows", stageId: "electrical-power-up" },
+    { mode: "scanFlows", stageId: "preliminary-preflight-procedure" }
+  ],
+  "preflight-setup": [
+    { mode: "normal", stageId: "1-preliminary-preflight-captain-or-first-officer" },
+    { mode: "normal", stageId: "2-cdu-efb-preflight-captain-and-first-officer" },
+    { mode: "normal", stageId: "3-exterior-inspection" },
+    { mode: "normal", stageId: "4-preflight-procedure-first-officer" },
+    { mode: "normal", stageId: "5-preflight-procedure-captain" },
+    { mode: "scanFlows", stageId: "preliminary-preflight-procedure" },
+    { mode: "scanFlows", stageId: "pre-flight-procedure" }
+  ],
+  "broc": [
+    { mode: "normal", stageId: "2-cdu-efb-preflight-captain-and-first-officer" },
+    { mode: "normal", stageId: "6-before-start" },
+    { mode: "scanFlows", stageId: "before-start-procedure" }
+  ],
+  "before-closing-the-aircraft-doors": [
+    { mode: "normal", stageId: "6-before-start" },
+    { mode: "scanFlows", stageId: "before-start-procedure" }
+  ],
+  "before-start-procedure": [
+    { mode: "normal", stageId: "6-before-start" },
+    { mode: "normal", stageId: "7-pushback-or-towing" },
+    { mode: "normal", stageId: "8-engine-start" },
+    { mode: "scanFlows", stageId: "before-start-procedure" }
+  ],
+  "before-taxi-procedure": [
+    { mode: "normal", stageId: "9-before-taxi" },
+    { mode: "scanFlows", stageId: "before-taxi-procedure" }
+  ],
+  "before-takeoff-procedure": [
+    { mode: "normal", stageId: "10-before-takeoff" },
+    { mode: "normal", stageId: "11-takeoff" },
+    { mode: "scanFlows", stageId: "before-takeoff-takeoff-procedure" }
+  ],
+  "descent-procedure": [
+    { mode: "normal", stageId: "13-descent" },
+    { mode: "scanFlows", stageId: "decent-procedure" }
+  ],
+  "norse-atlantic-manoeuvres": [
+    { mode: "normal", stageId: "16-go-around-and-missed-approach-branch" }
+  ],
+  "altimeter-setting-procedures": [
+    { mode: "normal", stageId: "12-takeoff-flap-retraction-and-climb-cruise" },
+    { mode: "normal", stageId: "14-approach" },
+    { mode: "scanFlows", stageId: "approach-procedure" }
+  ],
+  "trainee-guide-for-eicas-handling": [
+    { mode: "normal", stageId: "operating-frame" },
+    { mode: "scanFlows", stageId: "preliminary-preflight-procedure" },
+    { mode: "scanFlows", stageId: "before-taxi-procedure" }
+  ],
+  "trainee-guide-for-opt": [
+    { mode: "normal", stageId: "2-cdu-efb-preflight-captain-and-first-officer" },
+    { mode: "normal", stageId: "13-descent" },
+    { mode: "scanFlows", stageId: "decent-procedure" }
+  ],
+  "standard-pa-calls-to-cabin": [
+    { mode: "normal", stageId: "10-before-takeoff" },
+    { mode: "normal", stageId: "13-descent" },
+    { mode: "normal", stageId: "15a-landing-ils-or-gls" },
+    { mode: "normal", stageId: "19-shutdown" },
+    { mode: "scanFlows", stageId: "before-takeoff-takeoff-procedure" },
+    { mode: "scanFlows", stageId: "decent-procedure" },
+    { mode: "scanFlows", stageId: "shutdown-procedure" }
+  ],
+  "example-norse-emergency-brief": [
+    { mode: "normal", stageId: "11-takeoff" },
+    { mode: "normal", stageId: "17-landing-roll" },
+    { mode: "scanFlows", stageId: "before-takeoff-takeoff-procedure" }
+  ]
+};
