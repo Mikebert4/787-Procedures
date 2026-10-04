@@ -107,6 +107,17 @@ window.NORSE_PROCS = [
       }
     ],
     blocks: [
+      { type: "heading", text: "BROC mnemonic" },
+      {
+        type: "table",
+        headers: ["Letter", "Meaning"],
+        rows: [
+          ["B", "Briefing"],
+          ["R", "Route Check"],
+          ["O", "OPT Calculations"],
+          ["C", "Clearance(s)"]
+        ]
+      },
       {
         type: "bullets",
         items: [
