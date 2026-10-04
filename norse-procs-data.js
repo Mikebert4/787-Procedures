@@ -245,19 +245,19 @@ window.NORSE_PROCS = [
     blocks: [
       { type: "paragraph", text: "Set up FMC, review notes/weather and prepare landing performance." },
       { type: "paragraph", text: "PF leads the procedure; complete by 10,000 feet AAL." },
-      { type: "paragraph", text: "Mnemonic: NOVAMS (easy to remember like NOTAMS)" },
       {
-        type: "bullets",
-        items: [
-          "N - NOTAMs & Notes (recall alert and memo messages)",
-          "O - Compare OPT landing performance calculations",
-          "V - VREF: PF verifies; PM enters on APPROACH REF",
-          "A - Autobrake set by PM as directed by PF",
-          "M - Minima set individually and cross-checked",
-          "PM: verify / set the NAV RADIO page for the approach",
-          "Conduct approach briefing, including manual go-around thrust on or near the ground and the possible flap configuration warning",
-          "S - Set ISFD (standby altimeter) to arrival QNH",
-          "PF calls; PM completes Descent Checklist"
+        type: "mnemonic",
+        intro: "Mnemonic: NOVAMS (easy to remember like NOTAMS)",
+        steps: [
+          { letter: "N", text: "NOTAMs & Notes (recall alert and memo messages)" },
+          { letter: "O", text: "Compare OPT landing performance calculations" },
+          { letter: "V", text: "VREF: PF verifies; PM enters on APPROACH REF" },
+          { letter: "A", text: "Autobrake set by PM as directed by PF" },
+          { letter: "M", text: "Minima set individually and cross-checked" },
+          { label: "Additional step", text: "PM: verify / set the NAV RADIO page for the approach" },
+          { label: "Additional step", text: "Conduct approach briefing, including manual go-around thrust on or near the ground and the possible flap configuration warning" },
+          { letter: "S", text: "Set ISFD (standby altimeter) to arrival QNH" },
+          { label: "Additional step", text: "PF calls; PM completes Descent Checklist" }
         ]
       }
     ]

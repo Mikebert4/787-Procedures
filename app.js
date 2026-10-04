@@ -1230,6 +1230,11 @@ function renderNorseProcsStage(stage) {
       return;
     }
 
+    if (block.type === "mnemonic") {
+      section.append(createNorseMnemonic(block));
+      return;
+    }
+
     if (block.type === "table") {
       section.append(createNorseProcsTable(block));
     }
@@ -1278,6 +1283,37 @@ function createNorseProcsTable(block) {
   });
   table.append(tbody);
   wrapper.append(table);
+  return wrapper;
+}
+
+function createNorseMnemonic(block) {
+  const wrapper = document.createElement("section");
+  wrapper.className = "norse-mnemonic";
+
+  const intro = document.createElement("p");
+  intro.className = "norse-mnemonic-intro";
+  intro.textContent = block.intro;
+  wrapper.append(intro);
+
+  const list = document.createElement("ul");
+  list.className = "norse-mnemonic-list";
+  block.steps.forEach((step) => {
+    const item = document.createElement("li");
+    item.className = `norse-mnemonic-step ${step.letter ? "is-mnemonic" : "is-additional"}`;
+
+    const marker = document.createElement(step.letter ? "strong" : "span");
+    marker.className = "norse-mnemonic-marker";
+    marker.textContent = step.letter || step.label;
+
+    const text = document.createElement("span");
+    text.className = "norse-mnemonic-text";
+    text.textContent = step.text;
+
+    item.append(marker, text);
+    list.append(item);
+  });
+  wrapper.append(list);
+
   return wrapper;
 }
 
