@@ -423,6 +423,7 @@ function renderTabs() {
 }
 
 function showsCompletionBadge(stage) {
+  if (stage.type === "memoryIntro") return false;
   return !["limitations", "callouts", "scanFlows", "norseProcs", "sessions", "techQuiz"].includes(stage.mode);
 }
 
@@ -448,6 +449,10 @@ function updateTabSelection() {
 }
 
 function renderStageBody(stage) {
+  if (stage.type === "memoryIntro") {
+    renderMemoryIntroStage(stage);
+    return;
+  }
   if (stage.type === "memory") {
     renderMemoryStage(stage);
     return;
@@ -642,11 +647,11 @@ function parseLimitationRow(text, sectionTitle) {
 function parseMemoryItems(items) {
   return items.map((item, index) => ({
     ...item,
-    type: "memory",
+    type: item.type || "memory",
     mode: "memory",
     rawTitle: item.title,
     title: item.title,
-    body: item.actions.map((action) => `- ${action}`).join("\n"),
+    body: (item.actions || []).map((action) => `- ${action}`).join("\n"),
     order: index + 1
   }));
 }
@@ -755,6 +760,7 @@ function quizPromptTitle(prompt) {
 }
 
 function stageLabel(stage, index) {
+  if (state.activeMode === "memory" && stage.type === "memoryIntro") return "Memory items - Terminology";
   if (state.activeMode === "memory") return `Memory items - Item ${index + 1}`;
   if (state.activeMode === "limitations") return `Limitations - Section ${index + 1}`;
   if (state.activeMode === "callouts") return `Callouts - Phase ${index + 1}`;
@@ -1342,6 +1348,23 @@ function renderCalloutsStage(stage) {
     footer.textContent = stage.footer;
     panel.append(footer);
   }
+
+  contentEl.append(panel);
+}
+
+function renderMemoryIntroStage(stage) {
+  const panel = document.createElement("section");
+  panel.className = "memory-panel memory-intro";
+
+  const notice = document.createElement("p");
+  notice.className = "memory-alert";
+  notice.textContent = stage.notice;
+  panel.append(notice);
+
+  const source = document.createElement("p");
+  source.className = "citation memory-source";
+  source.textContent = `Source: ${stage.citation}`;
+  panel.append(source);
 
   contentEl.append(panel);
 }

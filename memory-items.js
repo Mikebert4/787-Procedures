@@ -1,5 +1,12 @@
 window.MEMORY_ITEMS = [
   {
+    id: "immediate-action-items",
+    type: "memoryIntro",
+    title: "Immediate Action Items",
+    citation: "Norse Atlantic UK Guide for IAGO Instructors V2, PDF p.4; Norse QRH Rev 9, NNC.7 p.7.11 and Checklist Instructions CI.2.2.",
+    notice: "Memory Items are now called Immediate Action Items in Boeing and Norse Procedures."
+  },
+  {
     id: "cabin-altitude",
     title: "CABIN ALTITUDE",
     condition: "Cabin altitude warning or rapid/uncontrollable cabin altitude condition.",

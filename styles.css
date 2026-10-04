@@ -603,6 +603,10 @@ h3 {
   gap: 14px;
 }
 
+.memory-intro {
+  align-content: start;
+}
+
 .memory-alert {
   margin: 0;
   padding: 12px 14px;
