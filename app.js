@@ -163,6 +163,7 @@ const norseDifferences = window.NORSE_DIFFERENCES || [];
 const sessionReferenceDetails = window.SESSION_REFERENCE_DETAILS || {};
 const sessionReferences = window.SESSION_REFERENCES || {};
 const techQuizData = window.TECH_QUIZ || {};
+const norseProcs = window.NORSE_PROCS || [];
 const appShellEl = document.querySelector(".app-shell");
 const tabsEl = document.getElementById("tabs");
 const titleEl = document.getElementById("stage-title");
@@ -198,6 +199,7 @@ const modeButtons = {
   limitations: document.getElementById("mode-limitations"),
   callouts: document.getElementById("mode-callouts"),
   scanFlows: document.getElementById("mode-scan-flows"),
+  norseProcs: document.getElementById("mode-norse-procs"),
   sessions: document.getElementById("mode-sessions"),
   techQuiz: document.getElementById("mode-tech-quiz")
 };
@@ -215,6 +217,7 @@ async function init() {
     state.profiles.limitations = parseMarkdown(window.LIMITATIONS_MARKDOWN || "", "limitations");
     state.profiles.callouts = parseCalloutItems(window.CALLOUTS || []);
     state.profiles.scanFlows = parseScanFlowItems(window.SCAN_FLOWS || []);
+    state.profiles.norseProcs = parseNorseProcsItems(norseProcs);
     state.profiles.sessions = parseSessionItems(window.STUDY_SESSIONS || {});
     state.profiles.techQuiz = parseTechQuizItems(techQuizData);
     state.stages = state.profiles[state.activeMode];
@@ -264,6 +267,7 @@ async function startAppAfterUnlock() {
   state.profiles.limitations = parseMarkdown(window.LIMITATIONS_MARKDOWN || "", "limitations");
   state.profiles.callouts = parseCalloutItems(window.CALLOUTS || []);
   state.profiles.scanFlows = parseScanFlowItems(window.SCAN_FLOWS || []);
+  state.profiles.norseProcs = parseNorseProcsItems(norseProcs);
   state.profiles.sessions = parseSessionItems(window.STUDY_SESSIONS || {});
   state.profiles.techQuiz = parseTechQuizItems(techQuizData);
   state.stages = state.profiles[state.activeMode];
@@ -370,6 +374,7 @@ function bindControls() {
   modeButtons.limitations.addEventListener("click", () => setMode("limitations"));
   modeButtons.callouts.addEventListener("click", () => setMode("callouts"));
   modeButtons.scanFlows.addEventListener("click", () => setMode("scanFlows"));
+  modeButtons.norseProcs.addEventListener("click", () => setMode("norseProcs"));
   modeButtons.sessions.addEventListener("click", () => setMode("sessions"));
   modeButtons.techQuiz.addEventListener("click", () => setMode("techQuiz"));
 }
@@ -418,7 +423,7 @@ function renderTabs() {
 }
 
 function showsCompletionBadge(stage) {
-  return !["limitations", "callouts", "scanFlows", "sessions", "techQuiz"].includes(stage.mode);
+  return !["limitations", "callouts", "scanFlows", "norseProcs", "sessions", "techQuiz"].includes(stage.mode);
 }
 
 function selectStage(index) {
@@ -457,6 +462,10 @@ function renderStageBody(stage) {
   }
   if (stage.mode === "scanFlows") {
     renderScanFlowStage(stage);
+    return;
+  }
+  if (stage.mode === "norseProcs") {
+    renderNorseProcsStage(stage);
     return;
   }
   if (stage.mode === "sessions") {
@@ -668,6 +677,18 @@ function parseScanFlowItems(items) {
   }));
 }
 
+function parseNorseProcsItems(items) {
+  return items.map((item, index) => ({
+    ...item,
+    type: "norseProcs",
+    mode: "norseProcs",
+    rawTitle: item.title,
+    title: item.title,
+    body: "",
+    order: index + 1
+  }));
+}
+
 function parseSessionItems(data) {
   const improvements = data.improvements || [];
   const sessions = data.sessions || [];
@@ -719,7 +740,7 @@ function parseTechQuizItems(data) {
     type: "techQuiz",
     mode: "techQuiz",
     rawTitle: `Question ${question.number}`,
-    title: `Q${question.number} - ${quizPromptTitle(question.prompt)}`,
+    title: quizPromptTitle(question.prompt),
     citation: data.citation || "QB 101 787 1; source-checked audit notes.",
     question,
     questions,
@@ -738,6 +759,7 @@ function stageLabel(stage, index) {
   if (state.activeMode === "limitations") return `Limitations - Section ${index + 1}`;
   if (state.activeMode === "callouts") return `Callouts - Phase ${index + 1}`;
   if (state.activeMode === "scanFlows") return `Scan Flows - Page ${stage.sourcePage || index + 1}`;
+  if (state.activeMode === "norseProcs") return `Norse Procs - PDF p.${stage.sourcePages?.join("-") || index + 1}`;
   if (state.activeMode === "sessions") return index === 0 ? "Sessions - Study Plan" : `Sessions - ${stage.category || "Session"} ${index}`;
   if (state.activeMode === "techQuiz") return `Tech Quiz - Question ${index + 1} of ${state.stages.length}`;
   return `${state.activeMode === "normal" ? "Normal" : "Non-Normal"} - ${stage.id === "operating-frame" ? "Profile" : `Stage ${stageNumber(index)}`}`;
@@ -1164,6 +1186,93 @@ function renderScanFlowStage(stage) {
   panel.append(source);
 
   contentEl.append(panel);
+}
+
+function renderNorseProcsStage(stage) {
+  const panel = document.createElement("section");
+  panel.className = "norse-procs-panel";
+  let section = createNorseProcsSection();
+
+  const appendSection = () => {
+    if (section.children.length) panel.append(section);
+  };
+
+  stage.blocks.forEach((block) => {
+    if (block.type === "heading") {
+      appendSection();
+      section = createNorseProcsSection(block.text);
+      return;
+    }
+
+    if (block.type === "paragraph") {
+      const paragraph = document.createElement("p");
+      paragraph.className = "norse-procs-text";
+      paragraph.textContent = block.text;
+      section.append(paragraph);
+      return;
+    }
+
+    if (block.type === "bullets" || block.type === "numbered") {
+      const list = document.createElement(block.type === "numbered" ? "ol" : "ul");
+      list.className = `norse-procs-list ${block.type === "numbered" ? "is-numbered" : ""}`.trim();
+      block.items.forEach((text) => {
+        const item = document.createElement("li");
+        item.textContent = text;
+        list.append(item);
+      });
+      section.append(list);
+      return;
+    }
+
+    if (block.type === "table") {
+      section.append(createNorseProcsTable(block));
+    }
+  });
+
+  appendSection();
+  contentEl.append(panel);
+}
+
+function createNorseProcsSection(headingText = "") {
+  const section = document.createElement("section");
+  section.className = "norse-procs-section";
+  if (headingText) {
+    const heading = document.createElement("h3");
+    heading.textContent = headingText;
+    section.append(heading);
+  }
+  return section;
+}
+
+function createNorseProcsTable(block) {
+  const wrapper = document.createElement("div");
+  wrapper.className = "norse-procs-table-wrap";
+  const table = document.createElement("table");
+  table.className = "norse-procs-table";
+  const thead = document.createElement("thead");
+  const headerRow = document.createElement("tr");
+  block.headers.forEach((header) => {
+    const cell = document.createElement("th");
+    cell.scope = "col";
+    cell.textContent = header;
+    headerRow.append(cell);
+  });
+  thead.append(headerRow);
+  table.append(thead);
+
+  const tbody = document.createElement("tbody");
+  block.rows.forEach((row) => {
+    const bodyRow = document.createElement("tr");
+    row.forEach((value) => {
+      const cell = document.createElement("td");
+      cell.textContent = value || "";
+      bodyRow.append(cell);
+    });
+    tbody.append(bodyRow);
+  });
+  table.append(tbody);
+  wrapper.append(table);
+  return wrapper;
 }
 
 function openScanFlowDetail(stage, section, item) {
