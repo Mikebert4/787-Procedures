@@ -152,7 +152,7 @@ const visualLibrary = [
 
 const state = {
   profiles: {},
-  activeMode: "normal",
+  activeMode: "norseProcs",
   stages: [],
   current: 0,
   navCollapsed: localStorage.getItem("b787-procedures:nav-collapsed") === "1"
