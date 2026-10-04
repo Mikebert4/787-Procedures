@@ -135,6 +135,23 @@ input {
   color: white;
 }
 
+.norse-procs-button {
+  border: 1px solid #d69e2e;
+  background: #fff2d5;
+  color: #713b00;
+  font-weight: 800;
+}
+
+.norse-procs-button:hover {
+  background: #ffe6a3;
+}
+
+.norse-procs-button[aria-pressed="true"] {
+  border-color: #9a5b00;
+  background: #9a5b00;
+  color: white;
+}
+
 .eyebrow {
   margin: 0 0 4px;
   color: var(--accent-strong);
