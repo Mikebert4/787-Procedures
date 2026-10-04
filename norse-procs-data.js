@@ -45,18 +45,13 @@ window.NORSE_PROCS = [
   {
     id: "preflight-setup",
     title: "Preflight Setup",
-    sourcePages: [1, 2],
-    citation: "Norse Atlantic UK Guide for IAGO Instructors V2, PDF pp.1-2",
+    sourcePages: [1],
+    citation: "Norse Atlantic UK Guide for IAGO Instructors V2, PDF p.1",
     images: [
       {
         src: "assets/norse-iago-guide-01.png",
         alt: "Preflight Setup guide source page 1",
         caption: "Preflight Setup, first source page. Guide PDF p.1."
-      },
-      {
-        src: "assets/norse-iago-guide-02.png",
-        alt: "Preflight Setup guide source page 2 continuation",
-        caption: "Preflight Setup, continuation. Guide PDF p.2."
       }
     ],
     blocks: [
@@ -96,7 +91,22 @@ window.NORSE_PROCS = [
       },
       { type: "paragraph", text: "Cabin crew briefing (flexible timing)" },
       { type: "paragraph", text: "Walkaround (PM - flexible timing; exterior inspection valid 60 minutes)" },
-      { type: "paragraph", text: "ELBPM 2.2.2.3" },
+      { type: "paragraph", text: "ELBPM 2.2.2.3" }
+    ]
+  },
+  {
+    id: "broc",
+    title: "BROC",
+    sourcePages: [2],
+    citation: "Norse Atlantic UK Guide for IAGO Instructors V2, PDF p.2",
+    images: [
+      {
+        src: "assets/norse-iago-guide-02.png",
+        alt: "BROC guide source page",
+        caption: "BROC. Guide source page 2."
+      }
+    ],
+    blocks: [
       {
         type: "bullets",
         items: [
